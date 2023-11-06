@@ -9,20 +9,20 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;;
+import static org.mockito.Mockito.when;
 
-public class UnitOfWorkInvokerFactoryTest {
+class UnitOfWorkInvokerFactoryTest {
 
     class FooService {
         public String foo() {
@@ -65,8 +65,8 @@ public class UnitOfWorkInvokerFactoryTest {
     // CXF Exchange contains message exchange and is used by Invoker to obtain invoked method name
     Exchange exchange;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         exchange = mock(Exchange.class);
         BindingOperationInfo boi = mock(BindingOperationInfo.class);
         when(exchange.getBindingOperationInfo()).thenReturn(boi);
@@ -99,7 +99,7 @@ public class UnitOfWorkInvokerFactoryTest {
     }
 
     @Test
-    public void noAnnotation() {
+    void noAnnotation() {
         Invoker invoker = invokerBuilder.create(fooService, new FooInvoker(), null);
         this.setTargetMethod(exchange, "foo"); // simulate CXF behavior
 
@@ -112,7 +112,7 @@ public class UnitOfWorkInvokerFactoryTest {
     }
 
     @Test
-    public void unitOfWorkAnnotation() {
+    void unitOfWorkAnnotation() {
         // use underlying invoker which invokes fooService.unitOfWork(false)
         Invoker invoker = invokerBuilder.create(fooService, new UnitOfWorkInvoker(false), sessionFactory);
         this.setTargetMethod(exchange, "unitOfWork", boolean.class); // simulate CXF behavior
@@ -127,7 +127,7 @@ public class UnitOfWorkInvokerFactoryTest {
     }
 
     @Test
-    public void unitOfWorkWithException() {
+    void unitOfWorkWithException() {
         // use underlying invoker which invokes fooService.unitOfWork(true) - exception is thrown
         Invoker invoker = invokerBuilder.create(fooService, new UnitOfWorkInvoker(true), sessionFactory);
         this.setTargetMethod(exchange, "unitOfWork", boolean.class); // simulate CXF behavior

@@ -26,6 +26,7 @@
 
         <dropwizard.version>4.0.3</dropwizard.version>
         <cxf.version>4.0.3</cxf.version>
+        <junit.version>5.10.1</junit.version>
 
         <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
 
@@ -141,15 +142,22 @@
                 <type>pom</type>
             </dependency>
 
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 

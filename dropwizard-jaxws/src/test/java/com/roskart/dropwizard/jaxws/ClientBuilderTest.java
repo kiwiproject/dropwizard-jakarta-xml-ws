@@ -1,7 +1,7 @@
 package com.roskart.dropwizard.jaxws;
 
 import org.apache.cxf.interceptor.Interceptor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import jakarta.xml.ws.handler.Handler;
 
@@ -10,10 +10,10 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class ClientBuilderTest {
+class ClientBuilderTest {
 
     @Test
-    public void buildClient() {
+    void buildClient() {
 
         Handler<?> handler = mock(Handler.class);
 

@@ -7,9 +7,8 @@ import io.dropwizard.core.Configuration;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.jetty.setup.ServletEnvironment;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletRegistration;
 import jakarta.servlet.http.HttpServlet;
@@ -17,10 +16,10 @@ import jakarta.servlet.http.HttpServlet;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
-public class JAXWSBundleTest {
+class JAXWSBundleTest {
 
     Environment environment = mock(Environment.class);
     Bootstrap<?> bootstrap = mock(Bootstrap.class);
@@ -29,8 +28,8 @@ public class JAXWSBundleTest {
     JAXWSEnvironment jaxwsEnvironment = mock(JAXWSEnvironment.class);
     LifecycleEnvironment lifecycleEnvironment = mock(LifecycleEnvironment.class);
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         when(environment.servlets()).thenReturn(servletEnvironment);
         when(environment.lifecycle()).thenReturn(lifecycleEnvironment);
         when(bootstrap.getMetricRegistry()).thenReturn(mock(MetricRegistry.class));
@@ -40,7 +39,7 @@ public class JAXWSBundleTest {
     }
 
     @Test
-    public void constructorArgumentChecks() {
+    void constructorArgumentChecks() {
         try {
             new JAXWSBundle<>(null, null);
             fail();
@@ -59,7 +58,7 @@ public class JAXWSBundleTest {
     }
 
     @Test
-    public void initializeAndRun() {
+    void initializeAndRun() {
         JAXWSBundle<?> jaxwsBundle = new JAXWSBundle<>("/soap", jaxwsEnvironment);
 
         try {
@@ -80,7 +79,7 @@ public class JAXWSBundleTest {
     }
 
     @Test
-    public void initializeAndRunWithPublishedEndpointUrlPrefix() {
+    void initializeAndRunWithPublishedEndpointUrlPrefix() {
         JAXWSBundle<?> jaxwsBundle = new JAXWSBundle<Configuration>("/soap", jaxwsEnvironment) {
             @Override
             protected String getPublishedEndpointUrlPrefix(Configuration configuration) {
@@ -106,7 +105,7 @@ public class JAXWSBundleTest {
     }
 
     @Test
-    public void publishEndpoint() {
+    void publishEndpoint() {
 
         JAXWSBundle<?> jaxwsBundle = new JAXWSBundle<>("/soap", jaxwsEnvironment);
         Object service = new Object();
@@ -140,7 +139,7 @@ public class JAXWSBundleTest {
     }
 
     @Test
-    public void getClient() {
+    void getClient() {
 
         JAXWSBundle<?> jaxwsBundle = new JAXWSBundle<>("/soap", jaxwsEnvironment);
 

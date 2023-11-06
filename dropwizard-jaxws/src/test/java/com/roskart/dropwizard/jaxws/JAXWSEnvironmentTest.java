@@ -21,9 +21,9 @@ import org.apache.cxf.transport.local.LocalTransportFactory;
 import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.hibernate.SessionFactory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
@@ -53,7 +53,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-public class JAXWSEnvironmentTest {
+class JAXWSEnvironmentTest {
 
     private JAXWSEnvironment jaxwsEnvironment;
     private Invoker mockInvoker = mock(Invoker.class);
@@ -88,8 +88,8 @@ public class JAXWSEnvironmentTest {
         }
     }
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
 
         ((ch.qos.logback.classic.Logger)LoggerFactory.getLogger("org.apache.cxf")).setLevel(Level.INFO);
 
@@ -124,20 +124,20 @@ public class JAXWSEnvironmentTest {
         testutils.addNamespace("a", "http://jaxws.dropwizard.roskart.com/");
     }
 
-    @After
-    public void teardown() {
+    @AfterEach
+    void teardown() {
         jaxwsEnvironment.bus.shutdown(false);
     }
 
     @Test
-    public void buildServlet() {
+    void buildServlet() {
         Object result = jaxwsEnvironment.buildServlet();
         assertThat(result, is(instanceOf(CXFNonSpringServlet.class)));
         assertThat(((CXFNonSpringServlet) result).getBus(), is(instanceOf(Bus.class)));
     }
 
     @Test
-    public void publishEndpoint() throws Exception {
+    void publishEndpoint() throws Exception {
 
         Endpoint e = jaxwsEnvironment.publishEndpoint(new EndpointBuilder("local://path", service));
         assertThat(e, is(notNullValue()));
@@ -154,7 +154,7 @@ public class JAXWSEnvironmentTest {
     }
 
     @Test
-    public void publishEndpointWithAnotherEnvironment() throws Exception {
+    void publishEndpointWithAnotherEnvironment() throws Exception {
 
         // creating new runtime environment simulates using separate bundles
         JAXWSEnvironment anotherJaxwsEnvironment = new JAXWSEnvironment("soap2");
@@ -177,7 +177,7 @@ public class JAXWSEnvironmentTest {
     }
 
     @Test
-    public void publishEndpointWithAuthentication() throws Exception {
+    void publishEndpointWithAuthentication() throws Exception {
 
         jaxwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
@@ -197,7 +197,7 @@ public class JAXWSEnvironmentTest {
     }
 
     @Test
-    public void publishEndpointWithHibernateInvoker() throws Exception {
+    void publishEndpointWithHibernateInvoker() throws Exception {
 
         jaxwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
@@ -215,7 +215,7 @@ public class JAXWSEnvironmentTest {
     }
 
     @Test
-    public void publishEndpointWithCxfInterceptors() throws Exception {
+    void publishEndpointWithCxfInterceptors() throws Exception {
 
         TestInterceptor inInterceptor = new TestInterceptor(Phase.UNMARSHAL);
         TestInterceptor inInterceptor2 = new TestInterceptor(Phase.PRE_INVOKE);
@@ -251,7 +251,7 @@ public class JAXWSEnvironmentTest {
 
 
     @Test
-    public void publishEndpointWithMtom() throws Exception {
+    void publishEndpointWithMtom() throws Exception {
 
         jaxwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
@@ -271,7 +271,7 @@ public class JAXWSEnvironmentTest {
     }
 
     @Test
-    public void publishEndpointWithCustomPublishedUrl() throws Exception {
+    void publishEndpointWithCustomPublishedUrl() throws Exception {
 
         jaxwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
@@ -289,7 +289,7 @@ public class JAXWSEnvironmentTest {
     }
 
     @Test
-    public void publishEndpointWithProperties() throws Exception {
+    void publishEndpointWithProperties() throws Exception {
 
         HashMap<String, Object> props = new HashMap<>();
         props.put("key", "value");
@@ -313,7 +313,7 @@ public class JAXWSEnvironmentTest {
     }
 
     @Test
-    public void publishEndpointWithPublishedUrlPrefix() throws WSDLException {
+    void publishEndpointWithPublishedUrlPrefix() throws WSDLException {
 
         jaxwsEnvironment.setPublishedEndpointUrlPrefix("http://external/prefix");
 
@@ -332,7 +332,7 @@ public class JAXWSEnvironmentTest {
     }
 
     @Test
-    public void publishEndpointWithInvalidArguments() throws Exception {
+    void publishEndpointWithInvalidArguments() throws Exception {
 
         try {
             jaxwsEnvironment.publishEndpoint(new EndpointBuilder("foo", null));
@@ -354,7 +354,7 @@ public class JAXWSEnvironmentTest {
     }
 
     @Test
-    public void getClient() {
+    void getClient() {
 
         String address = "http://address";
         Handler handler = mock(Handler.class);
