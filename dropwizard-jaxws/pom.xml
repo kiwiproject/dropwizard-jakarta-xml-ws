@@ -2,15 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>dropwizard-jaxws-parent</artifactId>
-        <groupId>com.github.roskart.dropwizard-jaxws</groupId>
-        <version>1.2.3</version>
+
+     <parent>
+        <groupId>org.kiwiproject</groupId>
+        <artifactId>dropwizard-jakarta-xml-ws-parent</artifactId>
+        <version>0.5.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dropwizard-jaxws</artifactId>
-    <name>Dropwizard JAX-WS Bundle</name>
+    <artifactId>dropwizard-jakarta-xml-ws</artifactId>
+    <name>Dropwizard Jakarta XML Web Services Bundle</name>
 
     <dependencies>
 
