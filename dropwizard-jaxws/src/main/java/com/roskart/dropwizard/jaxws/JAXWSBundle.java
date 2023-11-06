@@ -49,18 +49,12 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
         this.jaxwsEnvironment = jaxwsEnvironment;
     }
 
-    /**
-     * Implements com.yammer.dropwizard.Bundle#initialize()
-     */
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
         this.jaxwsEnvironment.setInstrumentedInvokerBuilder(
                 new InstrumentedInvokerFactory(bootstrap.getMetricRegistry()));
     }
 
-    /**
-     * Implements com.yammer.dropwizard.Bundle#run()
-     */
     @Override
     public void run(C configuration, Environment environment) {
         checkArgument(environment != null, "Environment is null");
