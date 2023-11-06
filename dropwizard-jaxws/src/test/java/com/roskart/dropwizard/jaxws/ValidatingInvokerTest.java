@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -150,40 +150,21 @@ class ValidatingInvokerTest {
 
     @Test
     void invokeWithValidation() {
-
         setTargetMethod(exchange, "withValidation", RootParam1.class, RootParam2.class);
 
-        List<Object> params = Arrays.asList(new RootParam1(new ChildParam("")), new RootParam2("ok"));
+        assertThatThrownBy(() -> invoker.invoke(exchange, List.of(new RootParam1(new ChildParam("")), new RootParam2("ok"))))
+                .isExactlyInstanceOf(ValidationException.class);
 
-        try {
-            invoker.invoke(exchange, params);
-            fail("expected ValidationException but no exception thrown");
-        }
-        catch(Exception e) {
-            assertThat(e).isInstanceOf(ValidationException.class);
-        }
+        assertThatThrownBy(() -> invoker.invoke(exchange, List.of(new RootParam1(new ChildParam("ok")), new RootParam2(""))))
+                .isExactlyInstanceOf(ValidationException.class);
 
-        params = Arrays.asList(new RootParam1(new ChildParam("")), new RootParam2("ok"));
-        try {
-            invoker.invoke(exchange, params);
-            fail("expected ValidationException but no exception thrown");
-        }
-        catch(Exception e) {
-            assertThat(e).isInstanceOf(ValidationException.class);
-        }
-
-        params = Arrays.asList(new RootParam1(new ChildParam("John")), new RootParam2("ok"));
-        try {
-            invoker.invoke(exchange, params);
-            fail("expected ValidationException but no exception thrown");
-        }
-        catch(Exception e) {
-            assertThat(e).isInstanceOf(ValidationException.class);
-        }
+        assertThatThrownBy(() -> invoker.invoke(exchange, List.of(new RootParam1(new ChildParam("John")), new RootParam2("ok"))))
+                .isExactlyInstanceOf(ValidationException.class)
+                .hasMessageContaining("foo may not be 'John'");
 
         verifyNoMoreInteractions(underlying);
 
-        params = Arrays.asList(new RootParam1(new ChildParam("ok")), new RootParam2("ok"));
+        var params = List.of(new RootParam1(new ChildParam("ok")), new RootParam2("ok"));
         invoker.invoke(exchange, params);
 
         verify(underlying).invoke(exchange, params);
