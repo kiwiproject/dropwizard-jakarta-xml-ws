@@ -29,8 +29,8 @@ import org.w3c.dom.Node;
 
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
+import jakarta.mail.internet.MimeMultipart;
+import jakarta.mail.util.ByteArrayDataSource;
 import javax.wsdl.WSDLException;
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.Endpoint;
