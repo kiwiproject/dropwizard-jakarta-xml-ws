@@ -16,7 +16,11 @@ import java.lang.reflect.Method;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;;
 
 public class UnitOfWorkInvokerFactoryTest {
 
@@ -102,9 +106,9 @@ public class UnitOfWorkInvokerFactoryTest {
         Object result = invoker.invoke(exchange, null);
         assertEquals("foo return", result);
 
-        verifyZeroInteractions(sessionFactory);
-        verifyZeroInteractions(session);
-        verifyZeroInteractions(transaction);
+        verifyNoInteractions(sessionFactory);
+        verifyNoInteractions(session);
+        verifyNoInteractions(transaction);
     }
 
     @Test

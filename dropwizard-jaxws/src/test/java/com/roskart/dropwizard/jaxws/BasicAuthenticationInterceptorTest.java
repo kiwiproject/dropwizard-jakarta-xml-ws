@@ -1,8 +1,8 @@
 package com.roskart.dropwizard.jaxws;
 
 import static com.roskart.dropwizard.jaxws.BasicAuthenticationInterceptor.PRINCIPAL_KEY;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,7 +47,7 @@ public class BasicAuthenticationInterceptorTest {
 
     @Before
     public void setup() throws IOException {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         when(destinationMock.getBackChannel(any())).thenReturn(conduitMock);
         when(outMessageMock.getContent(OutputStream.class)).thenReturn(outputStreamMock);
     }

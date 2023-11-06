@@ -8,9 +8,9 @@ import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.EchoResponse;
 import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.NonBlockingEcho;
 import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService;
 
-import javax.jws.HandlerChain;
-import javax.jws.WebService;
-import javax.xml.ws.AsyncHandler;
+import jakarta.jws.HandlerChain;
+import jakarta.jws.WebService;
+import jakarta.xml.ws.AsyncHandler;
 import java.util.concurrent.Future;
 
 @WebService(endpointInterface = "ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService",
