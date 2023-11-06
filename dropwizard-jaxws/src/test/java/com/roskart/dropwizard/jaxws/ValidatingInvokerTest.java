@@ -21,11 +21,12 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 class ValidatingInvokerTest {
 
@@ -100,7 +101,7 @@ class ValidatingInvokerTest {
                     .thenReturn(DummyService.class.getMethod(methodName, parameterTypes));
         }
         catch (Exception e) {
-            fail("setTargetMethod failed: " + e.getClass().getName() + ": " + e.getMessage());
+            fail("setTargetMethod failed", e);
         }
     }
 
@@ -156,28 +157,28 @@ class ValidatingInvokerTest {
 
         try {
             invoker.invoke(exchange, params);
-            fail();
+            fail("expected ValidationException but no exception thrown");
         }
         catch(Exception e) {
-            assertThat(e, is(instanceOf(ValidationException.class)));
+            assertThat(e).isInstanceOf(ValidationException.class);
         }
 
         params = Arrays.asList(new RootParam1(new ChildParam("")), new RootParam2("ok"));
         try {
             invoker.invoke(exchange, params);
-            fail();
+            fail("expected ValidationException but no exception thrown");
         }
         catch(Exception e) {
-            assertThat(e, is(instanceOf(ValidationException.class)));
+            assertThat(e).isInstanceOf(ValidationException.class);
         }
 
         params = Arrays.asList(new RootParam1(new ChildParam("John")), new RootParam2("ok"));
         try {
             invoker.invoke(exchange, params);
-            fail();
+            fail("expected ValidationException but no exception thrown");
         }
         catch(Exception e) {
-            assertThat(e, is(instanceOf(ValidationException.class)));
+            assertThat(e).isInstanceOf(ValidationException.class);
         }
 
         verifyNoMoreInteractions(underlying);

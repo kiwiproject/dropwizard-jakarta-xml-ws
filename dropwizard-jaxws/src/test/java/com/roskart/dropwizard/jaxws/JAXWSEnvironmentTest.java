@@ -40,12 +40,7 @@ import jakarta.xml.ws.soap.SOAPBinding;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -132,15 +127,15 @@ class JAXWSEnvironmentTest {
     @Test
     void buildServlet() {
         Object result = jaxwsEnvironment.buildServlet();
-        assertThat(result, is(instanceOf(CXFNonSpringServlet.class)));
-        assertThat(((CXFNonSpringServlet) result).getBus(), is(instanceOf(Bus.class)));
+        assertThat(result).isInstanceOf(CXFNonSpringServlet.class);
+        assertThat(((CXFNonSpringServlet) result).getBus()).isInstanceOf(Bus.class);
     }
 
     @Test
     void publishEndpoint() throws Exception {
 
         Endpoint e = jaxwsEnvironment.publishEndpoint(new EndpointBuilder("local://path", service));
-        assertThat(e, is(notNullValue()));
+        assertThat(e).isNotNull();
 
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
@@ -193,7 +188,7 @@ class JAXWSEnvironmentTest {
 
         testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
 
-        assertThat(mockBasicAuthInterceptorInvoked, equalTo(1));
+        assertThat(mockBasicAuthInterceptorInvoked).isEqualTo(1);
     }
 
     @Test
@@ -232,9 +227,9 @@ class JAXWSEnvironmentTest {
                 LocalTransportFactory.TRANSPORT_ID, soapRequest);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
-        assertThat(inInterceptor.getInvocationCount(), equalTo(1));
-        assertThat(inInterceptor2.getInvocationCount(), equalTo(1));
-        assertThat(outInterceptor.getInvocationCount(), equalTo(1));
+        assertThat(inInterceptor.getInvocationCount()).isEqualTo(1);
+        assertThat(inInterceptor2.getInvocationCount()).isEqualTo(1);
+        assertThat(outInterceptor.getInvocationCount()).isEqualTo(1);
 
         testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
 
@@ -242,9 +237,9 @@ class JAXWSEnvironmentTest {
                 LocalTransportFactory.TRANSPORT_ID, soapRequest);
 
         verify(mockInvoker, times(2)).invoke(any(Exchange.class), any());
-        assertThat(inInterceptor.getInvocationCount(), equalTo(2));
-        assertThat(inInterceptor2.getInvocationCount(), equalTo(2));
-        assertThat(outInterceptor.getInvocationCount(), equalTo(2));
+        assertThat(inInterceptor.getInvocationCount()).isEqualTo(2);
+        assertThat(inInterceptor2.getInvocationCount()).isEqualTo(2);
+        assertThat(outInterceptor.getInvocationCount()).isEqualTo(2);
 
         testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
     }
@@ -265,7 +260,7 @@ class JAXWSEnvironmentTest {
 
         MimeMultipart mimeMultipart = new MimeMultipart(new ByteArrayDataSource(response,
                 "application/xop+xml; charset=UTF-8; type=\"text/xml\""));
-        assertThat(mimeMultipart.getCount(), equalTo(1));
+        assertThat(mimeMultipart.getCount()).isEqualTo(1);
         testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse",
                 StaxUtils.read(mimeMultipart.getBodyPart(0).getInputStream()));
     }
@@ -285,7 +280,7 @@ class JAXWSEnvironmentTest {
         AbstractDestination destination = (AbstractDestination) server.getDestination();
         String publishedEndpointUrl = destination.getEndpointInfo().getProperty(WSDLGetUtils.PUBLISHED_ENDPOINT_URL, String.class);
 
-        assertThat(publishedEndpointUrl, equalTo("http://external.server/external/path"));
+        assertThat(publishedEndpointUrl).isEqualTo("http://external.server/external/path");
     }
 
     @Test
@@ -298,8 +293,8 @@ class JAXWSEnvironmentTest {
                 new EndpointBuilder("local://path", service)
                     .properties(props));
 
-        assertThat(e, is(notNullValue()));
-        assertThat(e.getProperties().get("key"), equalTo("value"));
+        assertThat(e).isNotNull();
+        assertThat(e.getProperties().get("key")).isEqualTo("value");
 
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
@@ -328,7 +323,7 @@ class JAXWSEnvironmentTest {
         AbstractDestination destination = (AbstractDestination) server.getDestination();
         String publishedEndpointUrl = destination.getEndpointInfo().getProperty(WSDLGetUtils.PUBLISHED_ENDPOINT_URL, String.class);
 
-        assertThat(publishedEndpointUrl, equalTo("http://external/prefix/path"));
+        assertThat(publishedEndpointUrl).isEqualTo("http://external/prefix/path");
     }
 
     @Test
@@ -363,16 +358,16 @@ class JAXWSEnvironmentTest {
         DummyInterface clientProxy = jaxwsEnvironment.getClient(
                 new ClientBuilder<>(DummyInterface.class, address)
         );
-        assertThat(clientProxy, is(instanceOf(Proxy.class)));
+        assertThat(clientProxy).isInstanceOf(Proxy.class);
 
         Client c = ClientProxy.getClient(clientProxy);
-        assertThat(c.getEndpoint().getEndpointInfo().getAddress(), equalTo(address));
-        assertThat(c.getEndpoint().getService().get("endpoint.class").equals(DummyInterface.class), equalTo(true));
-        assertThat(((BindingProvider)clientProxy).getBinding() .getHandlerChain().size(), equalTo(0));
+        assertThat(c.getEndpoint().getEndpointInfo().getAddress()).isEqualTo(address);
+        assertThat(c.getEndpoint().getService().get("endpoint.class").equals(DummyInterface.class)).isEqualTo(true);
+        assertThat(((BindingProvider)clientProxy).getBinding() .getHandlerChain().size()).isEqualTo(0);
 
         HTTPClientPolicy httpclient = ((HTTPConduit)c.getConduit()).getClient();
-        assertThat(httpclient.getConnectionTimeout(), equalTo(500L));
-        assertThat(httpclient.getReceiveTimeout(), equalTo(2000L));
+        assertThat(httpclient.getConnectionTimeout()).isEqualTo(500L);
+        assertThat(httpclient.getReceiveTimeout()).isEqualTo(2000L);
 
         // with timeouts, handlers, interceptors, properties and MTOM
 
@@ -390,18 +385,18 @@ class JAXWSEnvironmentTest {
                         .cxfOutInterceptors(outInterceptor)
                         .enableMtom());
         c = ClientProxy.getClient(clientProxy);
-        assertThat(((BindingProvider) clientProxy).getBinding().getBindingID(), equalTo("http://www.w3.org/2003/05/soap/bindings/HTTP/"));
-        assertThat(c.getEndpoint().getEndpointInfo().getAddress(), equalTo(address));
-        assertThat(c.getEndpoint().getService().get("endpoint.class").equals(DummyInterface.class), equalTo(true));
+        assertThat(((BindingProvider) clientProxy).getBinding().getBindingID()).isEqualTo("http://www.w3.org/2003/05/soap/bindings/HTTP/");
+        assertThat(c.getEndpoint().getEndpointInfo().getAddress()).isEqualTo(address);
+        assertThat(c.getEndpoint().getService().get("endpoint.class").equals(DummyInterface.class)).isEqualTo(true);
 
         httpclient = ((HTTPConduit)c.getConduit()).getClient();
-        assertThat(httpclient.getConnectionTimeout(), equalTo(123L));
-        assertThat(httpclient.getReceiveTimeout(), equalTo(456L));
+        assertThat(httpclient.getConnectionTimeout()).isEqualTo(123L);
+        assertThat(httpclient.getReceiveTimeout()).isEqualTo(456L);
 
-        assertThat(((BindingProvider)clientProxy).getBinding().getHandlerChain(), contains(handler));
+        assertThat(((BindingProvider)clientProxy).getBinding().getHandlerChain()).contains(handler);
 
         BindingProvider bp = (BindingProvider)clientProxy;
         SOAPBinding binding = (SOAPBinding)bp.getBinding();
-        assertThat(binding.isMTOMEnabled(), equalTo(true));
+        assertThat(binding.isMTOMEnabled()).isEqualTo(true);
     }
 }

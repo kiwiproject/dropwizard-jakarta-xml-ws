@@ -13,11 +13,15 @@ import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletRegistration;
 import jakarta.servlet.http.HttpServlet;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.startsWith;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class JAXWSBundleTest {
 
@@ -42,18 +46,18 @@ class JAXWSBundleTest {
     void constructorArgumentChecks() {
         try {
             new JAXWSBundle<>(null, null);
-            fail();
+            fail("expected IllegalArgumentException but no exception thrown");
         }
         catch (Exception e) {
-            assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
 
         try {
             new JAXWSBundle<>("soap", null);
-            fail();
+            fail("expected IllegalArgumentException but no exception thrown");
         }
         catch (Exception e) {
-            assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
     }
 
@@ -65,7 +69,7 @@ class JAXWSBundleTest {
             jaxwsBundle.run(null, null);
         }
         catch (Exception e) {
-            assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
 
         jaxwsBundle.initialize(bootstrap);
@@ -91,7 +95,7 @@ class JAXWSBundleTest {
             jaxwsBundle.run(null, null);
         }
         catch (Exception e) {
-            assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
 
         jaxwsBundle.initialize(bootstrap);
@@ -111,26 +115,26 @@ class JAXWSBundleTest {
         Object service = new Object();
         try {
             jaxwsBundle.publishEndpoint(new EndpointBuilder("foo", null));
-            fail();
+            fail("expected IllegalArgumentException but no exception thrown");
         }
         catch (Exception e) {
-            assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
 
         try {
             jaxwsBundle.publishEndpoint(new EndpointBuilder(null, service));
-            fail();
+            fail("expected IllegalArgumentException but no exception thrown");
         }
         catch (Exception e) {
-            assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
 
         try {
             jaxwsBundle.publishEndpoint(new EndpointBuilder("   ", service));
-            fail();
+            fail("expected IllegalArgumentException but no exception thrown");
         }
         catch (Exception e) {
-            assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
 
         EndpointBuilder builder = mock(EndpointBuilder.class);
@@ -148,27 +152,27 @@ class JAXWSBundleTest {
 
         try {
             jaxwsBundle.getClient(new ClientBuilder<>(null, null));
-            fail();
+            fail("expected IllegalArgumentException but no exception thrown");
         }
 
         catch (Exception e) {
-            assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
 
         try {
             jaxwsBundle.getClient(new ClientBuilder<>(null, url));
-            fail();
+            fail("expected IllegalArgumentException but no exception thrown");
         }
         catch (Exception e) {
-            assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
 
         try {
             jaxwsBundle.getClient(new ClientBuilder<>(cls, "   "));
-            fail();
+            fail("expected IllegalArgumentException but no exception thrown");
         }
         catch (Exception e) {
-            assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
 
         ClientBuilder<?> builder = new ClientBuilder<>(cls, url);
