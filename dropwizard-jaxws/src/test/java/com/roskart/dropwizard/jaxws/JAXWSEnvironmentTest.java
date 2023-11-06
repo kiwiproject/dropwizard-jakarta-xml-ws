@@ -41,6 +41,7 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -329,30 +330,24 @@ class JAXWSEnvironmentTest {
     @Test
     void publishEndpointWithInvalidArguments() throws Exception {
 
-        try {
-            jaxwsEnvironment.publishEndpoint(new EndpointBuilder("foo", null));
-        }
-        catch (IllegalArgumentException e) {
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new EndpointBuilder("foo", null))
+                .withMessage("Service is null");
 
-        try {
-            jaxwsEnvironment.publishEndpoint(new EndpointBuilder(null, service));
-        }
-        catch (IllegalArgumentException e) {
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new EndpointBuilder(null, service))
+                .withMessage("Path is null");
 
-        try {
-            jaxwsEnvironment.publishEndpoint(new EndpointBuilder("   ", service));
-        }
-        catch (IllegalArgumentException e) {
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new EndpointBuilder("   ", service))
+                .withMessage("Path is empty");
     }
 
     @Test
     void getClient() {
 
-        String address = "http://address";
-        Handler handler = mock(Handler.class);
+        var address = "http://address";
+        var handler = mock(Handler.class);
 
         // simple
         DummyInterface clientProxy = jaxwsEnvironment.getClient(

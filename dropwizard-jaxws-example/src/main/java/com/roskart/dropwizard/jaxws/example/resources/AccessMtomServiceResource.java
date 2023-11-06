@@ -9,6 +9,7 @@ import ws.example.jaxws.dropwizard.roskart.com.mtomservice.ObjectFactory;
 
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import jakarta.activation.DataHandler;
 import jakarta.mail.util.ByteArrayDataSource;
@@ -43,7 +44,7 @@ public class AccessMtomServiceResource {
                     IOUtils.readStringFromStream(hr.getBinary().getInputStream());
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 

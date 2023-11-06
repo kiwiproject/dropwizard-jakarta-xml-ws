@@ -13,7 +13,6 @@ import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletRegistration;
 import jakarta.servlet.http.HttpServlet;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,12 +64,9 @@ class JAXWSBundleTest {
     void initializeAndRun() {
         JAXWSBundle<?> jaxwsBundle = new JAXWSBundle<>("/soap", jaxwsEnvironment);
 
-        try {
-            jaxwsBundle.run(null, null);
-        }
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> jaxwsBundle.run(null, null))
+                .withMessage("Environment is null");
 
         jaxwsBundle.initialize(bootstrap);
         verify(jaxwsEnvironment).setInstrumentedInvokerBuilder(any(InstrumentedInvokerFactory.class));
@@ -91,12 +87,9 @@ class JAXWSBundleTest {
             }
         };
 
-        try {
-            jaxwsBundle.run(null, null);
-        }
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> jaxwsBundle.run(null, null))
+                .withMessage("Environment is null");
 
         jaxwsBundle.initialize(bootstrap);
         verify(jaxwsEnvironment).setInstrumentedInvokerBuilder(any(InstrumentedInvokerFactory.class));

@@ -23,8 +23,8 @@ public class PersonDAO extends AbstractDAO<Person> {
         try {
             sess.beginTransaction();
             sess.createNativeQuery("create table people(id bigint primary key auto_increment not null, " +
-                    "fullname varchar(256) not null, jobtitle varchar(256) not null);").executeUpdate();
-            sess.createNativeQuery("create sequence hibernate_sequence").executeUpdate();
+                    "fullname varchar(256) not null, jobtitle varchar(256) not null);", Void.class).executeUpdate();
+            sess.createNativeQuery("create sequence hibernate_sequence", Void.class).executeUpdate();
         }
         finally {
             sess.getTransaction().commit();

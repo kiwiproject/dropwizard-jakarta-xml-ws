@@ -89,7 +89,7 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
         outMessage.put(Message.RESPONSE_CODE, responseCode);
         // Set the response headers
         @SuppressWarnings("unchecked")
-        Map<String, List<String>> responseHeaders = (Map)message.get(Message.PROTOCOL_HEADERS);
+        var responseHeaders = (Map<String, List<String>>) message.get(Message.PROTOCOL_HEADERS);
         if (responseHeaders != null) {
             responseHeaders.put("WWW-Authenticate", Collections.singletonList("Basic realm=" + authentication.getRealm()));
             responseHeaders.put("Content-length", Collections.singletonList("0"));

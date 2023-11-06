@@ -65,16 +65,21 @@ class ValidatingInvokerTest {
     class DummyService {
         public void noParams() {
         }
+
         public void noValidation(RootParam1 rootParam1, RootParam2 rootParam2) {
         }
+
         public void withValidation(@Valid RootParam1 rootParam1, @Valid RootParam2 rootParam2) {
         }
+
         public void withDropwizardValidation(@Validated() String foo) {
         }
+
         @UseAsyncMethod
         public void asyncMethod(String foo) {
         }
-        public void asyncMethodAsync(String foo, AsyncHandler asyncHandler) {
+
+        public void asyncMethodAsync(String foo, AsyncHandler<String> asyncHandler) {
         }
     }
 
@@ -129,18 +134,18 @@ class ValidatingInvokerTest {
     void invokeWithAsycHandler() {
         setTargetMethod(exchange, "asyncMethod", String.class);
 
-        List<Object> params = Arrays.<Object>asList(null, new AsyncHandler(){
+        List<Object> params = Arrays.<Object>asList(null, new AsyncHandler<String>() {
             @Override
-            public void handleResponse(Response res) {
+            public void handleResponse(Response<String> res) {
 
             }
         });
         invoker.invoke(exchange, params);
         verify(underlying).invoke(exchange, params);
 
-        params = Arrays.asList("foo", new AsyncHandler(){
+        params = Arrays.asList("foo", new AsyncHandler<String>() {
             @Override
-            public void handleResponse(Response res) {
+            public void handleResponse(Response<String> res) {
 
             }
         });

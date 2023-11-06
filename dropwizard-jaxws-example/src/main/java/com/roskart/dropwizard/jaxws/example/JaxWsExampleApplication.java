@@ -49,6 +49,7 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
     public void run(JaxWsExampleApplicationConfiguration jaxWsExampleApplicationConfiguration, Environment environment) {
 
         // Hello world service
+        @SuppressWarnings("unused")
         EndpointImpl e = jaxWsBundle.publishEndpoint(
                 new EndpointBuilder("/simple", new SimpleService()));
 
