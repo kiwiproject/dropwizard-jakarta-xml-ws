@@ -85,11 +85,13 @@ public class InstrumentedInvokerFactory {
             if (absolute) {
                 return explicitName;
             }
-            return metricRegistry.name(method.getDeclaringClass(), explicitName);
+            return MetricRegistry.name(method.getDeclaringClass(), explicitName);
         }
-        return metricRegistry.name(metricRegistry.name(method.getDeclaringClass(),
+        return MetricRegistry.name(
+                MetricRegistry.name(method.getDeclaringClass(),
                 method.getName()),
-                suffixes);
+                suffixes
+        );
     }
 
     /**

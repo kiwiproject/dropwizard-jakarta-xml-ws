@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatRuntimeException;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -130,14 +131,11 @@ class UnitOfWorkInvokerFactoryTest {
     void unitOfWorkWithException() {
         // use underlying invoker which invokes fooService.unitOfWork(true) - exception is thrown
         Invoker invoker = invokerBuilder.create(fooService, new UnitOfWorkInvoker(true), sessionFactory);
-        this.setTargetMethod(exchange, "unitOfWork", boolean.class); // simulate CXF behavior
+        this.setTargetMethod(exchange, "unitOfWork", boolean.class);  // simulate CXF behavior
 
-        try {
-            invoker.invoke(exchange, null);
-        }
-        catch (Exception e) {
-            assertThat(e.getMessage()).isEqualTo("Uh oh");
-        }
+        assertThatRuntimeException()
+                .isThrownBy(() -> invoker.invoke(exchange, null))
+                .withMessage("Uh oh");
 
         verify(session, times(1)).beginTransaction();
         verify(transaction, times(0)).commit();
