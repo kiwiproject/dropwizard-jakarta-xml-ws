@@ -14,7 +14,8 @@ import jakarta.servlet.ServletRegistration;
 import jakarta.servlet.http.HttpServlet;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.startsWith;
@@ -44,21 +45,20 @@ class JAXWSBundleTest {
 
     @Test
     void constructorArgumentChecks() {
-        try {
-            new JAXWSBundle<>(null, null);
-            fail("expected IllegalArgumentException but no exception thrown");
-        }
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new JAXWSBundle<>(null, jaxwsEnvironment))
+                .withMessage("Servlet path is null");
 
-        try {
-            new JAXWSBundle<>("soap", null);
-            fail("expected IllegalArgumentException but no exception thrown");
-        }
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new JAXWSBundle<>("soap", jaxwsEnvironment))
+                .withMessage("soap is not an absolute path");
+
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new JAXWSBundle<>("/soap", null))
+                .withMessage("jaxwsEnvironment is null");
+
+        assertThatCode(() -> new JAXWSBundle<>("/soap", jaxwsEnvironment))
+                .doesNotThrowAnyException();
     }
 
     @Test
@@ -113,29 +113,17 @@ class JAXWSBundleTest {
 
         JAXWSBundle<?> jaxwsBundle = new JAXWSBundle<>("/soap", jaxwsEnvironment);
         Object service = new Object();
-        try {
-            jaxwsBundle.publishEndpoint(new EndpointBuilder("foo", null));
-            fail("expected IllegalArgumentException but no exception thrown");
-        }
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> jaxwsBundle.publishEndpoint(new EndpointBuilder("foo", null)))
+                .withMessage("Service is null");
 
-        try {
-            jaxwsBundle.publishEndpoint(new EndpointBuilder(null, service));
-            fail("expected IllegalArgumentException but no exception thrown");
-        }
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> jaxwsBundle.publishEndpoint(new EndpointBuilder(null, service)))
+                .withMessage("Path is null");
 
-        try {
-            jaxwsBundle.publishEndpoint(new EndpointBuilder("   ", service));
-            fail("expected IllegalArgumentException but no exception thrown");
-        }
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> jaxwsBundle.publishEndpoint(new EndpointBuilder("   ", service)))
+                .withMessage("Path is empty");
 
         EndpointBuilder builder = mock(EndpointBuilder.class);
         jaxwsBundle.publishEndpoint(builder);
@@ -150,30 +138,21 @@ class JAXWSBundleTest {
         Class<?> cls = Object.class;
         String url = "http://foo";
 
-        try {
-            jaxwsBundle.getClient(new ClientBuilder<>(null, null));
-            fail("expected IllegalArgumentException but no exception thrown");
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> jaxwsBundle.getClient(new ClientBuilder<>(null, null)))
+                .withMessage("ServiceClass is null");
 
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> jaxwsBundle.getClient(new ClientBuilder<>(null, url)))
+                .withMessage("ServiceClass is null");
 
-        try {
-            jaxwsBundle.getClient(new ClientBuilder<>(null, url));
-            fail("expected IllegalArgumentException but no exception thrown");
-        }
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> jaxwsBundle.getClient(new ClientBuilder<>(cls, null)))
+                .withMessage("Address is null");
 
-        try {
-            jaxwsBundle.getClient(new ClientBuilder<>(cls, "   "));
-            fail("expected IllegalArgumentException but no exception thrown");
-        }
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> jaxwsBundle.getClient(new ClientBuilder<>(cls, " ")))
+                .withMessage("Address is empty");
 
         ClientBuilder<?> builder = new ClientBuilder<>(cls, url);
         jaxwsBundle.getClient(builder);

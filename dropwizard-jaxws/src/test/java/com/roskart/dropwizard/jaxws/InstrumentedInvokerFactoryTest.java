@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatRuntimeException;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
@@ -218,15 +219,9 @@ class InstrumentedInvokerFactoryTest {
 
         // Invoke InstrumentedResource.exceptionMetered with exception beeing thrown
 
-        invoker = invokerBuilder.create(instrumentedService, new ExceptionMeteredInvoker(true));
+        var throwingInvoker = invokerBuilder.create(instrumentedService, new ExceptionMeteredInvoker(true));
 
-        try {
-            invoker.invoke(exchange, null);
-            fail("Exception should be thrown here");
-        }
-        catch (Exception e) {
-            assertThat(e).isInstanceOf(RuntimeException.class);
-        }
+        assertThatRuntimeException().isThrownBy(() -> throwingInvoker.invoke(exchange, null));
 
         assertThat(timer.getCount()).isEqualTo(oldtimervalue);
         assertThat(meter.getCount()).isEqualTo(oldmetervalue);
