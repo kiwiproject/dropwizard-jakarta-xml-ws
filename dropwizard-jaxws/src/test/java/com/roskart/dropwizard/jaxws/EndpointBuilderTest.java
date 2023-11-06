@@ -8,9 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.Mockito.mock;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class EndpointBuilderTest {
 
@@ -38,15 +36,15 @@ class EndpointBuilderTest {
                 .cxfOutFaultInterceptors(outFaultInterceptor, outFaultInterceptor)
                 .properties(props);
 
-        assertThat(builder.getPath(), equalTo(path));
-        assertThat(builder.getService(), equalTo(service));
-        assertThat(builder.publishedEndpointUrl(), equalTo(publishedUrl));
-        assertThat(builder.getAuthentication(), equalTo(basicAuth));
-        assertThat(builder.getSessionFactory(), equalTo(sessionFactory));
-        assertThat(builder.getCxfInInterceptors(), contains(new Interceptor<?>[]{ inInterceptor, inInterceptor }));
-        assertThat(builder.getCxfInFaultInterceptors(), contains(new Interceptor<?>[]{ inFaultInterceptor, inFaultInterceptor }));
-        assertThat(builder.getCxfOutInterceptors(), contains(new Interceptor<?>[]{ outInterceptor, outInterceptor }));
-        assertThat(builder.getCxfOutFaultInterceptors(), contains(new Interceptor<?>[]{ outFaultInterceptor, outFaultInterceptor }));
-        assertThat(builder.getProperties().get("key"), equalTo("value"));
+        assertThat(builder.getPath()).isEqualTo(path);
+        assertThat(builder.getService()).isEqualTo(service);
+        assertThat(builder.publishedEndpointUrl()).isEqualTo(publishedUrl);
+        assertThat(builder.getAuthentication()).isEqualTo(basicAuth);
+        assertThat(builder.getSessionFactory()).isEqualTo(sessionFactory);
+        assertThat(builder.getCxfInInterceptors()).contains(new Interceptor<?>[]{ inInterceptor, inInterceptor });
+        assertThat(builder.getCxfInFaultInterceptors()).contains(new Interceptor<?>[]{ inFaultInterceptor, inFaultInterceptor });
+        assertThat(builder.getCxfOutInterceptors()).contains(new Interceptor<?>[]{ outInterceptor, outInterceptor });
+        assertThat(builder.getCxfOutFaultInterceptors()).contains(new Interceptor<?>[]{ outFaultInterceptor, outFaultInterceptor });
+        assertThat(builder.getProperties().get("key")).isEqualTo("value");
     }
 }

@@ -14,11 +14,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 
 class InstrumentedInvokerFactoryTest {
 
@@ -103,7 +106,7 @@ class InstrumentedInvokerFactoryTest {
                     .thenReturn(InstrumentedService.class.getMethod(methodName, parameterTypes));
         }
         catch (Exception e) {
-            fail("setTargetMethod failed: " + e.getClass().getName() + ": " + e.getMessage());
+            fail("setTargetMethod failed", e);
         }
     }
 
@@ -139,10 +142,10 @@ class InstrumentedInvokerFactoryTest {
         this.setTargetMethod(exchange, "foo"); // simulate CXF behavior
 
         Object result = invoker.invoke(exchange, null);
-        assertEquals("fooReturn", result);
+        assertThat(result).isEqualTo("fooReturn");
 
-        assertThat(timer.getCount(), is(oldtimervalue));
-        assertThat(meter.getCount(), is(oldmetervalue));
+        assertThat(timer.getCount()).isEqualTo(oldtimervalue);
+        assertThat(meter.getCount()).isEqualTo(oldmetervalue);
     }
 
     @Test
@@ -160,10 +163,10 @@ class InstrumentedInvokerFactoryTest {
         this.setTargetMethod(exchange, "metered"); // simulate CXF behavior
 
         Object result = invoker.invoke(exchange, null);
-        assertEquals("meteredReturn", result);
+        assertThat(result).isEqualTo("meteredReturn");
 
-        assertThat(timer.getCount(), is(oldtimervalue));
-        assertThat(meter.getCount(), is(1 + oldmetervalue));
+        assertThat(timer.getCount()).isEqualTo(oldtimervalue);
+        assertThat(meter.getCount()).isEqualTo(1 + oldmetervalue);
     }
 
     @Test
@@ -181,10 +184,10 @@ class InstrumentedInvokerFactoryTest {
         this.setTargetMethod(exchange, "timed"); // simulate CXF behavior
 
         Object result = invoker.invoke(exchange, null);
-        assertEquals("timedReturn", result);
+        assertThat(result).isEqualTo("timedReturn");
 
-        assertThat(timer.getCount(), is(1 + oldtimervalue));
-        assertThat(meter.getCount(), is(oldmetervalue));
+        assertThat(timer.getCount()).isEqualTo(1 + oldtimervalue);
+        assertThat(meter.getCount()).isEqualTo(oldmetervalue);
     }
 
     @Test
@@ -207,11 +210,11 @@ class InstrumentedInvokerFactoryTest {
         this.setTargetMethod(exchange, "exceptionMetered", boolean.class); // simulate CXF behavior
 
         Object result = invoker.invoke(exchange, null);
-        assertEquals("exceptionMeteredReturn", result);
+        assertThat(result).isEqualTo("exceptionMeteredReturn");
 
-        assertThat(timer.getCount(), is(oldtimervalue));
-        assertThat(meter.getCount(), is(oldmetervalue));
-        assertThat(exceptionmeter.getCount(), is(oldexceptionmetervalue));
+        assertThat(timer.getCount()).isEqualTo(oldtimervalue);
+        assertThat(meter.getCount()).isEqualTo(oldmetervalue);
+        assertThat(exceptionmeter.getCount()).isEqualTo(oldexceptionmetervalue);
 
         // Invoke InstrumentedResource.exceptionMetered with exception beeing thrown
 
@@ -219,16 +222,15 @@ class InstrumentedInvokerFactoryTest {
 
         try {
             invoker.invoke(exchange, null);
-            fail("Exception shall be thrown here");
+            fail("Exception should be thrown here");
         }
         catch (Exception e) {
-            assertThat(e, is(instanceOf(RuntimeException.class)));
+            assertThat(e).isInstanceOf(RuntimeException.class);
         }
 
-        assertThat(timer.getCount(), is(oldtimervalue));
-        assertThat(meter.getCount(), is(oldmetervalue));
-        assertThat(exceptionmeter.getCount(), is(1 + oldexceptionmetervalue));
-
+        assertThat(timer.getCount()).isEqualTo(oldtimervalue);
+        assertThat(meter.getCount()).isEqualTo(oldmetervalue);
+        assertThat(exceptionmeter.getCount()).isEqualTo(1 + oldexceptionmetervalue);
     }
 
 }

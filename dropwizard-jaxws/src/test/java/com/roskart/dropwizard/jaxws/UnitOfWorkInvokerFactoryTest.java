@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -94,7 +94,7 @@ class UnitOfWorkInvokerFactoryTest {
                     .thenReturn(FooService.class.getMethod(methodName, parameterTypes));
         }
         catch (Exception e) {
-            fail("setTargetMethod failed: " + e.getClass().getName() + ": " + e.getMessage());
+            fail("setTargetMethod failed", e);
         }
     }
 
@@ -104,7 +104,7 @@ class UnitOfWorkInvokerFactoryTest {
         this.setTargetMethod(exchange, "foo"); // simulate CXF behavior
 
         Object result = invoker.invoke(exchange, null);
-        assertEquals("foo return", result);
+        assertThat(result).isEqualTo("foo return");
 
         verifyNoInteractions(sessionFactory);
         verifyNoInteractions(session);
@@ -118,7 +118,7 @@ class UnitOfWorkInvokerFactoryTest {
         this.setTargetMethod(exchange, "unitOfWork", boolean.class); // simulate CXF behavior
 
         Object result = invoker.invoke(exchange, null);
-        assertEquals("unitOfWork return", result);
+        assertThat(result).isEqualTo("unitOfWork return");
 
         verify(session, times(1)).beginTransaction();
         verify(transaction, times(1)).commit();
@@ -136,7 +136,7 @@ class UnitOfWorkInvokerFactoryTest {
             invoker.invoke(exchange, null);
         }
         catch (Exception e) {
-            assertEquals("Uh oh", e.getMessage());
+            assertThat(e.getMessage()).isEqualTo("Uh oh");
         }
 
         verify(session, times(1)).beginTransaction();

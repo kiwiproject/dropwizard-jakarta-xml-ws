@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import jakarta.xml.ws.handler.Handler;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 class ClientBuilderTest {
@@ -32,14 +30,14 @@ class ClientBuilderTest {
                 .cxfOutInterceptors(outInterceptor, outInterceptor)
                 .cxfOutFaultInterceptors(outFaultInterceptor, outFaultInterceptor);
 
-        assertThat(builder.getAddress(), equalTo("address"));
-        assertThat(builder.getServiceClass(), equalTo(Object.class));
-        assertThat(builder.getConnectTimeout(), equalTo(1234));
-        assertThat(builder.getReceiveTimeout(), equalTo(5678));
-        assertThat(builder.getBindingId(), equalTo("binding id"));
-        assertThat(builder.getCxfInInterceptors(), contains(new Interceptor<?>[]{ inInterceptor, inInterceptor }));
-        assertThat(builder.getCxfInFaultInterceptors(), contains(new Interceptor<?>[]{ inFaultInterceptor, inFaultInterceptor }));
-        assertThat(builder.getCxfOutInterceptors(), contains(new Interceptor<?>[]{ outInterceptor, outInterceptor }));
-        assertThat(builder.getCxfOutFaultInterceptors(), contains(new Interceptor<?>[]{ outFaultInterceptor, outFaultInterceptor }));
+        assertThat(builder.getAddress()).isEqualTo("address");
+        assertThat(builder.getServiceClass()).isEqualTo(Object.class);
+        assertThat(builder.getConnectTimeout()).isEqualTo(1234);
+        assertThat(builder.getReceiveTimeout()).isEqualTo(5678);
+        assertThat(builder.getBindingId()).isEqualTo("binding id");
+        assertThat(builder.getCxfInInterceptors()).contains(new Interceptor<?>[]{ inInterceptor, inInterceptor });
+        assertThat(builder.getCxfInFaultInterceptors()).contains(new Interceptor<?>[]{ inFaultInterceptor, inFaultInterceptor });
+        assertThat(builder.getCxfOutInterceptors()).contains(new Interceptor<?>[]{ outInterceptor, outInterceptor });
+        assertThat(builder.getCxfOutFaultInterceptors()).contains(new Interceptor<?>[]{ outFaultInterceptor, outFaultInterceptor });
     }
 }
