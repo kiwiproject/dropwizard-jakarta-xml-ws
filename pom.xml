@@ -30,6 +30,22 @@
         <dropwizard.version>4.0.3</dropwizard.version>
         <cxf.version>4.0.3</cxf.version>
         <jakarta.mail-api.version>2.1.2</jakarta.mail-api.version>
+
+        <!--
+        NOTE:
+        We are using Jakarta Persistence and Transaction APIs from Jakarta EE 10 here, but using
+        the JAXB runtime version compatible with Jakarta EE 9. I think this will work because
+        Dropwizard 4.x is using Hibernate 6.1.x which says (see https://hibernate.org/orm/releases/6.1/)
+        it is compatible with both Jakarta Persistence 3.1 (Jakarta EE 10) and 3.0 (Jakarta EE 9).
+        The kiwi-bom uses Hibernate 6.3.x which is compatible with Jakarta Persistence 3.1 (Jakarta EE 10)
+        and it seems to work fine with Dropwizard 4.x. Plus, Hibernate 6.1.x is EOL (end-of-life) so we
+        don't really want to be using it. But, we are also mandating the JAXB runtime version that is
+        Jakarta EE 9 compatible, since that is what Dropwizard 4.x is compatible with.
+        -->
+        <jakarta.persistence-api.version>3.1.0</jakarta.persistence-api.version>
+        <jakarta.transaction-api.version>2.0.1</jakarta.transaction-api.version>
+        <jaxb-runtime.version>3.0.2</jaxb-runtime.version>
+        <kiwi-bom.version>2.0.3</kiwi-bom.version>
     </properties>
 
     <developers>
@@ -73,13 +89,30 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.kiwiproject</groupId>
+                <artifactId>kiwi-bom</artifactId>
+                <version>${kiwi-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <dependency>
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-bom</artifactId>
-                <version>${dropwizard.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>${jakarta.persistence-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.transaction</groupId>
+                <artifactId>jakarta.transaction-api</artifactId>
+                <version>${jakarta.transaction-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>${jaxb-runtime.version}</version>
             </dependency>
 
             <dependency>
