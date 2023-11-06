@@ -2,19 +2,20 @@ package com.roskart.dropwizard.jaxws;
 
 import org.apache.cxf.interceptor.Interceptor;
 import org.hibernate.SessionFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-public class EndpointBuilderTest {
+
+class EndpointBuilderTest {
 
     @Test
-    public void buildEndpoint() {
+    void buildEndpoint() {
         Object service = new Object();
         String path = "/foo";
         String publishedUrl = "http://external/url";

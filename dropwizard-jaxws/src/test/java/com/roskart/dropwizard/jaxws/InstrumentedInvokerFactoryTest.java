@@ -10,18 +10,17 @@ import org.apache.cxf.message.Exchange;
 import org.apache.cxf.service.invoker.Invoker;
 import org.apache.cxf.service.model.BindingOperationInfo;
 import org.apache.cxf.service.model.OperationInfo;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class InstrumentedInvokerFactoryTest {
+class InstrumentedInvokerFactoryTest {
 
     // Test service implementation
     class InstrumentedService {
@@ -108,8 +107,8 @@ public class InstrumentedInvokerFactoryTest {
         }
     }
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         exchange = mock(Exchange.class);
 
         BindingOperationInfo boi = mock(BindingOperationInfo.class);
@@ -126,7 +125,7 @@ public class InstrumentedInvokerFactoryTest {
     }
 
     @Test
-    public void noAnnotation() {
+    void noAnnotation() {
 
         Timer timer = testMetricRegistry.timer("timed");
         Meter meter = testMetricRegistry.meter("metered");
@@ -147,7 +146,7 @@ public class InstrumentedInvokerFactoryTest {
     }
 
     @Test
-    public void meteredAnnotation() {
+    void meteredAnnotation() {
 
         Timer timer = testMetricRegistry.timer("timed");
         Meter meter = testMetricRegistry.meter("metered");
@@ -168,7 +167,7 @@ public class InstrumentedInvokerFactoryTest {
     }
 
     @Test
-    public void timedAnnotation() {
+    void timedAnnotation() {
 
         Timer timer = testMetricRegistry.timer("timed");
         Meter meter = testMetricRegistry.meter("metered");
@@ -189,7 +188,7 @@ public class InstrumentedInvokerFactoryTest {
     }
 
     @Test
-    public void exceptionMeteredAnnotation() {
+    void exceptionMeteredAnnotation() {
 
         Timer timer = testMetricRegistry.timer("timed");
         Meter meter = testMetricRegistry.meter("metered");

@@ -8,9 +8,8 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.service.invoker.Invoker;
 import org.apache.cxf.service.model.BindingOperationInfo;
 import org.apache.cxf.service.model.OperationInfo;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import jakarta.validation.Validation;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
@@ -25,11 +24,10 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
-public class ValidatingInvokerTest {
+class ValidatingInvokerTest {
 
     ValidatingInvoker invoker;
     Invoker underlying;
@@ -79,8 +77,8 @@ public class ValidatingInvokerTest {
         }
     }
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         underlying = mock(Invoker.class);
         invoker = new ValidatingInvoker(underlying, Validation.buildDefaultValidatorFactory().getValidator());
         exchange = mock(Exchange.class);
@@ -107,14 +105,14 @@ public class ValidatingInvokerTest {
     }
 
     @Test
-    public void invokeWithoutParams() {
+    void invokeWithoutParams() {
         setTargetMethod(exchange, "noParams");
         invoker.invoke(exchange, null);
         verify(underlying).invoke(exchange, null);
     }
 
     @Test
-    public void invokeWithoutValidation() {
+    void invokeWithoutValidation() {
         setTargetMethod(exchange, "noValidation", RootParam1.class, RootParam2.class);
 
         List<Object> params = Arrays.asList(null, null);
@@ -127,7 +125,7 @@ public class ValidatingInvokerTest {
     }
 
     @Test
-    public void invokeWithAsycHandler() {
+    void invokeWithAsycHandler() {
         setTargetMethod(exchange, "asyncMethod", String.class);
 
         List<Object> params = Arrays.<Object>asList(null, new AsyncHandler(){
@@ -150,7 +148,7 @@ public class ValidatingInvokerTest {
     }
 
     @Test
-    public void invokeWithValidation() {
+    void invokeWithValidation() {
 
         setTargetMethod(exchange, "withValidation", RootParam1.class, RootParam2.class);
 

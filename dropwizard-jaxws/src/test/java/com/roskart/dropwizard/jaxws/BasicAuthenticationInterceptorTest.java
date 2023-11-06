@@ -19,12 +19,12 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageImpl;
 import org.apache.cxf.transport.Conduit;
 import org.apache.cxf.transport.Destination;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class BasicAuthenticationInterceptorTest {
+class BasicAuthenticationInterceptorTest {
 
     @Mock
     private InterceptorChain interceptorChainMock;
@@ -45,15 +45,15 @@ public class BasicAuthenticationInterceptorTest {
     private static final String CORRECT_PASSWORD = "secret";
     private static final String USERNAME = "username";
 
-    @Before
-    public void setup() throws IOException {
+    @BeforeEach
+    void setup() throws IOException {
         MockitoAnnotations.openMocks(this);
         when(destinationMock.getBackChannel(any())).thenReturn(conduitMock);
         when(outMessageMock.getContent(OutputStream.class)).thenReturn(outputStreamMock);
     }
 
     @Test
-    public void shouldAuthenticateValidUser() {
+    void shouldAuthenticateValidUser() {
         BasicAuthenticationInterceptor target = new BasicAuthenticationInterceptor();
         target.setAuthenticator(basicAuthentication);
         Message message = createMessageWithUsernameAndPassword(USERNAME, CORRECT_PASSWORD);
@@ -64,7 +64,7 @@ public class BasicAuthenticationInterceptorTest {
     }
 
     @Test
-    public void shouldReturnUnathorizedCodeForInvalidCredentials() {
+    void shouldReturnUnathorizedCodeForInvalidCredentials() {
         BasicAuthenticationInterceptor target = new BasicAuthenticationInterceptor();
         target.setAuthenticator(basicAuthentication);
         Message message = createMessageWithUsernameAndPassword(USERNAME, "foo");
@@ -75,7 +75,7 @@ public class BasicAuthenticationInterceptorTest {
     }
 
     @Test
-    public void shouldNotCrashOnNullPassword() {
+    void shouldNotCrashOnNullPassword() {
         BasicAuthenticationInterceptor target = new BasicAuthenticationInterceptor();
         target.setAuthenticator(basicAuthentication);
         Message message = createMessageWithUsernameAndPassword(USERNAME, null);
@@ -86,7 +86,7 @@ public class BasicAuthenticationInterceptorTest {
     }
 
     @Test
-    public void shouldNotCrashOnNullUser() {
+    void shouldNotCrashOnNullUser() {
         BasicAuthenticationInterceptor target = new BasicAuthenticationInterceptor();
         target.setAuthenticator(basicAuthentication);
         Message message = createMessageWithUsernameAndPassword(null, CORRECT_PASSWORD);
