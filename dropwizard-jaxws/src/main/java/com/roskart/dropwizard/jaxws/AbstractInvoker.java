@@ -31,9 +31,6 @@ public abstract class AbstractInvoker implements Invoker {
 
     }
 
-    @Override
-    public abstract Object invoke(Exchange exchange, Object o);
-
     /**
      * Rethrows exception, without requiring to handle checked exception.
      * Type-erasure happens at compile time, therefore if E is RuntimeException,
