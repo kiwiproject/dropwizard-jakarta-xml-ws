@@ -11,19 +11,21 @@ import java.util.Set;
 
 public class WsdlFirstServiceHandler implements SOAPHandler<SOAPMessageContext> {
 
-    Logger log = LoggerFactory.getLogger(WsdlFirstServiceHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WsdlFirstServiceHandler.class);
 
     @Override
     public Set<QName> getHeaders() {
-        return null;
+        return Set.of();
     }
 
     @Override
     public void close(MessageContext messageContext) {
+        LOG.info("Closing");
     }
 
     @Override
     public boolean handleFault(SOAPMessageContext context) {
+        LOG.warn("Handling fault");
         return true;
     }
 
@@ -33,9 +35,9 @@ public class WsdlFirstServiceHandler implements SOAPHandler<SOAPMessageContext> 
         Boolean outbound = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
         if (Boolean.TRUE.equals(outbound)) {
-            log.info("WsdlFirstService server handler - outbound");
+            LOG.info("WsdlFirstService server handler - outbound");
         } else {
-            log.info("WsdlFirstService server handler - inbound");
+            LOG.info("WsdlFirstService server handler - inbound");
         }
 
         return true;
