@@ -1,11 +1,19 @@
 package com.roskart.dropwizard.jaxws;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatRuntimeException;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.Timer;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.service.invoker.Invoker;
 import org.apache.cxf.service.model.BindingOperationInfo;
@@ -14,14 +22,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatRuntimeException;
-import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.contains;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 class InstrumentedInvokerFactoryTest {
@@ -47,8 +47,7 @@ class InstrumentedInvokerFactoryTest {
         public String exceptionMetered(boolean doThrow) {
             if (doThrow) {
                 throw new RuntimeException("Runtime exception occured");
-            }
-            else {
+            } else {
                 return "exceptionMeteredReturn";
             }
         }
@@ -86,9 +85,11 @@ class InstrumentedInvokerFactoryTest {
 
     public class ExceptionMeteredInvoker implements Invoker {
         private boolean doThrow;
+
         public ExceptionMeteredInvoker(boolean doThrow) {
             this.doThrow = doThrow;
         }
+
         @Override
         public Object invoke(Exchange exchange, Object o) {
             return instrumentedService.exceptionMetered(doThrow);
@@ -105,8 +106,7 @@ class InstrumentedInvokerFactoryTest {
             OperationInfo oi = exchange.getBindingOperationInfo().getOperationInfo();
             when(oi.getProperty(Method.class.getName()))
                     .thenReturn(InstrumentedService.class.getMethod(methodName, parameterTypes));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail("setTargetMethod failed", e);
         }
     }

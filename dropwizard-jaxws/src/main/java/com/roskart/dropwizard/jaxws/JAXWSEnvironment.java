@@ -93,8 +93,7 @@ public class JAXWSEnvironment {
                         .append(")\n");
             }
             log.info("JAX-WS service endpoints [{}]:\n\n{}", this.defaultPath, endpoints);
-        }
-        else {
+        } else {
             log.info("No JAX-WS service endpoints were registered.");
         }
     }
@@ -106,17 +105,16 @@ public class JAXWSEnvironment {
         checkArgument(endpointBuilder != null, "EndpointBuilder is null");
 
         EndpointImpl cxfendpoint = new EndpointImpl(bus, endpointBuilder.getService());
-        if(endpointBuilder.publishedEndpointUrl() != null) {
+        if (endpointBuilder.publishedEndpointUrl() != null) {
             cxfendpoint.setPublishedEndpointUrl(endpointBuilder.publishedEndpointUrl());
-        }
-        else if(publishedEndpointUrlPrefix != null) {
+        } else if (publishedEndpointUrlPrefix != null) {
             cxfendpoint.setPublishedEndpointUrl(publishedEndpointUrlPrefix + endpointBuilder.getPath());
         }
         cxfendpoint.publish(endpointBuilder.getPath());
 
         // MTOM support
         if (endpointBuilder.isMtomEnabled()) {
-            ((SOAPBinding)cxfendpoint.getBinding()).setMTOMEnabled(true);
+            ((SOAPBinding) cxfendpoint.getBinding()).setMTOMEnabled(true);
         }
 
         Invoker invoker = cxfendpoint.getService().getInvoker();
@@ -172,8 +170,9 @@ public class JAXWSEnvironment {
 
     /**
      * JAX-WS client factory
+     *
      * @param clientBuilder ClientBuilder.
-     * @param <T> Service interface type.
+     * @param <T>           Service interface type.
      * @return JAX-WS client proxy.
      */
     public <T> T getClient(ClientBuilder<T> clientBuilder) {
@@ -212,12 +211,12 @@ public class JAXWSEnvironment {
 
         // MTOM support
         if (clientBuilder.isMtomEnabled()) {
-            BindingProvider bp = (BindingProvider)proxy;
-            SOAPBinding binding = (SOAPBinding)bp.getBinding();
+            BindingProvider bp = (BindingProvider) proxy;
+            SOAPBinding binding = (SOAPBinding) bp.getBinding();
             binding.setMTOMEnabled(true);
         }
 
-        HTTPConduit http = (HTTPConduit)ClientProxy.getClient(proxy).getConduit();
+        HTTPConduit http = (HTTPConduit) ClientProxy.getClient(proxy).getConduit();
         HTTPClientPolicy client = http.getClient();
         client.setConnectionTimeout(clientBuilder.getConnectTimeout());
         client.setReceiveTimeout(clientBuilder.getReceiveTimeout());

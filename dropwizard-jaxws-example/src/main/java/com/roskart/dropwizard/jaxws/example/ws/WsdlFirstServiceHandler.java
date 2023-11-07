@@ -30,12 +30,11 @@ public class WsdlFirstServiceHandler implements SOAPHandler<SOAPMessageContext> 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
 
-        Boolean outbound = (Boolean)context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+        Boolean outbound = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
         if (Boolean.TRUE.equals(outbound)) {
             log.info("WsdlFirstService server handler - outbound");
-        }
-        else {
+        } else {
             log.info("WsdlFirstService server handler - inbound");
         }
 

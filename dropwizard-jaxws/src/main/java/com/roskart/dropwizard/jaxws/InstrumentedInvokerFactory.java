@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Provides factory method for creating instrumented CXF invoker chain.
+ *
  * @see com.roskart.dropwizard.jaxws.InstrumentedInvokers
  * @see com.codahale.metrics.jersey.InstrumentedResourceMethodDispatchProvider
  */
@@ -89,17 +90,16 @@ public class InstrumentedInvokerFactory {
         }
         return MetricRegistry.name(
                 MetricRegistry.name(method.getDeclaringClass(),
-                method.getName()),
+                        method.getName()),
                 suffixes
         );
     }
 
     /**
-     *
      * @param metricRegistry Metric registry.
      */
     public InstrumentedInvokerFactory(MetricRegistry metricRegistry) {
-        this.metricRegistry =  metricRegistry;
+        this.metricRegistry = metricRegistry;
     }
 
 

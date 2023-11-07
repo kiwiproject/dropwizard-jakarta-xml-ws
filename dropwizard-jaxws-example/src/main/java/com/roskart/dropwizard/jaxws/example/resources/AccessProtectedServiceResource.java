@@ -1,7 +1,6 @@
 package com.roskart.dropwizard.jaxws.example.resources;
 
 import com.roskart.dropwizard.jaxws.example.ws.JavaFirstService;
-
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -27,13 +26,12 @@ public class AccessProtectedServiceResource {
     public String getEcho() {
         try {
 
-            BindingProvider bp = (BindingProvider)javaFirstService;
+            BindingProvider bp = (BindingProvider) javaFirstService;
             bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, "johndoe");
             bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, "secret");
 
             return this.javaFirstService.echo("Hello from the protected service!");
-        }
-        catch(JavaFirstService.JavaFirstServiceException jfse) {
+        } catch (JavaFirstService.JavaFirstServiceException jfse) {
             throw new WebApplicationException(jfse);
         }
     }

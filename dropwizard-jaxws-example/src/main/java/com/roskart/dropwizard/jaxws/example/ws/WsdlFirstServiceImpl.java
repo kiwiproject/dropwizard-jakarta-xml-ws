@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
         targetNamespace = "http://com.roskart.dropwizard.jaxws.example.ws/WsdlFirstService",
         name = "WsdlFirstService",
         wsdlLocation = "META-INF/WsdlFirstService.wsdl")
-@HandlerChain(file="wsdlfirstservice-handlerchain.xml")
+@HandlerChain(file = "wsdlfirstservice-handlerchain.xml")
 public class WsdlFirstServiceImpl implements WsdlFirstService {
     @Override
     @Metered
@@ -37,8 +37,8 @@ public class WsdlFirstServiceImpl implements WsdlFirstService {
     }
 
     public Future<EchoResponse> nonBlockingEchoAsync(
-        final NonBlockingEcho parameters,
-        final AsyncHandler<EchoResponse> asyncHandler) {
+            final NonBlockingEcho parameters,
+            final AsyncHandler<EchoResponse> asyncHandler) {
 
         final ServerAsyncResponse<EchoResponse> sar = new ServerAsyncResponse<>();
 

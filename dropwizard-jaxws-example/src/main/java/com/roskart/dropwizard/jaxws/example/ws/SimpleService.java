@@ -1,7 +1,6 @@
 package com.roskart.dropwizard.jaxws.example.ws;
 
 import com.codahale.metrics.annotation.Metered;
-
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
 

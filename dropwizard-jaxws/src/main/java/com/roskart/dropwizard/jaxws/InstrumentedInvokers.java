@@ -8,6 +8,7 @@ import org.apache.cxf.service.invoker.Invoker;
 
 /**
  * Provides instrumented CXF invoker implementations.
+ *
  * @see com.codahale.metrics.jersey3.InstrumentedResourceMethodApplicationListener
  */
 public class InstrumentedInvokers {
@@ -38,12 +39,10 @@ public class InstrumentedInvokers {
                 final Timer.Context context = timer.time();
                 try {
                     result = this.underlying.invoke(exchange, o);
-                }
-                finally {
+                } finally {
                     context.stop();
                 }
-            }
-            else {
+            } else {
                 result = this.underlying.invoke(exchange, o);
             }
             return result;
@@ -79,13 +78,16 @@ public class InstrumentedInvokers {
     public static class ExceptionMeter {
         private Meter meter;
         private Class<? extends Throwable> exceptionClass;
+
         public ExceptionMeter(Meter meter, Class<? extends Throwable> exceptionClass) {
             this.meter = meter;
             this.exceptionClass = exceptionClass;
         }
+
         public Meter getMeter() {
             return meter;
         }
+
         public Class<? extends Throwable> getExceptionClass() {
             return exceptionClass;
         }
@@ -111,8 +113,7 @@ public class InstrumentedInvokers {
             try {
                 result = this.underlying.invoke(exchange, o);
                 return result;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
 
                 if (meters.containsKey(methodname)) {
                     ExceptionMeter meter = meters.get(methodname);

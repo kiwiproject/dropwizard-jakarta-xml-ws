@@ -1,12 +1,11 @@
 package com.roskart.dropwizard.jaxws;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.google.common.collect.ImmutableList;
+import jakarta.xml.ws.handler.Handler;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.message.Message;
-
-import jakarta.xml.ws.handler.Handler;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * JAX-WS/CXF client builder.
@@ -46,8 +45,9 @@ public class ClientBuilder<T> extends AbstractBuilder {
 
     /**
      * Create new ClientBuilder. Endpoint will be published relative to the CXF servlet path.
+     *
      * @param serviceClass Service interface class..
-     * @param address Endpoint URL address..
+     * @param address      Endpoint URL address..
      */
     public ClientBuilder(Class<T> serviceClass, String address) {
         checkArgument(serviceClass != null, "ServiceClass is null");
@@ -59,6 +59,7 @@ public class ClientBuilder<T> extends AbstractBuilder {
 
     /**
      * Change default HTTP client connect timeout.
+     *
      * @param value Timeout value in milliseconds.
      * @return ClientBuilder instance.
      */
@@ -69,6 +70,7 @@ public class ClientBuilder<T> extends AbstractBuilder {
 
     /**
      * Change default HTTP client receive timeout.
+     *
      * @param value Timeout value in milliseconds.
      * @return ClientBuilder instance.
      */
@@ -79,6 +81,7 @@ public class ClientBuilder<T> extends AbstractBuilder {
 
     /**
      * Add client side JAX-WS handlers.
+     *
      * @param handlers JAX-WS handlers.
      * @return ClientBuilder instance.
      */
@@ -89,6 +92,7 @@ public class ClientBuilder<T> extends AbstractBuilder {
 
     /**
      * Set ClientProxyFactoryBean bindingId.
+     *
      * @param bindingId bindingId.
      * @return ClientBuilder instance.
      */
@@ -101,33 +105,33 @@ public class ClientBuilder<T> extends AbstractBuilder {
     @SafeVarargs
     @SuppressWarnings("unchecked")
     public final ClientBuilder<T> cxfInInterceptors(Interceptor<? extends Message>... interceptors) {
-        return (ClientBuilder<T>)super.cxfInInterceptors(interceptors);
+        return (ClientBuilder<T>) super.cxfInInterceptors(interceptors);
     }
 
     @Override
     @SafeVarargs
     @SuppressWarnings("unchecked")
     public final ClientBuilder<T> cxfInFaultInterceptors(Interceptor<? extends Message>... interceptors) {
-        return (ClientBuilder<T>)super.cxfInFaultInterceptors(interceptors);
+        return (ClientBuilder<T>) super.cxfInFaultInterceptors(interceptors);
     }
 
     @Override
     @SafeVarargs
     @SuppressWarnings("unchecked")
     public final ClientBuilder<T> cxfOutInterceptors(Interceptor<? extends Message>... interceptors) {
-        return (ClientBuilder<T>)super.cxfOutInterceptors(interceptors);
+        return (ClientBuilder<T>) super.cxfOutInterceptors(interceptors);
     }
 
     @Override
     @SafeVarargs
     @SuppressWarnings("unchecked")
     public final ClientBuilder<T> cxfOutFaultInterceptors(Interceptor<? extends Message>... interceptors) {
-        return (ClientBuilder<T>)super.cxfOutFaultInterceptors(interceptors);
+        return (ClientBuilder<T>) super.cxfOutFaultInterceptors(interceptors);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public ClientBuilder<T> enableMtom() {
-        return (ClientBuilder<T>)super.enableMtom();
+        return (ClientBuilder<T>) super.enableMtom();
     }
 }

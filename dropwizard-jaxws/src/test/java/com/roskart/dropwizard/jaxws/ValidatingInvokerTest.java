@@ -37,10 +37,12 @@ class ValidatingInvokerTest {
     class ChildParam {
         @NotEmpty
         private String foo;
+
         public ChildParam(String foo) {
             this.foo = foo;
         }
-        @ValidationMethod(message="foo may not be 'John'")
+
+        @ValidationMethod(message = "foo may not be 'John'")
         public boolean isNotJohn() {
             return !("John".equals(foo));
         }
@@ -49,6 +51,7 @@ class ValidatingInvokerTest {
     class RootParam1 {
         @Valid
         private ChildParam child;
+
         public RootParam1(ChildParam childParam) {
             this.child = childParam;
         }
@@ -57,6 +60,7 @@ class ValidatingInvokerTest {
     class RootParam2 {
         @NotEmpty
         private String foo;
+
         public RootParam2(String foo) {
             this.foo = foo;
         }
@@ -104,8 +108,7 @@ class ValidatingInvokerTest {
             OperationInfo oi = exchange.getBindingOperationInfo().getOperationInfo();
             when(oi.getProperty(Method.class.getName()))
                     .thenReturn(DummyService.class.getMethod(methodName, parameterTypes));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail("setTargetMethod failed", e);
         }
     }

@@ -13,6 +13,7 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 /**
  * Wraps underlying invoker in a Hibernate session. Code in this class is based on Dropwizard's UnitOfWorkApplication
  * listener and UnitOfWorkAspect. We don't use UnitOfWorkAspect here because it is declared package private.
+ *
  * @see io.dropwizard.hibernate.UnitOfWorkAspect
  * @see io.dropwizard.hibernate.UnitOfWorkApplicationListener
  * @see io.dropwizard.hibernate.UnitOfWorkAwareProxyFactory
@@ -57,8 +58,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
                 session.close();
                 ManagedSessionContext.unbind(sessionFactory);
             }
-        }
-        else {
+        } else {
             return underlying.invoke(exchange, o);
         }
     }
