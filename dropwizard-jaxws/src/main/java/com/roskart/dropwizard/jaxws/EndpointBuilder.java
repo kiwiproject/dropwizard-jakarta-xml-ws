@@ -9,7 +9,7 @@ import org.hibernate.SessionFactory;
 import java.util.Map;
 
 /**
- * JAX-WS/CXF server endpoint builder.
+ * Jakarta XML Web Services/CXF server endpoint builder.
  */
 public class EndpointBuilder extends AbstractBuilder {
 
@@ -62,7 +62,7 @@ public class EndpointBuilder extends AbstractBuilder {
     }
 
     /**
-     * Publish JAX-WS endpoint with Dropwizard Hibernate Bundle integration.
+     * Publish Jakarta XML Web Services endpoint with Dropwizard Hibernate Bundle integration.
      * Service will be scanned for @UnitOfWork annotations.
      *
      * @param sessionFactory Hibernate session factory.
@@ -73,7 +73,7 @@ public class EndpointBuilder extends AbstractBuilder {
     }
 
     /**
-     * Publish JAX-WS protected endpoint using Dropwizard BasicAuthentication.
+     * Publish Jakarta XML Web Services protected endpoint using Dropwizard BasicAuthentication.
      *
      * @param authentication BasicAuthentication implementation.
      */
@@ -108,7 +108,8 @@ public class EndpointBuilder extends AbstractBuilder {
     }
 
     /**
-     * Invoking enableMTOM is not necessary if you use @MTOM JAX-WS annotation on your service implementation class.
+     * Invoking enableMTOM is not necessary if you use the {@link jakarta.xml.ws.soap.MTOM MTOM} Jakarta XML Web
+     * Services annotation on your service implementation class.
      */
     @Override
     public EndpointBuilder enableMtom() {
@@ -121,7 +122,7 @@ public class EndpointBuilder extends AbstractBuilder {
     }
 
     /**
-     * Provide a property bag to be supplied to the JAX-WS endpoint.
+     * Provide a property bag to be supplied to the Jakarta XML Web Services endpoint.
      */
     public EndpointBuilder properties(Map<String, Object> properties) {
         this.properties = properties;
