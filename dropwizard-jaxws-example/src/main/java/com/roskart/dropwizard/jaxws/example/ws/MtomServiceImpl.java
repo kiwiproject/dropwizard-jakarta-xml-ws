@@ -1,16 +1,17 @@
 package com.roskart.dropwizard.jaxws.example.ws;
 
 import com.codahale.metrics.annotation.Metered;
+import jakarta.activation.DataHandler;
+import jakarta.jws.WebService;
+import jakarta.mail.util.ByteArrayDataSource;
+import jakarta.xml.ws.soap.MTOM;
 import org.apache.cxf.helpers.IOUtils;
 import ws.example.jaxws.dropwizard.roskart.com.mtomservice.Hello;
 import ws.example.jaxws.dropwizard.roskart.com.mtomservice.HelloResponse;
 import ws.example.jaxws.dropwizard.roskart.com.mtomservice.MtomService;
 
-import jakarta.activation.DataHandler;
-import jakarta.jws.WebService;
-import jakarta.mail.util.ByteArrayDataSource;
-import jakarta.xml.ws.soap.MTOM;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 @MTOM // @MTOM annotation is not necessary if you invoke enableMtom on EndopointBuilder
 @WebService(endpointInterface = "ws.example.jaxws.dropwizard.roskart.com.mtomservice.MtomService",
@@ -28,9 +29,8 @@ public class MtomServiceImpl implements MtomService {
             response.setBinary(new DataHandler(new ByteArrayDataSource(bin,
                     parameters.getBinary().getContentType())));
             return response;
-        }
-        catch(IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 }

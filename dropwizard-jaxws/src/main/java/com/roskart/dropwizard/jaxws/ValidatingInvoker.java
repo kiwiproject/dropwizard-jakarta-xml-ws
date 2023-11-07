@@ -1,18 +1,18 @@
 package com.roskart.dropwizard.jaxws;
 
-import io.dropwizard.validation.Validated;
 import io.dropwizard.validation.ConstraintViolations;
+import io.dropwizard.validation.Validated;
+import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
+import jakarta.validation.Validator;
+import jakarta.validation.groups.Default;
+import jakarta.xml.ws.AsyncHandler;
 import org.apache.cxf.helpers.CastUtils;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.FaultMode;
 import org.apache.cxf.message.MessageContentsList;
 import org.apache.cxf.service.invoker.Invoker;
 
-import jakarta.validation.Validator;
-import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
-import jakarta.validation.groups.Default;
-import jakarta.xml.ws.AsyncHandler;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.List;
@@ -84,11 +84,11 @@ public class ValidatingInvoker extends AbstractInvoker {
                     validator.validate(value, classes));
 
             if (!errors.isEmpty()) {
-                String message = "\n";
+                var message = new StringBuilder("\n");
                 for (String error : errors) {
-                    message += "    " + error + "\n";
+                    message.append("    ").append(error).append("\n");
                 }
-                throw new ValidationException(message);
+                throw new ValidationException(message.toString());
             }
         }
 

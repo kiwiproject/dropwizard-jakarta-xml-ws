@@ -1,14 +1,14 @@
 package com.roskart.dropwizard.jaxws;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
 import org.apache.cxf.interceptor.Interceptor;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.mockito.Mockito.mock;
-import static org.assertj.core.api.Assertions.assertThat;
 
 class EndpointBuilderTest {
 
@@ -45,6 +45,6 @@ class EndpointBuilderTest {
         assertThat(builder.getCxfInFaultInterceptors()).contains(new Interceptor<?>[]{ inFaultInterceptor, inFaultInterceptor });
         assertThat(builder.getCxfOutInterceptors()).contains(new Interceptor<?>[]{ outInterceptor, outInterceptor });
         assertThat(builder.getCxfOutFaultInterceptors()).contains(new Interceptor<?>[]{ outFaultInterceptor, outFaultInterceptor });
-        assertThat(builder.getProperties().get("key")).isEqualTo("value");
+        assertThat(builder.getProperties()).containsEntry("key", "value");
     }
 }

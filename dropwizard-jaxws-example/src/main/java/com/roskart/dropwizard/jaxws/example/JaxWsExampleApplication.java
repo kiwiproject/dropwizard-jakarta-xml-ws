@@ -7,16 +7,24 @@ import com.roskart.dropwizard.jaxws.JAXWSBundle;
 import com.roskart.dropwizard.jaxws.example.auth.BasicAuthenticator;
 import com.roskart.dropwizard.jaxws.example.core.Person;
 import com.roskart.dropwizard.jaxws.example.db.PersonDAO;
-import com.roskart.dropwizard.jaxws.example.resources.*;
-import com.roskart.dropwizard.jaxws.example.ws.*;
+import com.roskart.dropwizard.jaxws.example.resources.AccessMtomServiceResource;
+import com.roskart.dropwizard.jaxws.example.resources.AccessProtectedServiceResource;
+import com.roskart.dropwizard.jaxws.example.resources.AccessWsdlFirstServiceResource;
+import com.roskart.dropwizard.jaxws.example.resources.WsdlFirstClientHandler;
+import com.roskart.dropwizard.jaxws.example.ws.HibernateExampleService;
+import com.roskart.dropwizard.jaxws.example.ws.JavaFirstService;
+import com.roskart.dropwizard.jaxws.example.ws.JavaFirstServiceImpl;
+import com.roskart.dropwizard.jaxws.example.ws.MtomServiceImpl;
+import com.roskart.dropwizard.jaxws.example.ws.SimpleService;
+import com.roskart.dropwizard.jaxws.example.ws.WsdlFirstServiceImpl;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
-import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.ext.logging.LoggingInInterceptor;
 import org.apache.cxf.ext.logging.LoggingOutInterceptor;
+import org.apache.cxf.jaxws.EndpointImpl;
 import ws.example.jaxws.dropwizard.roskart.com.mtomservice.MtomService;
 import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService;
 
@@ -45,6 +53,7 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
         bootstrap.addBundle(anotherJaxWsBundle);
     }
 
+    @SuppressWarnings({ "UnusedAssignment", "java:S1854", "java:S125" })
     @Override
     public void run(JaxWsExampleApplicationConfiguration jaxWsExampleApplicationConfiguration, Environment environment) {
 

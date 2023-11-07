@@ -1,18 +1,6 @@
 package com.roskart.dropwizard.jaxws;
 
-import org.apache.cxf.Bus;
-import org.apache.cxf.BusFactory;
-import org.apache.cxf.jaxws.EndpointImpl;
-import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.endpoint.ServerRegistry;
-import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.service.invoker.Invoker;
-import org.apache.cxf.transport.http.HTTPConduit;
-import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
-import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.google.common.base.Preconditions.checkArgument;
 
 import jakarta.servlet.http.HttpServlet;
 import jakarta.validation.Validation;
@@ -21,8 +9,19 @@ import jakarta.validation.ValidatorFactory;
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.handler.Handler;
 import jakarta.xml.ws.soap.SOAPBinding;
-
-import static com.google.common.base.Preconditions.checkArgument;
+import org.apache.cxf.Bus;
+import org.apache.cxf.BusFactory;
+import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.endpoint.ServerRegistry;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.jaxws.EndpointImpl;
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.service.invoker.Invoker;
+import org.apache.cxf.transport.http.HTTPConduit;
+import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Performs CXF Bus setup and provides methods for publishing JAX-WS endpoints and create JAX-WS clients.
@@ -83,13 +82,17 @@ public class JAXWSEnvironment {
 
     public void logEndpoints() {
         ServerRegistry sr = bus.getExtension(org.apache.cxf.endpoint.ServerRegistry.class);
-        if (sr.getServers().size() > 0) {
-            String endpoints = "";
+        if (!sr.getServers().isEmpty()) {
+            var endpoints = new StringBuilder();
             for (Server s : sr.getServers()) {
-                endpoints += "    " + this.defaultPath +  s.getEndpoint().getEndpointInfo().getAddress() +
-                        " (" + s.getEndpoint().getEndpointInfo().getInterface().getName() + ")\n";
+                endpoints.append("    ")
+                        .append(this.defaultPath)
+                        .append(s.getEndpoint().getEndpointInfo().getAddress())
+                        .append(" (")
+                        .append(s.getEndpoint().getEndpointInfo().getInterface().getName())
+                        .append(")\n");
             }
-            log.info("JAX-WS service endpoints [" + this.defaultPath + "]:\n\n" + endpoints);
+            log.info("JAX-WS service endpoints [{}]:\n\n{}", this.defaultPath, endpoints);
         }
         else {
             log.info("No JAX-WS service endpoints were registered.");

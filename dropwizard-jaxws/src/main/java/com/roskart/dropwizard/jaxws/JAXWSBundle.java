@@ -1,15 +1,13 @@
 package com.roskart.dropwizard.jaxws;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import io.dropwizard.core.ConfiguredBundle;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
-
+import jakarta.xml.ws.handler.Handler;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.hibernate.SessionFactory;
-
-import jakarta.xml.ws.handler.Handler;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * A Dropwizard bundle that enables Dropwizard applications to publish SOAP web services using JAX-WS and create
@@ -88,6 +86,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      *
      * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
      */
+    @Deprecated(since = "0.5.0")
     public EndpointImpl publishEndpoint(String path, Object service) {
         return this.publishEndpoint(path, service, null, null);
     }
@@ -102,6 +101,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      *
      * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
      */
+    @Deprecated(since = "0.5.0")
     public EndpointImpl publishEndpoint(String path, Object service, SessionFactory sessionFactory) {
         return this.publishEndpoint(path, service, null, sessionFactory);
     }
@@ -116,6 +116,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      *
      * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
      */
+    @Deprecated(since = "0.5.0")
     public EndpointImpl publishEndpoint(String path, Object service, BasicAuthentication authentication) {
         return this.publishEndpoint(path, service, authentication, null);
     }
@@ -132,6 +133,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      *
      * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
      */
+    @Deprecated(since = "0.5.0")
     public EndpointImpl publishEndpoint(String path, Object service, BasicAuthentication auth,
                                 SessionFactory sessionFactory) {
         checkArgument(service != null, "Service is null");
@@ -153,7 +155,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      *
      * @deprecated Use the {@link #getClient(ClientBuilder)} getClient} method instead.
      */
-    @Deprecated
+    @Deprecated(since = "0.5.0")
     public <T> T getClient(Class<T> serviceClass, String address, Handler...handlers) {
         checkArgument(serviceClass != null, "ServiceClass is null");
         checkArgument(address != null, "Address is null");

@@ -1,16 +1,20 @@
 package com.roskart.dropwizard.jaxws;
 
-import com.google.common.collect.ImmutableMap;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.Timer;
+import com.google.common.collect.ImmutableMap;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.service.invoker.Invoker;
 
 /**
  * Provides instrumented CXF invoker implementations.
- * @see io.dropwizard.metrics.jersey2.InstrumentedResourceMethodApplicationListener
+ * @see com.codahale.metrics.jersey3.InstrumentedResourceMethodApplicationListener
  */
 public class InstrumentedInvokers {
+
+    private InstrumentedInvokers() {
+        // utility class
+    }
 
     /**
      * Wraps underlying invoker and manages timers for methods annotated with @Timed.
