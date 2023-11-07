@@ -10,16 +10,16 @@
         <version>3.0.4</version>
     </parent>
 
-    <groupId>com.github.roskart.dropwizard-jaxws</groupId>
-    <artifactId>dropwizard-jaxws-parent</artifactId>
-    <version>1.2.3</version>
+    <artifactId>dropwizard-jakarta-xml-ws-parent</artifactId>
+    <version>0.5.0</version>
     <packaging>pom</packaging>
-    <name>Dropwizard JAX-WS</name>
+
+    <name>Dropwizard Jakarta XML Web Services</name>
     <description>
-        Dropwizard-JAXWS is a Dropwizard Bundle that enables building SOAP web services and clients
-        using JAX-WS API with Dropwizard.
+        A Dropwizard Bundle that enables building SOAP web services and client using Jakarta XML Web Services
+        in Dropwizard applications.
     </description>
-    <url>https://github.com/roskart/dropwizard-jaxws</url>
+    <url>https://github.com/kiwiproject/dropwizard-jakarta-xml-ws</url>
 
     <modules>
         <module>dropwizard-jaxws</module>
@@ -27,7 +27,6 @@
     </modules>
 
     <properties>
-        <dropwizard.version>4.0.3</dropwizard.version>
         <cxf.version>4.0.3</cxf.version>
         <jakarta.mail-api.version>2.1.2</jakarta.mail-api.version>
 
@@ -55,6 +54,12 @@
             <timezone>+1</timezone>
             <organizationUrl>https://github.com/roskart</organizationUrl>
         </developer>
+        <developer>
+            <name>Scott Leberknight</name>
+            <organization>Kiwi Project</organization>
+            <organizationUrl>https://github.com/kiwiproject</organizationUrl>
+            <url>https://github.com/sleberknight</url>
+        </developer>
     </developers>
 
     <licenses>
@@ -66,26 +71,15 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git@github.com:roskart/dropwizard-jaxws.git</connection>
-        <developerConnection>scm:git:git@github.com:roskart/dropwizard-jaxws.git</developerConnection>
+        <connection>scm:git:https://github.com/kiwiproject/dropwizard-jakarta-xml-ws.git</connection>
+        <developerConnection>scm:git@github.com:kiwiproject/dropwizard-jakarta-xml-ws.git</developerConnection>
         <url>git@github.com:roskart/dropwizard-jaxws.git</url>
     </scm>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/roskart/dropwizard-jaxws/issues</url>
+        <url>https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/issuess</url>
     </issueManagement>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
