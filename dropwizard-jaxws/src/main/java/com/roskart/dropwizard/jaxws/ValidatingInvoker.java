@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class ValidatingInvoker extends AbstractInvoker {
 
+    private static final Class<?>[] EMPTY_CLASS_ARRAY = {};
     private static final Class<?>[] DEFAULT_GROUP_ARRAY = new Class<?>[] { Default.class };
 
     private Validator validator;
@@ -79,7 +80,7 @@ public class ValidatingInvoker extends AbstractInvoker {
     private Object validate(Annotation[] annotations, Object value) {
         final Class<?>[] classes = findValidationGroups(annotations);
 
-        if (classes != null) {
+        if (classes != null && classes.length > 0) {
             final Collection<String> errors = ConstraintViolations.format(
                     validator.validate(value, classes));
 
@@ -106,6 +107,6 @@ public class ValidatingInvoker extends AbstractInvoker {
                 return ((Validated) annotation).value();
             }
         }
-        return null;
+        return EMPTY_CLASS_ARRAY;
     }
 }
