@@ -15,6 +15,7 @@
 
     <properties>
         <h2.version>2.2.224</h2.version>
+        <saaj-impl.version>3.0.3</saaj-impl.version>
 
         <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
     </properties>
@@ -31,6 +32,7 @@
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
             <exclusions>
+                <!-- TODO: Can these exclusions be removed? -->
                 <!-- Exclude JAXB API 2.3.2 and activation API 1.2.1 that are used by jackson-jaxrs-json-provider
                 to prevent duplicate class warnings when building fat jar (dropwizard-jersey depends on JAXB API
                 2.3.1 and activation API 1.2.0 ). -->
@@ -55,6 +57,7 @@
             <artifactId>dropwizard-hibernate</artifactId>
             <exclusions>
                 <exclusion>
+                    <!-- TODO: Can this exclusion be removed? -->
                     <!-- Exclude JTA 1.3 API from jackson-datatype-hibernate5 to prevent duplicate class warnings
                     when building fat jar (hibernate-core depends on JTA 1.2 API). -->
                     <groupId>javax.transaction</groupId>
@@ -78,6 +81,12 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-features-logging</artifactId>
             <version>${cxf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.messaging.saaj</groupId>
+            <artifactId>saaj-impl</artifactId>
+            <version>${saaj-impl.version}</version>
         </dependency>
 
     </dependencies>
