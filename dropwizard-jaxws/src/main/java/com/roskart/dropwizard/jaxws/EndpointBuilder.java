@@ -46,7 +46,8 @@ public class EndpointBuilder extends AbstractBuilder {
 
     /**
      * Create new EndpointBuilder. Endpoint will be published relative to the CXF servlet path.
-     * @param path Relative endpoint path.
+     *
+     * @param path    Relative endpoint path.
      * @param service Service implementation.
      */
     public EndpointBuilder(String path, Object service) {
@@ -63,6 +64,7 @@ public class EndpointBuilder extends AbstractBuilder {
     /**
      * Publish JAX-WS endpoint with Dropwizard Hibernate Bundle integration.
      * Service will be scanned for @UnitOfWork annotations.
+     *
      * @param sessionFactory Hibernate session factory.
      */
     public EndpointBuilder sessionFactory(SessionFactory sessionFactory) {
@@ -72,6 +74,7 @@ public class EndpointBuilder extends AbstractBuilder {
 
     /**
      * Publish JAX-WS protected endpoint using Dropwizard BasicAuthentication.
+     *
      * @param authentication BasicAuthentication implementation.
      */
     public EndpointBuilder authentication(BasicAuthentication authentication) {
@@ -82,26 +85,26 @@ public class EndpointBuilder extends AbstractBuilder {
     @Override
     @SafeVarargs
     public final EndpointBuilder cxfInInterceptors(Interceptor<? extends Message>... interceptors) {
-        return (EndpointBuilder)super.cxfInInterceptors(interceptors);
+        return (EndpointBuilder) super.cxfInInterceptors(interceptors);
     }
 
     @Override
     @SafeVarargs
     public final EndpointBuilder cxfInFaultInterceptors(Interceptor<? extends Message>... interceptors) {
-        return (EndpointBuilder)super.cxfInFaultInterceptors(interceptors);
+        return (EndpointBuilder) super.cxfInFaultInterceptors(interceptors);
     }
 
     @Override
     @SafeVarargs
 
     public final EndpointBuilder cxfOutInterceptors(Interceptor<? extends Message>... interceptors) {
-        return (EndpointBuilder)super.cxfOutInterceptors(interceptors);
+        return (EndpointBuilder) super.cxfOutInterceptors(interceptors);
     }
 
     @Override
     @SafeVarargs
     public final EndpointBuilder cxfOutFaultInterceptors(Interceptor<? extends Message>... interceptors) {
-        return (EndpointBuilder)super.cxfOutFaultInterceptors(interceptors);
+        return (EndpointBuilder) super.cxfOutFaultInterceptors(interceptors);
     }
 
     /**
@@ -109,7 +112,7 @@ public class EndpointBuilder extends AbstractBuilder {
      */
     @Override
     public EndpointBuilder enableMtom() {
-        return (EndpointBuilder)super.enableMtom();
+        return (EndpointBuilder) super.enableMtom();
     }
 
     public EndpointBuilder publishedEndpointUrl(String publishedEndpointUrl) {

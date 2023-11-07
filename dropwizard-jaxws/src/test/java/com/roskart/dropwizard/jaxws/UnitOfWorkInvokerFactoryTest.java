@@ -29,6 +29,7 @@ class UnitOfWorkInvokerFactoryTest {
         public String foo() {
             return "foo return";
         }
+
         @UnitOfWork
         public String unitOfWork(boolean throwException) {
             if (throwException)
@@ -48,9 +49,11 @@ class UnitOfWorkInvokerFactoryTest {
 
     public class UnitOfWorkInvoker implements Invoker {
         private boolean doThrow = false;
+
         public UnitOfWorkInvoker(boolean doThrow) {
             this.doThrow = doThrow;
         }
+
         @Override
         public Object invoke(Exchange exchange, Object o) {
             return fooService.unitOfWork(doThrow);
@@ -93,8 +96,7 @@ class UnitOfWorkInvokerFactoryTest {
             OperationInfo oi = exchange.getBindingOperationInfo().getOperationInfo();
             when(oi.getProperty(Method.class.getName()))
                     .thenReturn(FooService.class.getMethod(methodName, parameterTypes));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail("setTargetMethod failed", e);
         }
     }

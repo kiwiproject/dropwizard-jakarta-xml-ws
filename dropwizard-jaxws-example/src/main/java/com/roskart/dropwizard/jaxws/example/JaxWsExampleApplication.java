@@ -72,13 +72,13 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
         // Java first service protected with basic authentication
         e = jaxWsBundle.publishEndpoint(
                 new EndpointBuilder("/javafirst", new JavaFirstServiceImpl())
-                    .authentication(new BasicAuthentication(new BasicAuthenticator(), "TOP_SECRET")));
+                        .authentication(new BasicAuthentication(new BasicAuthenticator(), "TOP_SECRET")));
 
         // WSDL first service using server side JAX-WS handler and CXF logging interceptors
         e = jaxWsBundle.publishEndpoint(
                 new EndpointBuilder("/wsdlfirst", new WsdlFirstServiceImpl())
-                    .cxfInInterceptors(new LoggingInInterceptor())
-                    .cxfOutInterceptors(new LoggingOutInterceptor()));
+                        .cxfInInterceptors(new LoggingInInterceptor())
+                        .cxfOutInterceptors(new LoggingOutInterceptor()));
 
         // Service using Hibernate
         PersonDAO personDAO = new PersonDAO(hibernate.getSessionFactory());
@@ -97,7 +97,7 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
         // if you use @MTOM JAX-WS annotation on your service implementation class.
         e = jaxWsBundle.publishEndpoint(
                 new EndpointBuilder("/mtom", new MtomServiceImpl())
-                    .enableMtom()
+                        .enableMtom()
         );
 
         // RESTful resource that invokes WsdlFirstService on localhost and uses client side JAX-WS handler.

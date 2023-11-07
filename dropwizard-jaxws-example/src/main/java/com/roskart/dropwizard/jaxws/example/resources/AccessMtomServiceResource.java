@@ -40,8 +40,7 @@ public class AccessMtomServiceResource {
         try {
             return "Hello response: " + hr.getTitle() + ", " +
                     IOUtils.readStringFromStream(hr.getBinary().getInputStream());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }

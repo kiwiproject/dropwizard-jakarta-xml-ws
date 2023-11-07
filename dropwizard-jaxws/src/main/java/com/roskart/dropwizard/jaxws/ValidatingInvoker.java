@@ -19,11 +19,12 @@ import java.util.List;
 
 /**
  * Wraps underlying CXF invoker and performs validation of the service operation parameters.
+ *
  * @see io.dropwizard.jersey.jackson.JacksonMessageBodyProvider
  */
 public class ValidatingInvoker extends AbstractInvoker {
 
-    private static final Class<?>[] DEFAULT_GROUP_ARRAY = new Class<?>[]{ Default.class };
+    private static final Class<?>[] DEFAULT_GROUP_ARRAY = new Class<?>[] { Default.class };
 
     private Validator validator;
 
@@ -52,12 +53,11 @@ public class ValidatingInvoker extends AbstractInvoker {
             int i = 0;
             try {
                 for (Object parameter : params) {
-                    if(parameter == null || !AsyncHandler.class.isAssignableFrom(parameter.getClass())) {
+                    if (parameter == null || !AsyncHandler.class.isAssignableFrom(parameter.getClass())) {
                         validate(parameterAnnotations[i++], parameter);
                     }
                 }
-            }
-            catch (ValidationException ve) {
+            } catch (ValidationException ve) {
                 // Prevent CXF PhaseInterceptorChain to log complete stack trace (happens because ValidationException
                 // extends RuntimeException). Only error message with INFO level will be logged.
                 exchange.getInMessage().put(FaultMode.class, FaultMode.CHECKED_APPLICATION_FAULT);
@@ -73,8 +73,8 @@ public class ValidatingInvoker extends AbstractInvoker {
      * Notes on Hibernate Validator:
      * - when validating object graphs, null references are ignored.
      * - from version 5 on, Hibernate Validator throws IllegalArgumentException instead of ValidationException
-     *   for null parameter values:
-     *   java.lang.IllegalArgumentException: HV000116: The object to be validated must not be null.
+     * for null parameter values:
+     * java.lang.IllegalArgumentException: HV000116: The object to be validated must not be null.
      */
     private Object validate(Annotation[] annotations, Object value) {
         final Class<?>[] classes = findValidationGroups(annotations);
@@ -103,7 +103,7 @@ public class ValidatingInvoker extends AbstractInvoker {
             if (annotation.annotationType() == Valid.class) {
                 return DEFAULT_GROUP_ARRAY;
             } else if (annotation.annotationType() == Validated.class) {
-                return  ((Validated) annotation).value();
+                return ((Validated) annotation).value();
             }
         }
         return null;

@@ -28,6 +28,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
 
     /**
      * Initialize JAXWSEnvironment. Service endpoints are published relative to the provided servletPath.
+     *
      * @param servletPath Root path for service endpoints. Leading slash is required.
      */
     public JAXWSBundle(String servletPath) {
@@ -36,7 +37,8 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
 
     /**
      * Use provided JAXWSEnvironment. Service endpoints are published relative to the provided servletPath.
-     * @param servletPath Root path for service endpoints. Leading slash is required.
+     *
+     * @param servletPath      Root path for service endpoints. Leading slash is required.
      * @param jaxwsEnvironment Valid JAXWSEnvironment.
      */
     public JAXWSBundle(String servletPath, JAXWSEnvironment jaxwsEnvironment) {
@@ -63,27 +65,28 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
                 server -> jaxwsEnvironment.logEndpoints());
 
         String publishedEndpointUrlPrefix = getPublishedEndpointUrlPrefix(configuration);
-        if(publishedEndpointUrlPrefix != null) {
+        if (publishedEndpointUrlPrefix != null) {
             jaxwsEnvironment.setPublishedEndpointUrlPrefix(publishedEndpointUrlPrefix);
         }
     }
 
     /**
      * Publish JAX-WS endpoint. Endpoint will be published relative to the CXF servlet path.
+     *
      * @param endpointBuilder EndpointBuilder.
      * @return javax.xml.ws.Endpoint
      */
-     public EndpointImpl publishEndpoint(EndpointBuilder endpointBuilder) {
+    public EndpointImpl publishEndpoint(EndpointBuilder endpointBuilder) {
         checkArgument(endpointBuilder != null, "EndpointBuilder is null");
         return this.jaxwsEnvironment.publishEndpoint(endpointBuilder);
     }
 
     /**
      * Publish JAX-WS endpoint. Endpoint is published relative to the CXF servlet path.
-     * @param path Relative endpoint path.
+     *
+     * @param path    Relative endpoint path.
      * @param service Service implementation.
      * @return javax.xml.ws.Endpoint
-     *
      * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
      */
     @Deprecated(since = "0.5.0")
@@ -94,11 +97,11 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     /**
      * Publish JAX-WS endpoint with Dropwizard Hibernate Bundle integration. Service is scanned for @UnitOfWork
      * annotations. EndpointBuilder is published relative to the CXF servlet path.
-     * @param path Relative endpoint path.
-     * @param service Service implementation.
+     *
+     * @param path           Relative endpoint path.
+     * @param service        Service implementation.
      * @param sessionFactory Hibernate session factory.
      * @return javax.xml.ws.Endpoint
-     *
      * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
      */
     @Deprecated(since = "0.5.0")
@@ -109,11 +112,11 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     /**
      * Publish JAX-WS protected endpoint using Dropwizard BasicAuthentication. EndpointBuilder is published relative
      * to the CXF servlet path.
-     * @param path Relative endpoint path.
-     * @param service Service implementation.
+     *
+     * @param path           Relative endpoint path.
+     * @param service        Service implementation.
      * @param authentication BasicAuthentication implementation.
      * @return javax.xml.ws.Endpoint
-     *
      * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
      */
     @Deprecated(since = "0.5.0")
@@ -125,17 +128,17 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      * Publish JAX-WS protected endpoint using Dropwizard BasicAuthentication with Dropwizard Hibernate Bundle
      * integration. Service is scanned for @UnitOfWork annotations. EndpointBuilder is published relative to the CXF
      * servlet path.
-     * @param path Relative endpoint path.
-     * @param service Service implementation.
-     * @param auth BasicAuthentication implementation.
+     *
+     * @param path           Relative endpoint path.
+     * @param service        Service implementation.
+     * @param auth           BasicAuthentication implementation.
      * @param sessionFactory Hibernate session factory.
      * @return javax.xml.ws.Endpoint
-     *
      * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
      */
     @Deprecated(since = "0.5.0")
     public EndpointImpl publishEndpoint(String path, Object service, BasicAuthentication auth,
-                                SessionFactory sessionFactory) {
+                                        SessionFactory sessionFactory) {
         checkArgument(service != null, "Service is null");
         checkArgument(path != null, "Path is null");
         checkArgument((path).trim().length() > 0, "Path is empty");
@@ -147,16 +150,16 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
 
     /**
      * Factory method for creating JAX-WS clients.
-     * @param serviceClass Service interface class.
-     * @param address Endpoint URL address.
-     * @param handlers Client side JAX-WS handlers. Optional.
-     * @param <T> Service interface type.
-     * @return JAX-WS client proxy.
      *
+     * @param serviceClass Service interface class.
+     * @param address      Endpoint URL address.
+     * @param handlers     Client side JAX-WS handlers. Optional.
+     * @param <T>          Service interface type.
+     * @return JAX-WS client proxy.
      * @deprecated Use the {@link #getClient(ClientBuilder)} getClient} method instead.
      */
     @Deprecated(since = "0.5.0")
-    public <T> T getClient(Class<T> serviceClass, String address, Handler...handlers) {
+    public <T> T getClient(Class<T> serviceClass, String address, Handler... handlers) {
         checkArgument(serviceClass != null, "ServiceClass is null");
         checkArgument(address != null, "Address is null");
         checkArgument((address).trim().length() > 0, "Address is empty");
@@ -166,8 +169,9 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
 
     /**
      * Factory method for creating JAX-WS clients.
+     *
      * @param clientBuilder ClientBuilder.
-     * @param <T> Service interface type.
+     * @param <T>           Service interface type.
      * @return Client proxy.
      */
     public <T> T getClient(ClientBuilder<T> clientBuilder) {
@@ -178,7 +182,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     /**
      * Extract the published endpoint URL prefix from the application configuration and return it to use the returned
      * value as the location of services in the published WSDLs.
-     *
+     * <p>
      * Override this method to configure the bundle.
      *
      * @param configuration Application configuration.

@@ -11,6 +11,7 @@ import java.util.Set;
 
 /**
  * JAX-WS client handler used when WsdlFirstService is invoked.
+ *
  * @see AccessWsdlFirstServiceResource
  */
 public class WsdlFirstClientHandler implements SOAPHandler<SOAPMessageContext> {
@@ -34,12 +35,11 @@ public class WsdlFirstClientHandler implements SOAPHandler<SOAPMessageContext> {
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
 
-        Boolean outbound = (Boolean)context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+        Boolean outbound = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
         if (Boolean.TRUE.equals(outbound)) {
             log.info("WsdlFirstService client handler - outbound");
-        }
-        else {
+        } else {
             log.info("WsdlFirstService client handler - inbound");
         }
 

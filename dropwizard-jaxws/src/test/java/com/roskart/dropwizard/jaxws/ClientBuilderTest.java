@@ -34,9 +34,9 @@ class ClientBuilderTest {
         assertThat(builder.getConnectTimeout()).isEqualTo(1234);
         assertThat(builder.getReceiveTimeout()).isEqualTo(5678);
         assertThat(builder.getBindingId()).isEqualTo("binding id");
-        assertThat(builder.getCxfInInterceptors()).contains(new Interceptor<?>[]{ inInterceptor, inInterceptor });
-        assertThat(builder.getCxfInFaultInterceptors()).contains(new Interceptor<?>[]{ inFaultInterceptor, inFaultInterceptor });
-        assertThat(builder.getCxfOutInterceptors()).contains(new Interceptor<?>[]{ outInterceptor, outInterceptor });
-        assertThat(builder.getCxfOutFaultInterceptors()).contains(new Interceptor<?>[]{ outFaultInterceptor, outFaultInterceptor });
+        assertThat(builder.getCxfInInterceptors()).contains(new Interceptor<?>[] { inInterceptor, inInterceptor });
+        assertThat(builder.getCxfInFaultInterceptors()).contains(new Interceptor<?>[] { inFaultInterceptor, inFaultInterceptor });
+        assertThat(builder.getCxfOutInterceptors()).contains(new Interceptor<?>[] { outInterceptor, outInterceptor });
+        assertThat(builder.getCxfOutFaultInterceptors()).contains(new Interceptor<?>[] { outFaultInterceptor, outFaultInterceptor });
     }
 }

@@ -12,6 +12,7 @@ import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService
 
 /**
  * Dropwizard resource that invokes WsdlFirstService SOAP web service.
+ *
  * @see WsdlFirstClientHandler
  */
 @Path("/wsdlfirstclient")
