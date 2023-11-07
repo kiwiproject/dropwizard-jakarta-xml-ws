@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JAXWSEnvironment {
 
-    private static Logger log = LoggerFactory.getLogger(JAXWSEnvironment.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JAXWSEnvironment.class);
 
     protected final Bus bus;
     protected final String defaultPath;
@@ -92,9 +92,9 @@ public class JAXWSEnvironment {
                         .append(s.getEndpoint().getEndpointInfo().getInterface().getName())
                         .append(")\n");
             }
-            log.info("JAX-WS service endpoints [{}]:\n\n{}", this.defaultPath, endpoints);
+            LOG.info("JAX-WS service endpoints [{}]:\n\n{}", this.defaultPath, endpoints);
         } else {
-            log.info("No JAX-WS service endpoints were registered.");
+            LOG.info("No JAX-WS service endpoints were registered.");
         }
     }
 

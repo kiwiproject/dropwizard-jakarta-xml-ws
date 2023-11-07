@@ -34,8 +34,10 @@ import java.util.Optional;
  */
 public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Message> {
 
-    private static final Logger log = LoggerFactory.getLogger(BasicAuthenticationInterceptor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BasicAuthenticationInterceptor.class);
+
     public static final String PRINCIPAL_KEY = "dropwizard.jaxws.principal";
+
     private BasicAuthentication authentication;
 
     public BasicAuthenticationInterceptor() {
@@ -101,7 +103,7 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
             getConduit(message).prepare(outMessage);
             close(outMessage);
         } catch (IOException e) {
-            log.warn(e.getMessage(), e);
+            LOG.warn(e.getMessage(), e);
         }
     }
 
