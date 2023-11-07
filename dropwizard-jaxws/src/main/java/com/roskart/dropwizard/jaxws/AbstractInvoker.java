@@ -23,7 +23,7 @@ public abstract class AbstractInvoker implements Invoker {
 
         Object o = exchange.getBindingOperationInfo().getOperationInfo().getProperty(Method.class.getName());
 
-        if (o != null && o instanceof Method) {
+        if (o instanceof Method) {
             return (Method)o;
         }
         else {
