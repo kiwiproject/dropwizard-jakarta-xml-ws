@@ -1,12 +1,12 @@
 package com.roskart.dropwizard.jaxws;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.message.Message;
 import org.hibernate.SessionFactory;
 
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * JAX-WS/CXF server endpoint builder.

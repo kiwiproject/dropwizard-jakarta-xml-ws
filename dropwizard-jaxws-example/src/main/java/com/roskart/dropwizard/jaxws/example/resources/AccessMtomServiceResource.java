@@ -1,22 +1,20 @@
 package com.roskart.dropwizard.jaxws.example.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import org.apache.cxf.helpers.IOUtils;
-import ws.example.jaxws.dropwizard.roskart.com.mtomservice.Hello;
-import ws.example.jaxws.dropwizard.roskart.com.mtomservice.HelloResponse;
-import ws.example.jaxws.dropwizard.roskart.com.mtomservice.MtomService;
-import ws.example.jaxws.dropwizard.roskart.com.mtomservice.ObjectFactory;
-
-
-import java.io.IOException;
-import java.io.UncheckedIOException;
-
 import jakarta.activation.DataHandler;
 import jakarta.mail.util.ByteArrayDataSource;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import org.apache.cxf.helpers.IOUtils;
+import ws.example.jaxws.dropwizard.roskart.com.mtomservice.Hello;
+import ws.example.jaxws.dropwizard.roskart.com.mtomservice.HelloResponse;
+import ws.example.jaxws.dropwizard.roskart.com.mtomservice.MtomService;
+import ws.example.jaxws.dropwizard.roskart.com.mtomservice.ObjectFactory;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
 
 @Path("/mtomclient")
 @Produces(MediaType.APPLICATION_JSON)

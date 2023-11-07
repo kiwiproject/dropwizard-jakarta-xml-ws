@@ -1,12 +1,11 @@
 package com.roskart.dropwizard.jaxws;
 
-import org.apache.cxf.interceptor.Interceptor;
-import org.junit.jupiter.api.Test;
-
-import jakarta.xml.ws.handler.Handler;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+
+import jakarta.xml.ws.handler.Handler;
+import org.apache.cxf.interceptor.Interceptor;
+import org.junit.jupiter.api.Test;
 
 class ClientBuilderTest {
 

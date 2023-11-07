@@ -1,15 +1,14 @@
 package com.roskart.dropwizard.jaxws.example.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.Echo;
-import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.EchoResponse;
-import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.ObjectFactory;
-import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService;
-
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.Echo;
+import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.EchoResponse;
+import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.ObjectFactory;
+import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService;
 
 /**
  * Dropwizard resource that invokes WsdlFirstService SOAP web service.

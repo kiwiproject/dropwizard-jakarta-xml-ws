@@ -1,18 +1,5 @@
 package com.roskart.dropwizard.jaxws;
 
-import com.codahale.metrics.MetricRegistry;
-import io.dropwizard.lifecycle.ServerLifecycleListener;
-import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
-import io.dropwizard.core.Configuration;
-import io.dropwizard.core.setup.Bootstrap;
-import io.dropwizard.core.setup.Environment;
-import io.dropwizard.jetty.setup.ServletEnvironment;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import jakarta.servlet.Servlet;
-import jakarta.servlet.ServletRegistration;
-import jakarta.servlet.http.HttpServlet;
-
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,6 +9,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import com.codahale.metrics.MetricRegistry;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
+import io.dropwizard.jetty.setup.ServletEnvironment;
+import io.dropwizard.lifecycle.ServerLifecycleListener;
+import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletRegistration;
+import jakarta.servlet.http.HttpServlet;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class JAXWSBundleTest {
 
