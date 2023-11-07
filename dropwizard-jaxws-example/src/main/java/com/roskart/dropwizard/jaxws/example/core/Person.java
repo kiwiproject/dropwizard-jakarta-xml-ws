@@ -3,7 +3,13 @@
  */
 package com.roskart.dropwizard.jaxws.example.core;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 
 /**
@@ -11,16 +17,14 @@ import jakarta.validation.constraints.NotEmpty;
  */
 @Entity
 @Table(name = "people")
-@NamedQueries({
-        @NamedQuery(
-                name = "com.roskart.dropwizard.jaxws.example.core.Person.findAll",
-                query = "SELECT p FROM Person p"
-        ),
-        @NamedQuery(
-                name = "com.roskart.dropwizard.jaxws.example.core.Person.findById",
-                query = "SELECT p FROM Person p WHERE p.id = :id"
-        )
-})
+@NamedQuery(
+        name = "com.roskart.dropwizard.jaxws.example.core.Person.findAll",
+        query = "SELECT p FROM Person p"
+)
+@NamedQuery(
+        name = "com.roskart.dropwizard.jaxws.example.core.Person.findById",
+        query = "SELECT p FROM Person p WHERE p.id = :id"
+)
 public class Person {
 
     @Id

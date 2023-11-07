@@ -1,6 +1,9 @@
 package com.roskart.dropwizard.jaxws.example.ws;
 
 import com.codahale.metrics.annotation.Metered;
+import jakarta.jws.HandlerChain;
+import jakarta.jws.WebService;
+import jakarta.xml.ws.AsyncHandler;
 import org.apache.cxf.annotations.UseAsyncMethod;
 import org.apache.cxf.jaxws.ServerAsyncResponse;
 import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.Echo;
@@ -8,9 +11,6 @@ import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.EchoResponse;
 import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.NonBlockingEcho;
 import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService;
 
-import jakarta.jws.HandlerChain;
-import jakarta.jws.WebService;
-import jakarta.xml.ws.AsyncHandler;
 import java.util.concurrent.Future;
 
 @WebService(endpointInterface = "ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService",
@@ -51,6 +51,7 @@ public class WsdlFirstServiceImpl implements WsdlFirstService {
                     response.setValue("Non-blocking: " + parameters.getValue());
                     sar.set(response);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     sar.exception(e);
                 }
                 asyncHandler.handleResponse(sar);

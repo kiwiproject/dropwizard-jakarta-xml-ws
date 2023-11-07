@@ -1,7 +1,20 @@
 package com.roskart.dropwizard.jaxws;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import io.dropwizard.validation.Validated;
 import io.dropwizard.validation.ValidationMethod;
+import jakarta.validation.Valid;
+import jakarta.validation.Validation;
+import jakarta.validation.ValidationException;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.xml.ws.AsyncHandler;
+import jakarta.xml.ws.Response;
 import org.apache.cxf.annotations.UseAsyncMethod;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
@@ -10,23 +23,10 @@ import org.apache.cxf.service.model.BindingOperationInfo;
 import org.apache.cxf.service.model.OperationInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import jakarta.validation.Validation;
-import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.xml.ws.AsyncHandler;
-import jakarta.xml.ws.Response;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 class ValidatingInvokerTest {
 
@@ -157,13 +157,16 @@ class ValidatingInvokerTest {
     void invokeWithValidation() {
         setTargetMethod(exchange, "withValidation", RootParam1.class, RootParam2.class);
 
-        assertThatThrownBy(() -> invoker.invoke(exchange, List.of(new RootParam1(new ChildParam("")), new RootParam2("ok"))))
+        var params1 = List.of(new RootParam1(new ChildParam("")), new RootParam2("ok"));
+        assertThatThrownBy(() -> invoker.invoke(exchange, params1))
                 .isExactlyInstanceOf(ValidationException.class);
 
-        assertThatThrownBy(() -> invoker.invoke(exchange, List.of(new RootParam1(new ChildParam("ok")), new RootParam2(""))))
+        var params2 = List.of(new RootParam1(new ChildParam("ok")), new RootParam2(""));
+        assertThatThrownBy(() -> invoker.invoke(exchange, params2))
                 .isExactlyInstanceOf(ValidationException.class);
 
-        assertThatThrownBy(() -> invoker.invoke(exchange, List.of(new RootParam1(new ChildParam("John")), new RootParam2("ok"))))
+        var params3 = List.of(new RootParam1(new ChildParam("John")), new RootParam2("ok"));
+        assertThatThrownBy(() -> invoker.invoke(exchange, params3))
                 .isExactlyInstanceOf(ValidationException.class)
                 .hasMessageContaining("foo may not be 'John'");
 

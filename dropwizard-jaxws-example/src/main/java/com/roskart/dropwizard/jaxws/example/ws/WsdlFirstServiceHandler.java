@@ -1,12 +1,12 @@
 package com.roskart.dropwizard.jaxws.example.ws;
 
+import jakarta.xml.ws.handler.MessageContext;
+import jakarta.xml.ws.handler.soap.SOAPHandler;
+import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.namespace.QName;
-import jakarta.xml.ws.handler.MessageContext;
-import jakarta.xml.ws.handler.soap.SOAPHandler;
-import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import java.util.Set;
 
 public class WsdlFirstServiceHandler implements SOAPHandler<SOAPMessageContext> {
@@ -32,7 +32,7 @@ public class WsdlFirstServiceHandler implements SOAPHandler<SOAPMessageContext> 
 
         Boolean outbound = (Boolean)context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
-        if (outbound) {
+        if (Boolean.TRUE.equals(outbound)) {
             log.info("WsdlFirstService server handler - outbound");
         }
         else {

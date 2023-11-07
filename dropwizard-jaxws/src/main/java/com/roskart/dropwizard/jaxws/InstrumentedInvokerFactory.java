@@ -1,12 +1,12 @@
 package com.roskart.dropwizard.jaxws;
 
+import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.collect.ImmutableMap;
+import com.codahale.metrics.Timer;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.Timer;
+import com.google.common.collect.ImmutableMap;
 import org.apache.cxf.service.invoker.Invoker;
 
 import java.lang.reflect.Method;
@@ -129,15 +129,15 @@ public class InstrumentedInvokerFactory {
 
         Invoker invoker = rootInvoker;
 
-        if (timedmethods.size() > 0) {
+        if (!timedmethods.isEmpty()) {
             invoker = this.timed(invoker, timedmethods);
         }
 
-        if (meteredmethods.size() > 0) {
+        if (!meteredmethods.isEmpty()) {
             invoker = this.metered(invoker, meteredmethods);
         }
 
-        if (exceptionmeteredmethods.size() > 0) {
+        if (!exceptionmeteredmethods.isEmpty()) {
             invoker = this.exceptionMetered(invoker, exceptionmeteredmethods);
         }
 

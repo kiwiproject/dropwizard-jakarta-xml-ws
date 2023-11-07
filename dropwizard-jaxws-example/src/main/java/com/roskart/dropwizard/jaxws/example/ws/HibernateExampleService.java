@@ -1,14 +1,14 @@
 package com.roskart.dropwizard.jaxws.example.ws;
 
-import com.google.common.base.Optional;
 import com.roskart.dropwizard.jaxws.example.core.Person;
 import com.roskart.dropwizard.jaxws.example.db.PersonDAO;
 import io.dropwizard.hibernate.UnitOfWork;
-
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
 import jakarta.validation.Valid;
+
 import java.util.List;
+import java.util.Optional;
 
 @WebService
 public class HibernateExampleService {
@@ -32,10 +32,11 @@ public class HibernateExampleService {
     @UnitOfWork
     public Person getPerson(long id) throws Exception {
         Optional<Person> result = this.personDAO.findById(id);
-        if (result.isPresent())
+        if (result.isPresent()) {
             return result.get();
-        else
-            throw new Exception("Person with id " + id + " not found");
+        }
+
+        throw new Exception("Person with id " + id + " not found");
     }
 
     @WebMethod
