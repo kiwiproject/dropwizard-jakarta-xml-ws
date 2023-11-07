@@ -12,7 +12,7 @@ public abstract class AbstractInvoker implements Invoker {
 
     protected Invoker underlying;
 
-    public AbstractInvoker(Invoker underlying) {
+    protected AbstractInvoker(Invoker underlying) {
         this.underlying = underlying;
     }
 
