@@ -1,94 +1,142 @@
 🥝 _This README will be updated as we transition from the original dropwizard-jaxws to this repository._ 🥝
 
-Dropwizard-JAXWS
-================
+Dropwizard Jakarta XML Web Services
+===================================
 
-Dropwizard-JAXWS is a [Dropwizard](https://www.dropwizard.io/) Bundle that enables building SOAP web
-services and clients using JAX-WS API with Dropwizard.
+Dropwizard Jakarta XML Web Services is a [Dropwizard](https://www.dropwizard.io/) Bundle that enables building SOAP web
+services and clients using [Jakarta XML Web Services](https://jakarta.ee/specifications/xml-web-services/) with Dropwizard.
 
 Features
 --------
-* Uses [Apache CXF](http://cxf.apache.org/) web services framework (no Spring Framework dependency).
-* Java First and WSDL first service development.
-* Using standard JAX-WS annotations, without custom deployment descriptors.
-* [Metrics](https://github.com/codahale/metrics) instrumentation: @Metered, @Timed and @ExceptionMetered annotations.
+* Uses [Apache CXF](https://cxf.apache.org/) web services framework (no Spring Framework dependency).
+* Java-first and WSDL-first service development.
+* Use standard Jakarta XML Web Services annotations, without custom deployment descriptors.
+* [Metrics](https://metrics.dropwizard.io/) instrumentation: @Metered, @Timed and @ExceptionMetered annotations.
 * Dropwizard validation support.
 * Dropwizard Hibernate support (@UnitOfWork).
 * Dropwizard basic authentication using Dropwizard Authenticator.
 * Web service client factory.
-* Support for JAX-WS handlers, MTOM, CXF interceptors(both client and server side) and CXF @UseAsyncMethod annotation.
+* Support for Jakarta XML Web Services handlers, MTOM, CXF interceptors (both client and server side) and
+  CXF @UseAsyncMethod annotation.
+
+Background
+----------
+This library was imported from [roskart/dropwizard-jaxws](https://github.com/roskart/dropwizard-jaxws), which
+as of Novermber 2023 seems to be no longer maintained by the original creator.
+
+Since we are still using this library in our services which use Dropwizard and Jakarta XML Web Services, we decided to import the original repository and continue maintaining it for our own use, and anyone else who might want to use it. _We make no guarantees whatsoever about how long we will maintain it, and also plan to make our own changes such as changing the base package name to org.kiwiproject to be consistent with our other libraries._
+
+All other [kiwiproject](https://github.com/kiwiproject/) projects are MIT-licensed. However, because the original
+`dropwizard-jaxws` uses the Apache 2.0 license, we are keeping the Apache 2.0 license (otherwise to switch to MIT we
+would have to gain consent of all contributors, which we do not want to do and probably can't since the original
+author has not been active since October 2022).
+
+Another thing to note is that we _imported_ this repository from the original, so that it is a "disconnected fork". We
+did not want a reference to the original repository since it seems no longer maintained and so no changes here will ever
+be pushed back upstream. Thus, while we maintain the history that this is a fork , it is completely disconnected and is
+now a standalone (normal) repository.
+
+Migrating from roskart/dropwizard-jaxws
+---------------------------------------
+_Note that as of November 7, 2023 we have not yet released an initial version._
+
+There are two things you need to do in order to migrate. First, change the Maven coordinates so that the
+groupId is org.kiwiproject, the artifactId is dropwizard-jakarta-xml-ws, and choose the latest version.
+
+Second, when we imported this repository, we updated it from the Dropwizard 2.x and JAX-WS to Dropwizard 4.x
+and Jakarta XML Web Services, which means that all the package names have changed from `javax` to `jakarta`.
+This means you may need to change dependencies to [Jakarta XML Web Services](https://mvnrepository.com/artifact/jakarta.xml).
+
+For the initial 0.5.0 version, we will retain the original package names (`com.roskart.dropwizard.jaxws`).
+But in future versions, we will rename the packages to use the `org.kiwiproject` prefix and
+then some suffix, e.g. `dropwizard.jakarta.xml.ws` (which matches the actual Jakarta packages which begin
+with `jakarta.xml.ws`). Also, we will rename the modules, and may extract the example application into
+a separate repository which will not be deployed to Maven Central, as the original repository did.
+
+We will also remove deprecated code in subsequent releases, e.g. the deprecated methods in
+`JAXWSBundle`.  Last, we will eventually rename classes containing `JAXWS` in them, for example
+rename `JAXWSEnvironment` to `JakartaXmlWsEnvironment` or similar.
+
 
 Using
 -----
 
-To use dropwizard-jaxws in your project, add the following dependency to your `pom.xml`:
+To use dropwizard-jakarta-xml-ws in your project, add the following dependency to your `pom.xml`:
 
-        <dependency>
-            <groupId>com.github.roskart.dropwizard-jaxws</groupId>
-            <artifactId>dropwizard-jaxws</artifactId>
-            <version>1.2.3</version>
-        </dependency>
+```xml
+<dependency>
+    <groupId>org.kiwiproject</groupId>
+    <artifactId>dropwizard-jakarta-xml-ws</artifactId>
+    <version>[current-version]</version>
+</dependency>
+``````
 
 Hello World
 -----------
 
 **SOAP service:**
 
-        @Metered
-        @WebService
-        public HelloWorldSOAP {
-            @WebMethod
-            public String sayHello() {
-                return "Hello world!";
-            }
-        }
+```java
+@Metered
+@WebService
+public HelloWorldSOAP {
+    @WebMethod
+    public String sayHello() {
+        return "Hello world!";
+    }
+}
+```
 
 **Dropwizard application:**
 
-        public class MyApplication extends Application<MyApplicationConfiguration> {
+```java
+public class MyApplication extends Application<MyApplicationConfiguration> {
 
-            private JAXWSBundle jaxWsBundle = new JAXWSBundle();
+    private JAXWSBundle jaxWsBundle = new JAXWSBundle();
 
-            @Override
-            public void initialize(Bootstrap<MyApplicationConfiguration> bootstrap) {
-                bootstrap.addBundle(jaxWsBundle);
-            }
+    @Override
+    public void initialize(Bootstrap<MyApplicationConfiguration> bootstrap) {
+        bootstrap.addBundle(jaxWsBundle);
+    }
 
-            @Override
-            public void run(MyApplicationConfiguration configuration, Environment environment) throws Exception {
-                jaxWsBundle.publishEndpoint(
-                    new EndpointBuilder("/hello", new HelloWorldSOAP()));
-            }
+    @Override
+    public void run(MyApplicationConfiguration configuration, Environment environment) throws Exception {
+        jaxWsBundle.publishEndpoint(
+            new EndpointBuilder("/hello", new HelloWorldSOAP()));
+    }
 
-            public static void main(String[] args) throws Exception {
-                new MyApplication().run(args);
-            }
-        }
+    public static void main(String[] args) throws Exception {
+        new MyApplication().run(args);
+    }
+}
+```
 
 Client
 ------
 
 Using HelloWorldSOAP web service client:
 
-        HelloWorldSOAP helloWorld = jaxWsBundle.getClient(
-            new ClientBuilder(HelloWorldSOAP.class, "http://server/path"));
-        System.out.println(helloWorld.sayHello());
+```java
+HelloWorldSOAP helloWorld = jaxWsBundle.getClient(
+    new ClientBuilder(HelloWorldSOAP.class, "http://server/path"));
+System.out.println(helloWorld.sayHello());
+```
 
 Examples
 --------
-Module `dropwizard-jaxws-example` contains Dropwizard application (`JaxWsExampleApplication`) with the following SOAP
+Module `dropwizard-jakarta-xml-ws-example` contains Dropwizard application (`JaxWsExampleApplication`) with the following SOAP
 web services and RESTful resources:
 
 * **SimpleService**: A minimal 'hello world' example.
 
-* **JavaFirstService**: Java first development example. `JavaFirstService` interface uses JAX-WS annotations.
+* **JavaFirstService**: Java first development example. `JavaFirstService` interface uses Jakarta XML Web Services annotations.
 `JavaFirstServiceImpl` contains service implementation instrumented with Metrics annotations. Service is secured with
 basic authentication using `dropwizard-auth`. `BasicAuthenticator` implements Dropwizard `Authenticator`.
-`JavaFirstServiceImpl` accesses authenticated user properties via injected JAX-WS `WebServiceContext`.
+`JavaFirstServiceImpl` accesses authenticated user properties via injected Jakarta XML Web Services `WebServiceContext`.
 
 * **WsdlFirstService**: WSDL first development example. WSDL is stored in `resources/META-INF/WsdlFirstService.wsdl`.
 Code is generated using `cxf-codegen-plugin` which is configured in `pom.xml`. `WsdlFirstServiceImpl` contains service
-implementation with blocking and non-blocking methods. `WsdlFirstServiceHandler` contains server-side JAX-WS handler.
+implementation with blocking and non-blocking methods. `WsdlFirstServiceHandler` contains server-side Jakarta XML Web Services handler.
 
 * **HibernateExampleService**: `dropwizard-hibernate` example. `HibernateExampleService` implements the service.
 `@UnitOfWork` annotations are used for defining transactional boundaries. `@Valid` annotation is used for parameter
@@ -103,22 +151,29 @@ implementation with MTOM enabled.
 `JavaFirstService` SOAP web service on the same host. User credentials are provided to access protected service.
 
 * **AccessWsdlFirstServiceResource**: Dropwizard RESTful service which uses `WsdlFirstService` client to invoke
-`WsdlFirstService` SOAP web service on the same host. `WsdlFirstClientHandler` contains client-side JAX-WS handler.
+`WsdlFirstService` SOAP web service on the same host. `WsdlFirstClientHandler` contains client-side
+Jakarta XML Web Services handler.
 
 * **AccessMtomServiceResource**: Dropwizard RESTful service which uses `MtomService` client to invoke
 `MtomService` SOAP web service on the same host as an example for client side MTOM support.
 
-* See `JaxWsExampleApplication` for examples on usage of client side JAX-WS handler and CXF interceptors.
+* See `JaxWsExampleApplication` for examples on usage of client side Jakarta XML Web Services handler and CXF interceptors.
 
 ### Running the examples:
 
-After cloning the repository, go to the dropwizard-jaxws root folder and run:
+After cloning the repository, go to the dropwizard-jakarta-xml-ws root folder and run:
 
-        mvn package
+```bash
+mvn package
+```
 
 To run the example service:
 
-        java -jar dropwizard-jaxws-example\target\dropwizard-jaxws-example-1.2.3.jar server dropwizard-jaxws-example\config.yaml
+```bash
+java -jar \
+  dropwizard-jaxws-example/target/dropwizard-jakarta-xml-ws-example-[version].jar \
+  server dropwizard-jaxws-example/config.yaml
+```
 
 Notes
 -----
@@ -128,25 +183,33 @@ Notes
 When using `maven-shade-plugin` for building fat jar, you must add the following `transformer` element to plugin
 configuration:
 
-        <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-            <resource>META-INF/cxf/bus-extensions.txt</resource>
-        </transformer>
+```xml
+<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+    <resource>META-INF/cxf/bus-extensions.txt</resource>
+</transformer>
+```
 
 For example on building fat jar, see `dropwizard-jaxws-example/pom.xml`.
 
 When using Gradle and a recent version of [shadowJar](https://github.com/johnrengelman/shadow) use the following snippet:
 
-    shadowJar {
-        // ...
-        append('META-INF/cxf/bus-extensions.txt')
-    }
-    
+```groovy
+shadowJar {
+    // ...
+    append('META-INF/cxf/bus-extensions.txt')
+}
+```
+
 License
 -------
-Apache Software License 2.0, see [LICENSE](https://github.com/roskart/dropwizard-jaxws/blob/master/LICENSE).
+Apache Software License 2.0, see [LICENSE](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/blob/main/LICENSE).
 
-Changelog
----------
+Changelog (from the original repository)
+----------------------------------------
+
+_Below is the changelog from the [original repository](https://github.com/roskart/dropwizard-jaxws).
+Most likely this will be moved into a separate file later. We will use GitHub releases going forward
+under kiwiproject 🥝._
 
 ### v1.2.3
 

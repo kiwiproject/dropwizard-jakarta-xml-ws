@@ -10,8 +10,8 @@ import org.apache.cxf.jaxws.EndpointImpl;
 import org.hibernate.SessionFactory;
 
 /**
- * A Dropwizard bundle that enables Dropwizard applications to publish SOAP web services using JAX-WS and create
- * web service clients.
+ * A Dropwizard bundle that enables Dropwizard applications to publish SOAP web services using
+ * Jakarta XML Web Services and to create web service clients.
  */
 public class JAXWSBundle<C> implements ConfiguredBundle<C> {
 
@@ -20,14 +20,14 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     protected String servletPath;
 
     /**
-     * Initialize JAXWSEnvironment. Service endpoints are published relative to '/soap'.
+     * Create a new bundle instance. Service endpoints are published relative to '/soap'.
      */
     public JAXWSBundle() {
         this(DEFAULT_PATH);
     }
 
     /**
-     * Initialize JAXWSEnvironment. Service endpoints are published relative to the provided servletPath.
+     * Create a new bundle instance. Service endpoints are published relative to the provided servletPath.
      *
      * @param servletPath Root path for service endpoints. Leading slash is required.
      */
@@ -36,7 +36,8 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     }
 
     /**
-     * Use provided JAXWSEnvironment. Service endpoints are published relative to the provided servletPath.
+     * Create a new bundle instance using the provided JAXWSEnvironment. Service endpoints are
+     * published relative to the provided servletPath.
      *
      * @param servletPath      Root path for service endpoints. Leading slash is required.
      * @param jaxwsEnvironment Valid JAXWSEnvironment.
@@ -71,7 +72,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     }
 
     /**
-     * Publish JAX-WS endpoint. Endpoint will be published relative to the CXF servlet path.
+     * Publish Jakarta XML Web Services endpoint. Endpoint will be published relative to the CXF servlet path.
      *
      * @param endpointBuilder EndpointBuilder.
      * @return javax.xml.ws.Endpoint
@@ -82,7 +83,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     }
 
     /**
-     * Publish JAX-WS endpoint. Endpoint is published relative to the CXF servlet path.
+     * Publish Jakarta XML Web Services endpoint. Endpoint is published relative to the CXF servlet path.
      *
      * @param path    Relative endpoint path.
      * @param service Service implementation.
@@ -95,8 +96,8 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     }
 
     /**
-     * Publish JAX-WS endpoint with Dropwizard Hibernate Bundle integration. Service is scanned for @UnitOfWork
-     * annotations. EndpointBuilder is published relative to the CXF servlet path.
+     * Publish Jakarta XML Web Services endpoint with Dropwizard Hibernate Bundle integration. Service is
+     * scanned for @UnitOfWork annotations. EndpointBuilder is published relative to the CXF servlet path.
      *
      * @param path           Relative endpoint path.
      * @param service        Service implementation.
@@ -110,8 +111,8 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     }
 
     /**
-     * Publish JAX-WS protected endpoint using Dropwizard BasicAuthentication. EndpointBuilder is published relative
-     * to the CXF servlet path.
+     * Publish Jakarta XML Web Services protected endpoint using Dropwizard BasicAuthentication.
+     * EndpointBuilder is published relative to the CXF servlet path.
      *
      * @param path           Relative endpoint path.
      * @param service        Service implementation.
@@ -125,9 +126,9 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     }
 
     /**
-     * Publish JAX-WS protected endpoint using Dropwizard BasicAuthentication with Dropwizard Hibernate Bundle
-     * integration. Service is scanned for @UnitOfWork annotations. EndpointBuilder is published relative to the CXF
-     * servlet path.
+     * Publish Jakarta XML Web Services protected endpoint using Dropwizard BasicAuthentication with
+     * Dropwizard Hibernate Bundle integration. Service is scanned for @UnitOfWork annotations. EndpointBuilder
+     * is published relative to the CXF servlet path.
      *
      * @param path           Relative endpoint path.
      * @param service        Service implementation.
@@ -149,13 +150,13 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     }
 
     /**
-     * Factory method for creating JAX-WS clients.
+     * Factory method for creating Jakarta XML Web Services clients.
      *
      * @param serviceClass Service interface class.
      * @param address      Endpoint URL address.
-     * @param handlers     Client side JAX-WS handlers. Optional.
+     * @param handlers     Client side Jakarta XML Web Services handlers. Optional.
      * @param <T>          Service interface type.
-     * @return JAX-WS client proxy.
+     * @return Jakarta XML Web Services client proxy.
      * @deprecated Use the {@link #getClient(ClientBuilder)} getClient} method instead.
      */
     @Deprecated(since = "0.5.0")
@@ -168,11 +169,11 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
     }
 
     /**
-     * Factory method for creating JAX-WS clients.
+     * Factory method for creating Jakarta XML Web Services clients.
      *
      * @param clientBuilder ClientBuilder.
      * @param <T>           Service interface type.
-     * @return Client proxy.
+     * @return Jakarta XML Web Services client proxy.
      */
     public <T> T getClient(ClientBuilder<T> clientBuilder) {
         checkArgument(clientBuilder != null, "ClientBuilder is null");

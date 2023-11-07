@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * JAX-WS client handler used when WsdlFirstService is invoked.
+ * Jakarta XML Web Services client handler used when WsdlFirstService is invoked.
  *
  * @see AccessWsdlFirstServiceResource
  */

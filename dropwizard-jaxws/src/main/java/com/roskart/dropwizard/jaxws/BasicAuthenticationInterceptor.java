@@ -30,7 +30,8 @@ import java.util.Optional;
  * <a href="https://gist.github.com/palesz/3438143">Basic HTTP Authentication Interceptor for Apache CXF</a>.
  * <p>
  * Dropwizard authenticator is used for credentials authentication. Authenticated principal is stored in message
- * exchange and is available in the service implementation through JAX-WS WebServiceContext.
+ * exchange and is available in the service implementation through a Jakarta XML Web Services
+ * {@link jakarta.xml.ws.WebServiceContext WebServiceContext}.
  */
 public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Message> {
 
@@ -81,7 +82,7 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
                 return;
             }
 
-            // principal will be available through JAX-WS WebServiceContext
+            // principal will be available through Jakarta XML Web Services WebServiceContext
             exchange.getInMessage().put(PRINCIPAL_KEY, principal.get());
         } catch (AuthenticationException ae) {
             sendErrorResponse(message, HttpURLConnection.HTTP_INTERNAL_ERROR);

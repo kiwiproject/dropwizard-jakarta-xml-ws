@@ -80,7 +80,13 @@ public class InstrumentedInvokerFactory {
         return new InstrumentedInvokers.ExceptionMeteredInvoker(invoker, meters.build());
     }
 
-    /* Based on com.codahale.metrics.jersey.InstrumentedResourceMethodDispatchProvider#chooseName */
+    /**
+     * Based on the private chooseName method in
+     * com.codahale.metrics.jerseyX.InstrumentedResourceMethodApplicationListener,
+     * where X is Jersey version such as 2, 3, 31 (for 3.1), etc.
+     *
+     * @see com.codahale.metrics.jersey3.InstrumentedResourceMethodApplicationListener
+     */
     private String chooseName(String explicitName, boolean absolute, Method method, String... suffixes) {
         if (explicitName != null && !explicitName.isEmpty()) {
             if (absolute) {

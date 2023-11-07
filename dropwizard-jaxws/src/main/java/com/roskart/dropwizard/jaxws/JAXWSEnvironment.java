@@ -24,7 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Performs CXF Bus setup and provides methods for publishing JAX-WS endpoints and create JAX-WS clients.
+ * Performs CXF Bus setup and provides methods for publishing Jakarta XML Web Services endpoints and creating
+ * Jakarta XML Web Services clients.
  */
 public class JAXWSEnvironment {
 
@@ -92,14 +93,15 @@ public class JAXWSEnvironment {
                         .append(s.getEndpoint().getEndpointInfo().getInterface().getName())
                         .append(")\n");
             }
-            LOG.info("JAX-WS service endpoints [{}]:\n\n{}", this.defaultPath, endpoints);
+            LOG.info("Jakarta XML Web Services service endpoints [{}]:\n\n{}", this.defaultPath, endpoints);
         } else {
-            LOG.info("No JAX-WS service endpoints were registered.");
+            LOG.info("Jakarta XML Web Services service endpoints were registered.");
         }
     }
 
     /**
-     * Publish JAX-WS server side endpoint. Returns javax.xml.ws.Endpoint to enable further customization.
+     * Publish Jakarta XML Web Services server side endpoint. Returns the native CXF Endpoint
+     * to allow further customization.
      */
     public EndpointImpl publishEndpoint(EndpointBuilder endpointBuilder) {
         checkArgument(endpointBuilder != null, "EndpointBuilder is null");
@@ -169,11 +171,11 @@ public class JAXWSEnvironment {
     }
 
     /**
-     * JAX-WS client factory
+     * Jakarta XML Web Services client factory
      *
      * @param clientBuilder ClientBuilder.
      * @param <T>           Service interface type.
-     * @return JAX-WS client proxy.
+     * @return Jakarta XML Web Services client proxy.
      */
     public <T> T getClient(ClientBuilder<T> clientBuilder) {
 
@@ -181,7 +183,7 @@ public class JAXWSEnvironment {
         proxyFactory.setServiceClass(clientBuilder.getServiceClass());
         proxyFactory.setAddress(clientBuilder.getAddress());
 
-        // JAX-WS handlers
+        // Jakarta XML Web Services handlers
         if (clientBuilder.getHandlers() != null) {
             for (Handler h : clientBuilder.getHandlers()) {
                 proxyFactory.getHandlers().add(h);

@@ -42,7 +42,7 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
         }
     };
 
-    // JAX-WS Bundle
+    // Jakarta XML Web Services Bundle
     private JAXWSBundle<Object> jaxWsBundle = new JAXWSBundle<>();
     private JAXWSBundle<Object> anotherJaxWsBundle = new JAXWSBundle<>("/api2");
 
@@ -78,7 +78,9 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
                 new EndpointBuilder("/javafirst", new JavaFirstServiceImpl())
                         .authentication(new BasicAuthentication(new BasicAuthenticator(), "TOP_SECRET")));
 
-        // WSDL first service using server side JAX-WS handler and CXF logging interceptors
+        // WSDL first service using server side Jakarta XML Web Services handler and CXF logging interceptors.
+        // The server handler is defined in the wsdlfirstservice-handlerchain.xml file, via the
+        // HandlerChain annotation on WsdlFirstServiceImpl
         e = jaxWsBundle.publishEndpoint(
                 new EndpointBuilder("/wsdlfirst", new WsdlFirstServiceImpl())
                         .cxfInInterceptors(new LoggingInInterceptor())
@@ -98,13 +100,13 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
                         .sessionFactory(hibernate.getSessionFactory()));
 
         // WSDL first service using MTOM. Invoking enableMTOM on EndpointBuilder is not necessary
-        // if you use @MTOM JAX-WS annotation on your service implementation class.
+        // if you use @MTOM Jakarta XML Web Services annotation on your service implementation class.
         e = jaxWsBundle.publishEndpoint(
                 new EndpointBuilder("/mtom", new MtomServiceImpl())
                         .enableMtom()
         );
 
-        // RESTful resource that invokes WsdlFirstService on localhost and uses client side JAX-WS handler.
+        // RESTful resource that invokes WsdlFirstService on localhost and uses client side Jakarta XML Web Services handler.
         environment.jersey().register(new AccessWsdlFirstServiceResource(
                 jaxWsBundle.getClient(
                         new ClientBuilder<>(

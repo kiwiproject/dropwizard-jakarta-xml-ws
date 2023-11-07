@@ -8,7 +8,7 @@ import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.message.Message;
 
 /**
- * JAX-WS/CXF client builder.
+ * Jakarta XML Web Services/CXF client builder.
  */
 public class ClientBuilder<T> extends AbstractBuilder {
 
@@ -80,9 +80,9 @@ public class ClientBuilder<T> extends AbstractBuilder {
     }
 
     /**
-     * Add client side JAX-WS handlers.
+     * Add client side Jakarta XML Web Services handlers.
      *
-     * @param handlers JAX-WS handlers.
+     * @param handlers Jakarta XML Web Services handlers.
      * @return ClientBuilder instance.
      */
     public ClientBuilder<T> handlers(Handler... handlers) {
