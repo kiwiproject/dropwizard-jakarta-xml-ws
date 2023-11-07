@@ -23,10 +23,9 @@ public abstract class AbstractInvoker implements Invoker {
 
         Object o = exchange.getBindingOperationInfo().getOperationInfo().getProperty(Method.class.getName());
 
-        if (o instanceof Method) {
-            return (Method)o;
-        }
-        else {
+        if (o instanceof Method method) {
+            return method;
+        } else {
             throw new RuntimeException("Target method not found on OperationInfo");
         }
 
@@ -36,9 +35,9 @@ public abstract class AbstractInvoker implements Invoker {
     public abstract Object invoke(Exchange exchange, Object o);
 
     /**
-     *  Rethrows exception, without requiring to handle checked exception.
-     *  Type-erasure happens at compile time, therefore if E is RuntimeException,
-     *  checked exception can be re-thrown without declaring them.
+     * Rethrows exception, without requiring to handle checked exception.
+     * Type-erasure happens at compile time, therefore if E is RuntimeException,
+     * checked exception can be re-thrown without declaring them.
      */
     @SuppressWarnings("unchecked")
     protected <E extends Exception> void rethrow(Exception e) throws E {
