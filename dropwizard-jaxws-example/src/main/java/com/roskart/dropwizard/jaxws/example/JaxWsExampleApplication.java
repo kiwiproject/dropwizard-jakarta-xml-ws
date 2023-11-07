@@ -25,10 +25,14 @@ import io.dropwizard.hibernate.HibernateBundle;
 import org.apache.cxf.ext.logging.LoggingInInterceptor;
 import org.apache.cxf.ext.logging.LoggingOutInterceptor;
 import org.apache.cxf.jaxws.EndpointImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ws.example.jaxws.dropwizard.roskart.com.mtomservice.MtomService;
 import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService;
 
 public class JaxWsExampleApplication extends Application<JaxWsExampleApplicationConfiguration> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JaxWsExampleApplication.class);
 
     // HibernateBundle is used by HibernateExampleService
     private final HibernateBundle<JaxWsExampleApplicationConfiguration> hibernate = new HibernateBundle<JaxWsExampleApplicationConfiguration>(Person.class) {
@@ -125,5 +129,8 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
                                 "http://localhost:8080/soap/javafirst")
                                 .cxfInInterceptors(new LoggingInInterceptor())
                                 .cxfOutInterceptors(new LoggingOutInterceptor()))));
+
+        environment.lifecycle().addServerLifecycleListener(server ->
+                LOG.info("Jakarta XML Web Services Example is ready!"));
     }
 }
