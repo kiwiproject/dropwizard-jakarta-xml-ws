@@ -19,11 +19,16 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * A CXF interceptor that manages HTTP Basic Authentication. Implementation is based on combination of
- * CXF JAASLoginInterceptor code and the following Github Gist: https://gist.github.com/palesz/3438143.
+ * CXF JAASLoginInterceptor code and the following GitHub Gist:
+ * <a href="https://gist.github.com/palesz/3438143">Basic HTTP Authentication Interceptor for Apache CXF</a>.
+ * <p>
  * Dropwizard authenticator is used for credentials authentication. Authenticated principal is stored in message
  * exchange and is available in the service implementation through JAX-WS WebServiceContext.
  */
@@ -56,7 +61,7 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
                 // try the WS-Security UsernameToken
                 SecurityToken token = message.get(SecurityToken.class);
                 if (token != null && token.getTokenType() == TokenType.UsernameToken) {
-                    UsernameToken ut = (UsernameToken)token;
+                    UsernameToken ut = (UsernameToken) token;
                     credentials = new BasicCredentials(ut.getName(), ut.getPassword());
                 }
             }
@@ -69,17 +74,14 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
             Optional<?> principal = authentication.getAuthenticator().authenticate(
                     new BasicCredentials(credentials.getUsername(), credentials.getPassword()));
 
-            if (!principal.isPresent()) {
+            if (principal.isEmpty()) {
                 sendErrorResponse(message, HttpURLConnection.HTTP_UNAUTHORIZED);
                 return;
             }
 
             // principal will be available through JAX-WS WebServiceContext
-            if (principal.isPresent()) {
-                exchange.getInMessage().put(PRINCIPAL_KEY, principal.get());
-            }
-        }
-        catch (AuthenticationException ae) {
+            exchange.getInMessage().put(PRINCIPAL_KEY, principal.get());
+        } catch (AuthenticationException ae) {
             sendErrorResponse(message, HttpURLConnection.HTTP_INTERNAL_ERROR);
         }
     }
