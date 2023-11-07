@@ -37,6 +37,7 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
             <version>${cxf.version}</version>
+            <!-- TODO: Can this be removed? -->
             <exclusions>
                 <!-- jaxb-core 2.2.7 contains classes from istack-commons-runtime 2.16
                 and it also has dependency on istack-commons-runtime 2.16 -->
