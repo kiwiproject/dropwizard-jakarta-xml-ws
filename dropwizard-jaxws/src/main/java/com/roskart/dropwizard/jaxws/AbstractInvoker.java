@@ -26,7 +26,7 @@ public abstract class AbstractInvoker implements Invoker {
         if (o instanceof Method method) {
             return method;
         } else {
-            throw new RuntimeException("Target method not found on OperationInfo");
+            throw new IllegalStateException("Target method not found on OperationInfo");
         }
 
     }
