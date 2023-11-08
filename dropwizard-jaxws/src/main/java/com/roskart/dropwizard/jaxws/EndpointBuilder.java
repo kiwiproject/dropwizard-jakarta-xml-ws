@@ -53,7 +53,7 @@ public class EndpointBuilder extends AbstractBuilder {
     public EndpointBuilder(String path, Object service) {
         checkArgument(service != null, "Service is null");
         checkArgument(path != null, "Path is null");
-        checkArgument((path).trim().length() > 0, "Path is empty");
+        checkArgument(!path.isBlank(), "Path is empty");
         if (!path.startsWith("local:")) { // local transport is used in tests
             path = (path.startsWith("/")) ? path : "/" + path;
         }

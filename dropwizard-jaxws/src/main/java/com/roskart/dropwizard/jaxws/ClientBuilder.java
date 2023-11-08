@@ -52,7 +52,7 @@ public class ClientBuilder<T> extends AbstractBuilder {
     public ClientBuilder(Class<T> serviceClass, String address) {
         checkArgument(serviceClass != null, "ServiceClass is null");
         checkArgument(address != null, "Address is null");
-        checkArgument((address).trim().length() > 0, "Address is empty");
+        checkArgument(!address.isBlank(), "Address is empty");
         this.serviceClass = serviceClass;
         this.address = address;
     }
