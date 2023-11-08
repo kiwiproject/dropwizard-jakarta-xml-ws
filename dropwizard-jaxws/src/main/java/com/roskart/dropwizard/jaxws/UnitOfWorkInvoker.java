@@ -21,7 +21,7 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 public class UnitOfWorkInvoker extends AbstractInvoker {
 
     private final SessionFactory sessionFactory;
-    ImmutableMap<String, UnitOfWork> unitOfWorkMethods;
+    final ImmutableMap<String, UnitOfWork> unitOfWorkMethods;
 
     public UnitOfWorkInvoker(Invoker underlying, ImmutableMap<String, UnitOfWork> unitOfWorkMethods,
                              SessionFactory sessionFactory) {
@@ -64,7 +64,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     }
 
     /**
-     * @see io.dropwizard.hibernate.UnitOfWorkAspect#beginTransaction()
+     * @see io.dropwizard.hibernate.UnitOfWorkAspect#beginTransaction(UnitOfWork, Session)
      */
     private void beginTransaction(Session session, UnitOfWork unitOfWork) {
         if (unitOfWork.transactional()) {
@@ -82,7 +82,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     }
 
     /**
-     * @see io.dropwizard.hibernate.UnitOfWorkAspect#rollbackTransaction()
+     * @see io.dropwizard.hibernate.UnitOfWorkAspect#rollbackTransaction(UnitOfWork, Session)
      */
     private void rollbackTransaction(Session session, UnitOfWork unitOfWork) {
         if (unitOfWork.transactional()) {
@@ -94,7 +94,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     }
 
     /**
-     * @see io.dropwizard.hibernate.UnitOfWorkAspect#commitTransaction()
+     * @see io.dropwizard.hibernate.UnitOfWorkAspect#commitTransaction(UnitOfWork, Session)
      */
     private void commitTransaction(Session session, UnitOfWork unitOfWork) {
         if (unitOfWork.transactional()) {

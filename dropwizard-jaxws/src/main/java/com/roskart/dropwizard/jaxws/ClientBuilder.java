@@ -12,8 +12,8 @@ import org.apache.cxf.message.Message;
  */
 public class ClientBuilder<T> extends AbstractBuilder {
 
-    Class<T> serviceClass;
-    String address;
+    final Class<T> serviceClass;
+    final String address;
     private int connectTimeout = 500;
     private int receiveTimeout = 2000;
     ImmutableList<Handler> handlers;
@@ -46,13 +46,13 @@ public class ClientBuilder<T> extends AbstractBuilder {
     /**
      * Create new ClientBuilder. Endpoint will be published relative to the CXF servlet path.
      *
-     * @param serviceClass Service interface class..
+     * @param serviceClass Service interface class.
      * @param address      Endpoint URL address..
      */
     public ClientBuilder(Class<T> serviceClass, String address) {
         checkArgument(serviceClass != null, "ServiceClass is null");
         checkArgument(address != null, "Address is null");
-        checkArgument((address).trim().length() > 0, "Address is empty");
+        checkArgument(!address.isBlank(), "Address is empty");
         this.serviceClass = serviceClass;
         this.address = address;
     }

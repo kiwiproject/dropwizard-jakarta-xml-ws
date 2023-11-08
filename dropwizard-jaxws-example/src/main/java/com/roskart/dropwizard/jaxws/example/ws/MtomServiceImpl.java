@@ -13,7 +13,7 @@ import ws.example.jaxws.dropwizard.roskart.com.mtomservice.MtomService;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-@MTOM // @MTOM annotation is not necessary if you invoke enableMtom on EndopointBuilder
+@MTOM // @MTOM annotation is not necessary if you invoke enableMtom on EndpointBuilder
 @WebService(endpointInterface = "ws.example.jaxws.dropwizard.roskart.com.mtomservice.MtomService",
         targetNamespace = "http://com.roskart.dropwizard.jaxws.example.ws/MtomService",
         name = "MtomService",

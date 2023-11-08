@@ -22,7 +22,7 @@ Features
 Background
 ----------
 This library was imported from [roskart/dropwizard-jaxws](https://github.com/roskart/dropwizard-jaxws), which
-as of Novermber 2023 seems to be no longer maintained by the original creator.
+as of November 2023 seems to be no longer maintained by the original creator.
 
 Since we are still using this library in our services which use Dropwizard and Jakarta XML Web Services, we decided to import the original repository and continue maintaining it for our own use, and anyone else who might want to use it. _We make no guarantees whatsoever about how long we will maintain it, and also plan to make our own changes such as changing the base package name to org.kiwiproject to be consistent with our other libraries._
 
@@ -38,7 +38,7 @@ now a standalone (normal) repository.
 
 Migrating from roskart/dropwizard-jaxws
 ---------------------------------------
-_Note that as of November 7, 2023 we have not yet released an initial version._
+_Note that as of November 7, 2023, we have not yet released an initial version._
 
 There are two things you need to do in order to migrate. First, change the Maven coordinates so that the
 groupId is org.kiwiproject, the artifactId is dropwizard-jakarta-xml-ws, and choose the latest version.
@@ -314,7 +314,7 @@ under kiwiproject 🥝._
 ### v0.3.0
 
 - Updated JAXWSBundle API: introduced EndpointBuilder and ClientBuilder.
-- Added suport for CXF interceptors.
+- Added support for CXF interceptors.
 
 ### v0.2.0
 

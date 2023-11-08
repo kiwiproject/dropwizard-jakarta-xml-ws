@@ -1,7 +1,6 @@
 package com.roskart.dropwizard.jaxws;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -14,7 +13,6 @@ import jakarta.validation.Validation;
 import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.xml.ws.AsyncHandler;
-import jakarta.xml.ws.Response;
 import org.apache.cxf.annotations.UseAsyncMethod;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
@@ -34,9 +32,9 @@ class ValidatingInvokerTest {
     Invoker underlying;
     Exchange exchange;
 
-    class ChildParam {
+    static class ChildParam {
         @NotEmpty
-        private String foo;
+        private final String foo;
 
         public ChildParam(String foo) {
             this.foo = foo;
@@ -48,25 +46,26 @@ class ValidatingInvokerTest {
         }
     }
 
-    class RootParam1 {
+    static class RootParam1 {
         @Valid
-        private ChildParam child;
+        private final ChildParam child;
 
         public RootParam1(ChildParam childParam) {
             this.child = childParam;
         }
     }
 
-    class RootParam2 {
+    static class RootParam2 {
         @NotEmpty
-        private String foo;
+        private final String foo;
 
         public RootParam2(String foo) {
             this.foo = foo;
         }
     }
 
-    class DummyService {
+    @SuppressWarnings("unused")
+    static class DummyService {
         public void noParams() {
         }
 
@@ -109,7 +108,7 @@ class ValidatingInvokerTest {
             when(oi.getProperty(Method.class.getName()))
                     .thenReturn(DummyService.class.getMethod(methodName, parameterTypes));
         } catch (Exception e) {
-            fail("setTargetMethod failed", e);
+            throw new RuntimeException("setTargetMethod failed", e);
         }
     }
 
@@ -134,23 +133,17 @@ class ValidatingInvokerTest {
     }
 
     @Test
-    void invokeWithAsycHandler() {
+    void invokeWithAsyncHandler() {
         setTargetMethod(exchange, "asyncMethod", String.class);
 
-        List<Object> params = Arrays.<Object>asList(null, new AsyncHandler<String>() {
-            @Override
-            public void handleResponse(Response<String> res) {
-
-            }
+        List<Object> params = Arrays.asList(null, (AsyncHandler<String>) res -> {
+            // no-op
         });
         invoker.invoke(exchange, params);
         verify(underlying).invoke(exchange, params);
 
-        params = Arrays.asList("foo", new AsyncHandler<String>() {
-            @Override
-            public void handleResponse(Response<String> res) {
-
-            }
+        params = Arrays.asList("foo", (AsyncHandler<String>) res -> {
+            // no-op
         });
         invoker.invoke(exchange, params);
         verify(underlying).invoke(exchange, params);

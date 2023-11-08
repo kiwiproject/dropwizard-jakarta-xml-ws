@@ -2,7 +2,6 @@ package com.roskart.dropwizard.jaxws;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatRuntimeException;
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -25,7 +24,7 @@ import java.lang.reflect.Method;
 
 class UnitOfWorkInvokerFactoryTest {
 
-    class FooService {
+    static class FooService {
         public String foo() {
             return "foo return";
         }
@@ -47,8 +46,22 @@ class UnitOfWorkInvokerFactoryTest {
         }
     }
 
+    static class BarService {
+        public String bar() {
+            return "bar";
+        }
+    }
+
+    public class BarInvoker implements Invoker {
+
+        @Override
+        public Object invoke(Exchange exchange, Object o) {
+            return barService.bar();
+        }
+    }
+
     public class UnitOfWorkInvoker implements Invoker {
-        private boolean doThrow = false;
+        private final boolean doThrow;
 
         public UnitOfWorkInvoker(boolean doThrow) {
             this.doThrow = doThrow;
@@ -62,6 +75,7 @@ class UnitOfWorkInvokerFactoryTest {
 
     UnitOfWorkInvokerFactory invokerBuilder;
     FooService fooService;
+    BarService barService;
     SessionFactory sessionFactory;
     Session session;
     Transaction transaction;
@@ -70,7 +84,7 @@ class UnitOfWorkInvokerFactoryTest {
     Exchange exchange;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         exchange = mock(Exchange.class);
         BindingOperationInfo boi = mock(BindingOperationInfo.class);
         when(exchange.getBindingOperationInfo()).thenReturn(boi);
@@ -78,6 +92,7 @@ class UnitOfWorkInvokerFactoryTest {
         when(boi.getOperationInfo()).thenReturn(oi);
         invokerBuilder = new UnitOfWorkInvokerFactory();
         fooService = new FooService();
+        barService = new BarService();
         sessionFactory = mock(SessionFactory.class);
         session = mock(Session.class);
         when(sessionFactory.openSession()).thenReturn(session);
@@ -90,21 +105,21 @@ class UnitOfWorkInvokerFactoryTest {
      * Utility method that mimics runtime CXF behaviour. Enables AbstractInvoker.getTargetMethod to work properly
      * during the test.
      */
-    private void setTargetMethod(Exchange exchange, String methodName, Class<?>... parameterTypes) {
+    private void setTargetMethod(Exchange exchange, Class<?> serviceClass, String methodName, Class<?>... parameterTypes) {
 
         try {
             OperationInfo oi = exchange.getBindingOperationInfo().getOperationInfo();
             when(oi.getProperty(Method.class.getName()))
-                    .thenReturn(FooService.class.getMethod(methodName, parameterTypes));
+                    .thenReturn(serviceClass.getMethod(methodName, parameterTypes));
         } catch (Exception e) {
-            fail("setTargetMethod failed", e);
+            throw new RuntimeException("setTargetMethod failed", e);
         }
     }
 
     @Test
     void noAnnotation() {
-        Invoker invoker = invokerBuilder.create(fooService, new FooInvoker(), null);
-        this.setTargetMethod(exchange, "foo"); // simulate CXF behavior
+        Invoker invoker = invokerBuilder.create(fooService, new FooInvoker(), sessionFactory);
+        this.setTargetMethod(exchange, FooService.class, "foo"); // simulate CXF behavior
 
         Object result = invoker.invoke(exchange, null);
         assertThat(result).isEqualTo("foo return");
@@ -115,10 +130,23 @@ class UnitOfWorkInvokerFactoryTest {
     }
 
     @Test
+    void shouldCallService_WhenNoMethodsAreAnnotatedWith_UnitOfWork() {
+        var invoker = invokerBuilder.create(barService, new BarInvoker(), sessionFactory);
+        this.setTargetMethod(exchange, BarService.class, "bar");
+
+        var result = invoker.invoke(exchange, null);
+        assertThat(result).isEqualTo("bar");
+
+        verifyNoInteractions(sessionFactory);
+        verifyNoInteractions(session);
+        verifyNoInteractions(transaction);
+    }
+
+    @Test
     void unitOfWorkAnnotation() {
         // use underlying invoker which invokes fooService.unitOfWork(false)
         Invoker invoker = invokerBuilder.create(fooService, new UnitOfWorkInvoker(false), sessionFactory);
-        this.setTargetMethod(exchange, "unitOfWork", boolean.class); // simulate CXF behavior
+        this.setTargetMethod(exchange, FooService.class, "unitOfWork", boolean.class); // simulate CXF behavior
 
         Object result = invoker.invoke(exchange, null);
         assertThat(result).isEqualTo("unitOfWork return");
@@ -133,7 +161,7 @@ class UnitOfWorkInvokerFactoryTest {
     void unitOfWorkWithException() {
         // use underlying invoker which invokes fooService.unitOfWork(true) - exception is thrown
         Invoker invoker = invokerBuilder.create(fooService, new UnitOfWorkInvoker(true), sessionFactory);
-        this.setTargetMethod(exchange, "unitOfWork", boolean.class);  // simulate CXF behavior
+        this.setTargetMethod(exchange, FooService.class, "unitOfWork", boolean.class);  // simulate CXF behavior
 
         assertThatRuntimeException()
                 .isThrownBy(() -> invoker.invoke(exchange, null))

@@ -9,14 +9,14 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.xml.ws.BindingProvider;
 
 /**
- * Dropwizard resource that invokes JavaFirstService SOAP web service using basic authentication.
+ * A Dropwizard resource that invokes JavaFirstService SOAP web service using basic authentication.
  */
 @Path("/javafirstclient")
 @Produces(MediaType.APPLICATION_JSON)
 
 public class AccessProtectedServiceResource {
 
-    JavaFirstService javaFirstService;
+    final JavaFirstService javaFirstService;
 
     public AccessProtectedServiceResource(JavaFirstService javaFirstService) {
         this.javaFirstService = javaFirstService;

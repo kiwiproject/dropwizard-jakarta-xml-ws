@@ -20,7 +20,7 @@ import java.io.UncheckedIOException;
 @Produces(MediaType.APPLICATION_JSON)
 public class AccessMtomServiceResource {
 
-    MtomService mtomServiceClient;
+    final MtomService mtomServiceClient;
 
     public AccessMtomServiceResource(MtomService mtomServiceClient) {
         this.mtomServiceClient = mtomServiceClient;

@@ -41,10 +41,10 @@ class EndpointBuilderTest {
         assertThat(builder.publishedEndpointUrl()).isEqualTo(publishedUrl);
         assertThat(builder.getAuthentication()).isEqualTo(basicAuth);
         assertThat(builder.getSessionFactory()).isEqualTo(sessionFactory);
-        assertThat(builder.getCxfInInterceptors()).contains(new Interceptor<?>[] { inInterceptor, inInterceptor });
-        assertThat(builder.getCxfInFaultInterceptors()).contains(new Interceptor<?>[] { inFaultInterceptor, inFaultInterceptor });
-        assertThat(builder.getCxfOutInterceptors()).contains(new Interceptor<?>[] { outInterceptor, outInterceptor });
-        assertThat(builder.getCxfOutFaultInterceptors()).contains(new Interceptor<?>[] { outFaultInterceptor, outFaultInterceptor });
+        assertThat(builder.getCxfInInterceptors()).contains(inInterceptor, inInterceptor);
+        assertThat(builder.getCxfInFaultInterceptors()).contains(inFaultInterceptor, inFaultInterceptor);
+        assertThat(builder.getCxfOutInterceptors()).contains(outInterceptor, outInterceptor);
+        assertThat(builder.getCxfOutFaultInterceptors()).contains(outFaultInterceptor, outFaultInterceptor);
         assertThat(builder.getProperties()).containsEntry("key", "value");
     }
 }

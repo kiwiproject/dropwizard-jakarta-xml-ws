@@ -22,7 +22,7 @@ public class InstrumentedInvokers {
      */
     public static class TimedInvoker extends AbstractInvoker {
 
-        private ImmutableMap<String, Timer> timers;
+        private final ImmutableMap<String, Timer> timers;
 
         public TimedInvoker(Invoker underlying, ImmutableMap<String, Timer> timers) {
             super(underlying);
@@ -31,7 +31,7 @@ public class InstrumentedInvokers {
 
         public Object invoke(Exchange exchange, Object o) {
 
-            Object result = null;
+            Object result;
             String methodname = this.getTargetMethod(exchange).getName();
 
             if (timers.containsKey(methodname)) {
@@ -54,7 +54,7 @@ public class InstrumentedInvokers {
      */
     public static class MeteredInvoker extends AbstractInvoker {
 
-        private ImmutableMap<String, Meter> meters;
+        private final ImmutableMap<String, Meter> meters;
 
         public MeteredInvoker(Invoker underlying, ImmutableMap<String, Meter> meters) {
             super(underlying);
@@ -76,8 +76,8 @@ public class InstrumentedInvokers {
     }
 
     public static class ExceptionMeter {
-        private Meter meter;
-        private Class<? extends Throwable> exceptionClass;
+        private final Meter meter;
+        private final Class<? extends Throwable> exceptionClass;
 
         public ExceptionMeter(Meter meter, Class<? extends Throwable> exceptionClass) {
             this.meter = meter;
@@ -98,7 +98,7 @@ public class InstrumentedInvokers {
      */
     public static class ExceptionMeteredInvoker extends AbstractInvoker {
 
-        private ImmutableMap<String, ExceptionMeter> meters;
+        private final ImmutableMap<String, ExceptionMeter> meters;
 
         public ExceptionMeteredInvoker(Invoker underlying, ImmutableMap<String, ExceptionMeter> meters) {
             super(underlying);

@@ -1,5 +1,5 @@
 /**
- * This class is copied from drowpizard-example
+ * This class is copied from dropwizard-example
  */
 package com.roskart.dropwizard.jaxws.example.core;
 

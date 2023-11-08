@@ -26,7 +26,7 @@ public class UnitOfWorkInvokerFactory {
 
         Invoker invoker = rootInvoker;
 
-        if (unitOfWorkMethods.size() > 0) {
+        if (!unitOfWorkMethods.isEmpty()) {
             invoker = new UnitOfWorkInvoker(invoker, unitOfWorkMethods, sessionFactory);
         }
 
