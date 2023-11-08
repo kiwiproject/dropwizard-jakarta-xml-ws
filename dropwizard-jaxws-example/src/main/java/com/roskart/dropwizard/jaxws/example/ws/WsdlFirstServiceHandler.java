@@ -6,8 +6,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Jakarta XML Web Services server handler when WsdlFirstService is invoked.
- *
- * See 
+ * <p>
+ * See the {@code wsdlfirstservice-handlerchain.xml} configuration file, which
+ * is where this class is defined to be a handler.
  */
 public class WsdlFirstServiceHandler extends SimpleLoggingSoapHandler {
 
