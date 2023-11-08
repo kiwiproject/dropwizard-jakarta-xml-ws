@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 
 class UnitOfWorkInvokerFactoryTest {
 
-    class FooService {
+    static class FooService {
         public String foo() {
             return "foo return";
         }
@@ -48,7 +48,7 @@ class UnitOfWorkInvokerFactoryTest {
     }
 
     public class UnitOfWorkInvoker implements Invoker {
-        private boolean doThrow = false;
+        private final boolean doThrow;
 
         public UnitOfWorkInvoker(boolean doThrow) {
             this.doThrow = doThrow;

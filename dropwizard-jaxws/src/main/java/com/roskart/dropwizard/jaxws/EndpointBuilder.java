@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public class EndpointBuilder extends AbstractBuilder {
 
-    private String path;
-    private Object service;
+    private final String path;
+    private final Object service;
     private String publishedEndpointUrl;
     SessionFactory sessionFactory;
     BasicAuthentication authentication;

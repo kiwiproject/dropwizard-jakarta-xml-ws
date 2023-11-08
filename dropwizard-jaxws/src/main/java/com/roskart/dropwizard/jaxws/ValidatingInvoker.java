@@ -27,7 +27,7 @@ public class ValidatingInvoker extends AbstractInvoker {
     private static final Class<?>[] EMPTY_CLASS_ARRAY = {};
     private static final Class<?>[] DEFAULT_GROUP_ARRAY = new Class<?>[] { Default.class };
 
-    private Validator validator;
+    private final Validator validator;
 
     public ValidatingInvoker(Invoker underlying, Validator validator) {
         super(underlying);

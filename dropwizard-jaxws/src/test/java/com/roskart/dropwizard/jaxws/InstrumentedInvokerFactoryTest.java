@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 class InstrumentedInvokerFactoryTest {
 
     // Test service implementation
-    class InstrumentedService {
+    static class InstrumentedService {
 
         public String foo() {
             return "fooReturn";
@@ -46,7 +46,7 @@ class InstrumentedInvokerFactoryTest {
         @ExceptionMetered
         public String exceptionMetered(boolean doThrow) {
             if (doThrow) {
-                throw new RuntimeException("Runtime exception occured");
+                throw new RuntimeException("Runtime exception occurred");
             } else {
                 return "exceptionMeteredReturn";
             }
@@ -84,7 +84,7 @@ class InstrumentedInvokerFactoryTest {
     }
 
     public class ExceptionMeteredInvoker implements Invoker {
-        private boolean doThrow;
+        private final boolean doThrow;
 
         public ExceptionMeteredInvoker(boolean doThrow) {
             this.doThrow = doThrow;
@@ -205,7 +205,7 @@ class InstrumentedInvokerFactoryTest {
         long oldmetervalue = meter.getCount();
         long oldexceptionmetervalue = exceptionmeter.getCount();
 
-        // Invoke InstrumentedResource.exceptionMetered without exception beeing thrown
+        // Invoke InstrumentedResource.exceptionMetered without exception being thrown
 
         Invoker invoker = invokerBuilder.create(instrumentedService, new ExceptionMeteredInvoker(false));
         this.setTargetMethod(exchange, "exceptionMetered", boolean.class); // simulate CXF behavior
@@ -217,7 +217,7 @@ class InstrumentedInvokerFactoryTest {
         assertThat(meter.getCount()).isEqualTo(oldmetervalue);
         assertThat(exceptionmeter.getCount()).isEqualTo(oldexceptionmetervalue);
 
-        // Invoke InstrumentedResource.exceptionMetered with exception beeing thrown
+        // Invoke InstrumentedResource.exceptionMetered with exception being thrown
 
         var throwingInvoker = invokerBuilder.create(instrumentedService, new ExceptionMeteredInvoker(true));
 

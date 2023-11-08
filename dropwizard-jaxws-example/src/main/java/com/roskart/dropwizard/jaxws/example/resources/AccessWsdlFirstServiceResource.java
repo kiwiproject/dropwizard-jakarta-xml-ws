@@ -11,7 +11,7 @@ import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.ObjectFactory;
 import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService;
 
 /**
- * Dropwizard resource that invokes WsdlFirstService SOAP web service.
+ * A Dropwizard resource that invokes WsdlFirstService SOAP web service.
  *
  * @see WsdlFirstClientHandler
  */
@@ -19,7 +19,7 @@ import ws.example.jaxws.dropwizard.roskart.com.wsdlfirstservice.WsdlFirstService
 @Produces(MediaType.APPLICATION_JSON)
 public class AccessWsdlFirstServiceResource {
 
-    WsdlFirstService wsdlFirstServiceClient;
+    final WsdlFirstService wsdlFirstServiceClient;
 
     public AccessWsdlFirstServiceResource(WsdlFirstService wsdlFirstServiceClient) {
         this.wsdlFirstServiceClient = wsdlFirstServiceClient;

@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  */
 public abstract class AbstractInvoker implements Invoker {
 
-    protected Invoker underlying;
+    protected final Invoker underlying;
 
     protected AbstractInvoker(Invoker underlying) {
         this.underlying = underlying;

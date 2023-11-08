@@ -16,8 +16,8 @@ import org.hibernate.SessionFactory;
 public class JAXWSBundle<C> implements ConfiguredBundle<C> {
 
     protected static final String DEFAULT_PATH = "/soap";
-    protected JAXWSEnvironment jaxwsEnvironment;
-    protected String servletPath;
+    protected final JAXWSEnvironment jaxwsEnvironment;
+    protected final String servletPath;
 
     /**
      * Create a new bundle instance. Service endpoints are published relative to '/soap'.
@@ -88,7 +88,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      * @param path    Relative endpoint path.
      * @param service Service implementation.
      * @return javax.xml.ws.Endpoint
-     * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
+     * @deprecated Use the {@link #publishEndpoint(EndpointBuilder) publishEndpoint} method instead.
      */
     @Deprecated(since = "0.5.0")
     public EndpointImpl publishEndpoint(String path, Object service) {
@@ -103,7 +103,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      * @param service        Service implementation.
      * @param sessionFactory Hibernate session factory.
      * @return javax.xml.ws.Endpoint
-     * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
+     * @deprecated Use the {@link #publishEndpoint(EndpointBuilder) publishEndpoint} method instead.
      */
     @Deprecated(since = "0.5.0")
     public EndpointImpl publishEndpoint(String path, Object service, SessionFactory sessionFactory) {
@@ -118,7 +118,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      * @param service        Service implementation.
      * @param authentication BasicAuthentication implementation.
      * @return javax.xml.ws.Endpoint
-     * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
+     * @deprecated Use the {@link #publishEndpoint(EndpointBuilder) publishEndpoint} method instead.
      */
     @Deprecated(since = "0.5.0")
     public EndpointImpl publishEndpoint(String path, Object service, BasicAuthentication authentication) {
@@ -135,7 +135,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      * @param auth           BasicAuthentication implementation.
      * @param sessionFactory Hibernate session factory.
      * @return javax.xml.ws.Endpoint
-     * @deprecated Use the {@link #publishEndpoint(EndpointBuilder)} publishEndpoint} method instead.
+     * @deprecated Use the {@link #publishEndpoint(EndpointBuilder) publishEndpoint} method instead.
      */
     @Deprecated(since = "0.5.0")
     public EndpointImpl publishEndpoint(String path, Object service, BasicAuthentication auth,
@@ -157,7 +157,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      * @param handlers     Client side Jakarta XML Web Services handlers. Optional.
      * @param <T>          Service interface type.
      * @return Jakarta XML Web Services client proxy.
-     * @deprecated Use the {@link #getClient(ClientBuilder)} getClient} method instead.
+     * @deprecated Use the {@link #getClient(ClientBuilder) getClient} method instead.
      */
     @Deprecated(since = "0.5.0")
     public <T> T getClient(Class<T> serviceClass, String address, Handler... handlers) {

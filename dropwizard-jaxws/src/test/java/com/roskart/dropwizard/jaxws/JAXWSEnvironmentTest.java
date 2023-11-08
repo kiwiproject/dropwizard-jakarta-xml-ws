@@ -50,15 +50,16 @@ import java.util.HashMap;
 
 class JAXWSEnvironmentTest {
 
+    private static final String SOAP_REQUEST_FILE_NAME = "test-soap-request.xml";
+
     private JAXWSEnvironment jaxwsEnvironment;
-    private Invoker mockInvoker = mock(Invoker.class);
-    private TestUtilities testutils = new TestUtilities(JAXWSEnvironmentTest.class);
-    private DummyService service = new DummyService();
-    InstrumentedInvokerFactory mockInvokerBuilder = mock(InstrumentedInvokerFactory.class);
-    UnitOfWorkInvokerFactory mockUnitOfWorkInvokerBuilder = mock(UnitOfWorkInvokerFactory.class);
+    private Invoker mockInvoker;
+    private TestUtilities testutils;
+    private DummyService service;
+    InstrumentedInvokerFactory mockInvokerBuilder;
+    UnitOfWorkInvokerFactory mockUnitOfWorkInvokerBuilder;
     private int mockBasicAuthInterceptorInvoked;
 
-    private String soapRequest = "test-soap-request.xml";
 
     // DummyInterface is used by getClient test
     @WebService
@@ -69,7 +70,7 @@ class JAXWSEnvironmentTest {
     }
 
     // TestInterceptor is used for testing CXF interceptors
-    class TestInterceptor extends AbstractPhaseInterceptor<Message> {
+    static class TestInterceptor extends AbstractPhaseInterceptor<Message> {
         private int invocationCount = 0;
 
         public TestInterceptor(String phase) {
@@ -90,6 +91,12 @@ class JAXWSEnvironmentTest {
     void setup() {
 
         ((ch.qos.logback.classic.Logger) LoggerFactory.getLogger("org.apache.cxf")).setLevel(Level.INFO);
+
+        mockInvoker = mock(Invoker.class);
+        testutils = new TestUtilities(JAXWSEnvironmentTest.class);
+        service = new DummyService();
+        mockInvokerBuilder = mock(InstrumentedInvokerFactory.class);
+        mockUnitOfWorkInvokerBuilder = mock(UnitOfWorkInvokerFactory.class);
 
         jaxwsEnvironment = new JAXWSEnvironment("soap") {
             /*
@@ -144,7 +151,7 @@ class JAXWSEnvironmentTest {
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
 
         Node soapResponse = testutils.invoke("local://path",
-                LocalTransportFactory.TRANSPORT_ID, soapRequest);
+                LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
@@ -167,7 +174,7 @@ class JAXWSEnvironmentTest {
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
 
         Node soapResponse = testutils.invoke("local://path",
-                LocalTransportFactory.TRANSPORT_ID, soapRequest);
+                LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
@@ -185,7 +192,7 @@ class JAXWSEnvironmentTest {
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
 
         Node soapResponse = testutils.invoke("local://path",
-                LocalTransportFactory.TRANSPORT_ID, soapRequest);
+                LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
@@ -205,7 +212,7 @@ class JAXWSEnvironmentTest {
         verify(mockUnitOfWorkInvokerBuilder).create(any(), any(Invoker.class), any(SessionFactory.class));
 
         Node soapResponse = testutils.invoke("local://path",
-                LocalTransportFactory.TRANSPORT_ID, soapRequest);
+                LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
@@ -227,7 +234,7 @@ class JAXWSEnvironmentTest {
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
 
         Node soapResponse = testutils.invoke("local://path",
-                LocalTransportFactory.TRANSPORT_ID, soapRequest);
+                LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
         assertThat(inInterceptor.getInvocationCount()).isEqualTo(1);
@@ -237,7 +244,7 @@ class JAXWSEnvironmentTest {
         testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
 
         soapResponse = testutils.invoke("local://path",
-                LocalTransportFactory.TRANSPORT_ID, soapRequest);
+                LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker, times(2)).invoke(any(Exchange.class), any());
         assertThat(inInterceptor.getInvocationCount()).isEqualTo(2);
@@ -257,7 +264,7 @@ class JAXWSEnvironmentTest {
 
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
 
-        byte[] response = testutils.invokeBytes("local://path", LocalTransportFactory.TRANSPORT_ID, soapRequest);
+        byte[] response = testutils.invokeBytes("local://path", LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
@@ -303,7 +310,7 @@ class JAXWSEnvironmentTest {
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
 
         Node soapResponse = testutils.invoke("local://path",
-                LocalTransportFactory.TRANSPORT_ID, soapRequest);
+                LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
@@ -330,7 +337,7 @@ class JAXWSEnvironmentTest {
     }
 
     @Test
-    void publishEndpointWithInvalidArguments() throws Exception {
+    void publishEndpointWithInvalidArguments() {
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> new EndpointBuilder("foo", null))

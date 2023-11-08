@@ -17,7 +17,7 @@ import java.util.List;
  * Provides factory method for creating instrumented CXF invoker chain.
  *
  * @see com.roskart.dropwizard.jaxws.InstrumentedInvokers
- * @see com.codahale.metrics.jersey.InstrumentedResourceMethodDispatchProvider
+ * @see com.codahale.metrics.jersey3.InstrumentedResourceMethodApplicationListener
  */
 public class InstrumentedInvokerFactory {
 

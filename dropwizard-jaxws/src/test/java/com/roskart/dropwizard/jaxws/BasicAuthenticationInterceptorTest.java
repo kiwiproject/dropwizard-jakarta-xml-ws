@@ -27,6 +27,11 @@ import java.security.Principal;
 
 class BasicAuthenticationInterceptorTest {
 
+    // Suppress warning about "hard-coded" password
+    @SuppressWarnings("java:S2068")
+    private static final String CORRECT_PASSWORD = "secret";
+    private static final String USERNAME = "username";
+
     @Mock
     private InterceptorChain interceptorChainMock;
     @Mock
@@ -40,14 +45,12 @@ class BasicAuthenticationInterceptorTest {
     @Mock
     private OutputStream outputStreamMock;
 
-    private BasicAuthentication basicAuthentication = new BasicAuthentication(new BasicAuthenticator(), "TOP_SECRET");
-    // Suppress warning about "hard-coded" password
-    @SuppressWarnings("squid:S2068")
-    private static final String CORRECT_PASSWORD = "secret";
-    private static final String USERNAME = "username";
+    private BasicAuthentication basicAuthentication;
 
     @BeforeEach
     void setup() throws IOException {
+        basicAuthentication = new BasicAuthentication(new BasicAuthenticator(), "TOP_SECRET");
+
         MockitoAnnotations.openMocks(this);
         when(destinationMock.getBackChannel(any())).thenReturn(conduitMock);
         when(outMessageMock.getContent(OutputStream.class)).thenReturn(outputStreamMock);
@@ -65,7 +68,7 @@ class BasicAuthenticationInterceptorTest {
     }
 
     @Test
-    void shouldReturnUnathorizedCodeForInvalidCredentials() {
+    void shouldReturnUnauthorizedCodeForInvalidCredentials() {
         BasicAuthenticationInterceptor target = new BasicAuthenticationInterceptor();
         target.setAuthenticator(basicAuthentication);
         Message message = createMessageWithUsernameAndPassword(USERNAME, "foo");

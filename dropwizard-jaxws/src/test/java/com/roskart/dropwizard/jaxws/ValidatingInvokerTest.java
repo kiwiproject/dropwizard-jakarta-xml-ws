@@ -34,9 +34,9 @@ class ValidatingInvokerTest {
     Invoker underlying;
     Exchange exchange;
 
-    class ChildParam {
+    static class ChildParam {
         @NotEmpty
-        private String foo;
+        private final String foo;
 
         public ChildParam(String foo) {
             this.foo = foo;
@@ -48,18 +48,18 @@ class ValidatingInvokerTest {
         }
     }
 
-    class RootParam1 {
+    static class RootParam1 {
         @Valid
-        private ChildParam child;
+        private final ChildParam child;
 
         public RootParam1(ChildParam childParam) {
             this.child = childParam;
         }
     }
 
-    class RootParam2 {
+    static class RootParam2 {
         @NotEmpty
-        private String foo;
+        private final String foo;
 
         public RootParam2(String foo) {
             this.foo = foo;
@@ -134,14 +134,11 @@ class ValidatingInvokerTest {
     }
 
     @Test
-    void invokeWithAsycHandler() {
+    void invokeWithAsyncHandler() {
         setTargetMethod(exchange, "asyncMethod", String.class);
 
-        List<Object> params = Arrays.<Object>asList(null, new AsyncHandler<String>() {
-            @Override
-            public void handleResponse(Response<String> res) {
-
-            }
+        List<Object> params = Arrays.asList(null, (AsyncHandler<String>) res -> {
+            // no-op
         });
         invoker.invoke(exchange, params);
         verify(underlying).invoke(exchange, params);

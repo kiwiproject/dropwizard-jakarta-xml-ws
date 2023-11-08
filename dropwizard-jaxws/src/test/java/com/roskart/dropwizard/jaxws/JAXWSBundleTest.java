@@ -25,15 +25,22 @@ import org.junit.jupiter.api.Test;
 
 class JAXWSBundleTest {
 
-    Environment environment = mock(Environment.class);
-    Bootstrap<?> bootstrap = mock(Bootstrap.class);
-    ServletEnvironment servletEnvironment = mock(ServletEnvironment.class);
-    ServletRegistration.Dynamic servlet = mock(ServletRegistration.Dynamic.class);
-    JAXWSEnvironment jaxwsEnvironment = mock(JAXWSEnvironment.class);
-    LifecycleEnvironment lifecycleEnvironment = mock(LifecycleEnvironment.class);
+    Environment environment;
+    Bootstrap<?> bootstrap;
+    ServletEnvironment servletEnvironment;
+    ServletRegistration.Dynamic servlet;
+    JAXWSEnvironment jaxwsEnvironment;
+    LifecycleEnvironment lifecycleEnvironment;
 
     @BeforeEach
     void setUp() {
+        environment = mock(Environment.class);
+        bootstrap = mock(Bootstrap.class);
+        servletEnvironment = mock(ServletEnvironment.class);
+        servlet = mock(ServletRegistration.Dynamic.class);
+        jaxwsEnvironment = mock(JAXWSEnvironment.class);
+        lifecycleEnvironment = mock(LifecycleEnvironment.class);
+
         when(environment.servlets()).thenReturn(servletEnvironment);
         when(environment.lifecycle()).thenReturn(lifecycleEnvironment);
         when(bootstrap.getMetricRegistry()).thenReturn(mock(MetricRegistry.class));

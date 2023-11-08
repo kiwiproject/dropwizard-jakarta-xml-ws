@@ -43,8 +43,8 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
     };
 
     // Jakarta XML Web Services Bundle
-    private JAXWSBundle<Object> jaxWsBundle = new JAXWSBundle<>();
-    private JAXWSBundle<Object> anotherJaxWsBundle = new JAXWSBundle<>("/api2");
+    private final JAXWSBundle<Object> jaxWsBundle = new JAXWSBundle<>();
+    private final JAXWSBundle<Object> anotherJaxWsBundle = new JAXWSBundle<>("/api2");
 
     public static void main(String[] args) throws Exception {
         new JaxWsExampleApplication().run(args);
@@ -106,7 +106,7 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
                         .enableMtom()
         );
 
-        // RESTful resource that invokes WsdlFirstService on localhost and uses client side Jakarta XML Web Services handler.
+        // A RESTful resource that invokes WsdlFirstService on localhost and uses client side Jakarta XML Web Services handler.
         environment.jersey().register(new AccessWsdlFirstServiceResource(
                 jaxWsBundle.getClient(
                         new ClientBuilder<>(
@@ -114,7 +114,7 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
                                 "http://localhost:8080/soap/wsdlfirst")
                                 .handlers(new WsdlFirstClientHandler()))));
 
-        // RESTful resource that invokes MtomService on localhost
+        // A RESTful resource that invokes MtomService on localhost
         environment.jersey().register(new AccessMtomServiceResource(
                 jaxWsBundle.getClient(
                         new ClientBuilder<>(
@@ -122,7 +122,7 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
                                 "http://localhost:8080/soap/mtom")
                                 .enableMtom())));
 
-        // RESTful resource that invokes JavaFirstService on localhost and uses basic authentication and
+        // A RESTful resource that invokes JavaFirstService on localhost and uses basic authentication and
         // client side CXF interceptors.
         environment.jersey().register(new AccessProtectedServiceResource(
                 jaxWsBundle.getClient(

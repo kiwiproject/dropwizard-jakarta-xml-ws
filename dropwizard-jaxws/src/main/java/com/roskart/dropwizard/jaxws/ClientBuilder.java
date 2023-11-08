@@ -12,8 +12,8 @@ import org.apache.cxf.message.Message;
  */
 public class ClientBuilder<T> extends AbstractBuilder {
 
-    Class<T> serviceClass;
-    String address;
+    final Class<T> serviceClass;
+    final String address;
     private int connectTimeout = 500;
     private int receiveTimeout = 2000;
     ImmutableList<Handler> handlers;
@@ -46,7 +46,7 @@ public class ClientBuilder<T> extends AbstractBuilder {
     /**
      * Create new ClientBuilder. Endpoint will be published relative to the CXF servlet path.
      *
-     * @param serviceClass Service interface class..
+     * @param serviceClass Service interface class.
      * @param address      Endpoint URL address..
      */
     public ClientBuilder(Class<T> serviceClass, String address) {
