@@ -135,4 +135,58 @@
         <!--  nothing to see here...move along...move along... -->
     </dependencies>
 
+    <!--
+       NOTE:
+       Override the javadoc plugin from kiwi-parent, otherwise javadoc will fail because the generated
+       classes won't be found. And, since this project does not use Lombok, don't include it in the sourcePath
+       used for javadocs.
+    -->
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <sourcepath>
+                                ${project.build.sourceDirectory}:${project.build.directory}/generated-sources/annotations
+                            </sourcepath>
+
+                            <!-- Make JavaDoc understand the "new" tags introduced in Java 8 (!) -->
+                            <tags>
+                                <tag>
+                                    <name>apiNote</name>
+                                    <placement>a</placement>
+                                    <head>API Note:</head>
+                                </tag>
+                                <tag>
+                                    <name>implSpec</name>
+                                    <placement>a</placement>
+                                    <head>Implementation Requirements:</head>
+                                </tag>
+                                <tag>
+                                    <name>implNote</name>
+                                    <placement>a</placement>
+                                    <head>Implementation Note:</head>
+                                </tag>
+                            </tags>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>
