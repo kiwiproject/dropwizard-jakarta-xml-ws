@@ -7,6 +7,7 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import jakarta.xml.ws.handler.Handler;
 import org.apache.cxf.jaxws.EndpointImpl;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.hibernate.SessionFactory;
 
 /**
@@ -187,8 +188,9 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      * Override this method to configure the bundle.
      *
      * @param configuration Application configuration.
-     * @return Published endpoint URL prefix.
+     * @return Published endpoint URL prefix, or null if there is no prefix
      */
+    @Nullable
     protected String getPublishedEndpointUrlPrefix(C configuration) {
         return null;
     }
