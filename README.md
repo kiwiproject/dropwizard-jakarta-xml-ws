@@ -4,7 +4,7 @@ Dropwizard Jakarta XML Web Services
 [![build](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/actions/workflows/build.yml/badge.svg)](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/actions/workflows/build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kiwiproject_dropwizard-jakarta-xml-ws&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kiwiproject_dropwizard-jakarta-xml-ws)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kiwiproject_dropwizard-jakarta-xml-ws&metric=coverage)](https://sonarcloud.io/summary/new_code?id=kiwiproject_dropwizard-jakarta-xml-ws)
-[![javadoc](https://javadoc.io/badge2/org.kiwiproject/dropwizard-jakarta-xml-ws/javadoc.svg)](https://javadoc.io/doc/org.kiwiproject/dropwizard-jakarta-xml-ws) 
+[![javadoc](https://javadoc.io/badge2/org.kiwiproject/dropwizard-jakarta-xml-ws/javadoc.svg)](https://javadoc.io/doc/org.kiwiproject/dropwizard-jakarta-xml-ws)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![Maven Central](https://img.shields.io/maven-central/v/org.kiwiproject/dropwizard-jakarta-xml-ws)
 
@@ -52,8 +52,6 @@ now a standalone (normal) repository.
 
 Migrating from roskart/dropwizard-jaxws
 ---------------------------------------
-_Note that as of November 7, 2023, we have not yet released an initial version._
-
 There are two things you need to do in order to migrate. First, change the Maven coordinates so that the
 groupId is org.kiwiproject, the artifactId is dropwizard-jakarta-xml-ws, and choose the latest version.
 
@@ -61,7 +59,7 @@ Second, when we imported this repository, we updated it from the Dropwizard 2.x 
 and Jakarta XML Web Services, which means that all the package names have changed from `javax` to `jakarta`.
 This means you may need to change dependencies to [Jakarta XML Web Services](https://mvnrepository.com/artifact/jakarta.xml).
 
-For the initial 0.5.0 version, we will retain the original package names (`com.roskart.dropwizard.jaxws`).
+For the initial [0.5.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases/tag/v0.5.0) version, we will retain the original package names (`com.roskart.dropwizard.jaxws`).
 But in future versions, we will rename the packages to use the `org.kiwiproject` prefix and
 then some suffix, e.g. `dropwizard.jakarta.xml.ws` (which matches the actual Jakarta packages which begin
 with `jakarta.xml.ws`). Also, we will rename the modules, and may extract the example application into
