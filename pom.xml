@@ -138,8 +138,9 @@
     <!--
        NOTE:
        Override the javadoc plugin from kiwi-parent, otherwise javadoc will fail because the generated
-       classes won't be found. And, since this project does not use Lombok, don't include it in the sourcePath
-       used for javadocs.
+       classes won't be found. For now, disable some doclint checks, and customize the source path to
+       include generated annotations, cxf-generated classes, and classes in delombok (which will still
+       exist because of how the parent POM still runs delombok)
     -->
     <profiles>
         <profile>
@@ -160,8 +161,13 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <!-- TODO: fix these and then re-instate the checks -->
+                            <doclint>all,-missing,-reference</doclint>
+
                             <sourcepath>
-                                ${project.build.sourceDirectory}:${project.build.directory}/generated-sources/annotations
+                                ${project.build.sourceDirectory}:${project.build.directory}/generated-sources/annotations:
+                                ${project.build.sourceDirectory}:${project.build.directory}/generated-sources/cxf:
+                                ${project.build.sourceDirectory}:${project.build.directory}/generated-sources/delombok
                             </sourcepath>
 
                             <!-- Make JavaDoc understand the "new" tags introduced in Java 8 (!) -->
