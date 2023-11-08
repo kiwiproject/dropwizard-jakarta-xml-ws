@@ -221,7 +221,6 @@ Changelog
 
 The original repository listed its complete change log at the end of this README.
 
-We have moved it [here](TODO) for historical purposes.
+We have moved it [here](dropwizard-jaxws-changelog.md) for historical purposes.
 
 Releases in this repository use [GitHub releases](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases).
-s
