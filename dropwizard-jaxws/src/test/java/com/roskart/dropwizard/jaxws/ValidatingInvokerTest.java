@@ -13,7 +13,6 @@ import jakarta.validation.Validation;
 import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.xml.ws.AsyncHandler;
-import jakarta.xml.ws.Response;
 import org.apache.cxf.annotations.UseAsyncMethod;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
@@ -143,11 +142,8 @@ class ValidatingInvokerTest {
         invoker.invoke(exchange, params);
         verify(underlying).invoke(exchange, params);
 
-        params = Arrays.asList("foo", new AsyncHandler<String>() {
-            @Override
-            public void handleResponse(Response<String> res) {
-
-            }
+        params = Arrays.asList("foo", (AsyncHandler<String>) res -> {
+            // no-op
         });
         invoker.invoke(exchange, params);
         verify(underlying).invoke(exchange, params);
