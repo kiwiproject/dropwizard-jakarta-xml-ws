@@ -1,7 +1,6 @@
 package com.roskart.dropwizard.jaxws;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -66,7 +65,8 @@ class ValidatingInvokerTest {
         }
     }
 
-    class DummyService {
+    @SuppressWarnings("unused")
+    static class DummyService {
         public void noParams() {
         }
 
@@ -109,7 +109,7 @@ class ValidatingInvokerTest {
             when(oi.getProperty(Method.class.getName()))
                     .thenReturn(DummyService.class.getMethod(methodName, parameterTypes));
         } catch (Exception e) {
-            fail("setTargetMethod failed", e);
+            throw new RuntimeException("setTargetMethod failed", e);
         }
     }
 

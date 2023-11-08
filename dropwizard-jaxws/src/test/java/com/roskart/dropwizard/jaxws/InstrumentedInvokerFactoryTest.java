@@ -2,7 +2,6 @@ package com.roskart.dropwizard.jaxws;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatRuntimeException;
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
@@ -107,7 +106,7 @@ class InstrumentedInvokerFactoryTest {
             when(oi.getProperty(Method.class.getName()))
                     .thenReturn(InstrumentedService.class.getMethod(methodName, parameterTypes));
         } catch (Exception e) {
-            fail("setTargetMethod failed", e);
+            throw new RuntimeException("setTargetMethod failed", e);
         }
     }
 
