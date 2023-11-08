@@ -29,6 +29,7 @@ public class InstrumentedInvokers {
             this.timers = timers;
         }
 
+        @Override
         public Object invoke(Exchange exchange, Object o) {
 
             Object result;
@@ -61,6 +62,7 @@ public class InstrumentedInvokers {
             this.meters = meters;
         }
 
+        @Override
         public Object invoke(Exchange exchange, Object o) {
 
             Object result;
@@ -105,6 +107,7 @@ public class InstrumentedInvokers {
             this.meters = meters;
         }
 
+        @Override
         public Object invoke(Exchange exchange, Object o) {
 
             Object result;
