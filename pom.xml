@@ -79,7 +79,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/kiwiproject/dropwizard-jakarta-xml-ws.git</connection>
-        <developerConnection>scm:git@github.com:kiwiproject/dropwizard-jakarta-xml-ws.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:kiwiproject/dropwizard-jakarta-xml-ws.git</developerConnection>
         <url>https://github.com/kiwiproject/dropwizard-jakarta-xml-ws</url>
     </scm>
 
