@@ -20,8 +20,8 @@
     <url>https://github.com/kiwiproject/dropwizard-jakarta-xml-ws</url>
 
     <modules>
-        <module>dropwizard-jaxws</module>
-        <module>dropwizard-jaxws-example</module>
+        <module>dropwizard-jakarta-xml-ws</module>
+        <module>dropwizard-jakarta-xml-ws-example</module>
     </modules>
 
     <properties>
