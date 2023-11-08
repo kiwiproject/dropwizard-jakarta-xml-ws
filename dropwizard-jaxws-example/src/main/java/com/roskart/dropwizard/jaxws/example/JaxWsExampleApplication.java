@@ -43,8 +43,8 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
     };
 
     // Jakarta XML Web Services Bundle
-    private final JAXWSBundle<Object> jaxWsBundle = new JAXWSBundle<>();
-    private final JAXWSBundle<Object> anotherJaxWsBundle = new JAXWSBundle<>("/api2");
+    private JAXWSBundle<Object> jaxWsBundle = new JAXWSBundle<>();
+    private JAXWSBundle<Object> anotherJaxWsBundle = new JAXWSBundle<>("/api2");
 
     public static void main(String[] args) throws Exception {
         new JaxWsExampleApplication().run(args);
