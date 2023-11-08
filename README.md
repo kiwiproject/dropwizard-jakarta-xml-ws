@@ -59,14 +59,18 @@ Second, when we imported this repository, we updated it from the Dropwizard 2.x 
 and Jakarta XML Web Services, which means that all the package names have changed from `javax` to `jakarta`.
 This means you may need to change dependencies to [Jakarta XML Web Services](https://mvnrepository.com/artifact/jakarta.xml).
 
-For the initial [0.5.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases/tag/v0.5.0) version, we will retain the original package names (`com.roskart.dropwizard.jaxws`).
-But in future versions, we will rename the packages to use the `org.kiwiproject` prefix and
-then some suffix, e.g. `dropwizard.jakarta.xml.ws` (which matches the actual Jakarta packages which begin
-with `jakarta.xml.ws`). Also, we will rename the modules, and may extract the example application into
-a separate repository which will not be deployed to Maven Central, as the original repository did.
+For the initial [0.5.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases/tag/v0.5.0) version, we will
+retain the original package names (`com.roskart.dropwizard.jaxws`).
 
-We will also remove deprecated code in subsequent releases, e.g. the deprecated methods in
-`JAXWSBundle`.  Last, we will eventually rename classes containing `JAXWS` in them, for example
+Release 0.6.0 will remove deprecated code, i.e. the deprecated methods in `JAXWSBundle`. It will also
+rename the modules so they are consistent, i.e. rename `dropwizard-jaxws` to `dropwizard-jakarta-xml-ws`.
+
+In some future version, we will rename the packages to use the `org.kiwiproject` prefix and
+then some suffix, e.g. `dropwizard.jakarta.xml.ws` (which matches the actual Jakarta packages which begin
+with `jakarta.xml.ws`). We may extract the example application into a separate repository which will not
+be deployed to Maven Central, as the original repository did.
+
+In subsequent releases, we will also rename classes containing `JAXWS` in them, for example
 rename `JAXWSEnvironment` to `JakartaXmlWsEnvironment` or similar.
 
 
