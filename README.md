@@ -1,7 +1,16 @@
-🥝 _This README will be updated as we transition from the original dropwizard-jaxws to this repository._ 🥝
-
 Dropwizard Jakarta XML Web Services
 ===================================
+
+[![build](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/actions/workflows/build.yml/badge.svg)](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/actions/workflows/build.yml)
+
+---
+
+🥝 _This README will be updated as we transition from the original dropwizard-jaxws to this repository._ 🥝
+
+---
+
+Introduction
+------------
 
 Dropwizard Jakarta XML Web Services is a [Dropwizard](https://www.dropwizard.io/) Bundle that enables building SOAP web
 services and clients using [Jakarta XML Web Services](https://jakarta.ee/specifications/xml-web-services/) with Dropwizard.
