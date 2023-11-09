@@ -42,21 +42,18 @@ public class WsdlFirstServiceImpl implements WsdlFirstService {
 
         final ServerAsyncResponse<EchoResponse> sar = new ServerAsyncResponse<>();
 
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    EchoResponse response = new EchoResponse();
-                    response.setValue("Non-blocking: " + parameters.getValue());
-                    sar.set(response);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    sar.exception(e);
-                }
-                asyncHandler.handleResponse(sar);
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                EchoResponse response = new EchoResponse();
+                response.setValue("Non-blocking: " + parameters.getValue());
+                sar.set(response);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                sar.exception(e);
             }
-        }.start();
+            asyncHandler.handleResponse(sar);
+        }).start();
 
         return sar;
     }

@@ -46,6 +46,7 @@ class ValidatingInvokerTest {
         }
     }
 
+    @SuppressWarnings("all")
     static class RootParam1 {
         @Valid
         private final ChildParam child;
@@ -55,6 +56,7 @@ class ValidatingInvokerTest {
         }
     }
 
+    @SuppressWarnings("all")
     static class RootParam2 {
         @NotEmpty
         private final String foo;
@@ -64,7 +66,7 @@ class ValidatingInvokerTest {
         }
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings("all")
     static class DummyService {
         public void noParams() {
         }
