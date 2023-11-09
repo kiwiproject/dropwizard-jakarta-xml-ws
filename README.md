@@ -64,6 +64,8 @@ retain the original package names (`com.roskart.dropwizard.jaxws`).
 
 Release 0.6.0 will remove deprecated code, i.e. the deprecated methods in `JAXWSBundle`. It will also
 rename the modules so that they are consistent, i.e. rename `dropwizard-jaxws` to `dropwizard-jakarta-xml-ws`.
+Finally, 0.6.0 *comments out* the Maven Shade plugin in the POM of `dropwizard-jakarta-xml-ws-example` so
+that the JAR deployed to Maven Central is small (a few KB instead of the 40+ MB uber-jar).
 
 In some future version, we will rename the packages to use the `org.kiwiproject` prefix and
 then some suffix, e.g. `dropwizard.jakarta.xml.ws` (which matches the actual Jakarta packages which begin
@@ -176,6 +178,9 @@ Jakarta XML Web Services handler.
 * See `JaxWsExampleApplication` for examples on usage of client side Jakarta XML Web Services handler and CXF interceptors.
 
 ### Running the examples:
+
+_Before doing anything else, edit pom.xml in the dropwizard-jakarta-xml-ws root folder and uncomment the
+maven-shade-plugin. This is temporary until the examples are moved into a separate repository._
 
 After cloning the repository, go to the dropwizard-jakarta-xml-ws root folder and run:
 
