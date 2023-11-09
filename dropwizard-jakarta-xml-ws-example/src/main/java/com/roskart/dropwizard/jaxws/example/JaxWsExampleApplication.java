@@ -35,7 +35,7 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
     private static final Logger LOG = LoggerFactory.getLogger(JaxWsExampleApplication.class);
 
     // HibernateBundle is used by HibernateExampleService
-    private final HibernateBundle<JaxWsExampleApplicationConfiguration> hibernate = new HibernateBundle<JaxWsExampleApplicationConfiguration>(Person.class) {
+    private final HibernateBundle<JaxWsExampleApplicationConfiguration> hibernate = new HibernateBundle<>(Person.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(JaxWsExampleApplicationConfiguration configuration) {
             return configuration.getDatabaseConfiguration();
@@ -43,8 +43,8 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
     };
 
     // Jakarta XML Web Services Bundle
-    private JAXWSBundle<Object> jaxWsBundle = new JAXWSBundle<>();
-    private JAXWSBundle<Object> anotherJaxWsBundle = new JAXWSBundle<>("/api2");
+    private final JAXWSBundle<Object> jaxWsBundle = new JAXWSBundle<>();
+    private final JAXWSBundle<Object> anotherJaxWsBundle = new JAXWSBundle<>("/api2");
 
     public static void main(String[] args) throws Exception {
         new JaxWsExampleApplication().run(args);

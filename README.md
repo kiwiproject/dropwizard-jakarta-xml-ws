@@ -63,7 +63,7 @@ For the initial [0.5.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws
 retain the original package names (`com.roskart.dropwizard.jaxws`).
 
 Release 0.6.0 will remove deprecated code, i.e. the deprecated methods in `JAXWSBundle`. It will also
-rename the modules so they are consistent, i.e. rename `dropwizard-jaxws` to `dropwizard-jakarta-xml-ws`.
+rename the modules so that they are consistent, i.e. rename `dropwizard-jaxws` to `dropwizard-jakarta-xml-ws`.
 
 In some future version, we will rename the packages to use the `org.kiwiproject` prefix and
 then some suffix, e.g. `dropwizard.jakarta.xml.ws` (which matches the actual Jakarta packages which begin

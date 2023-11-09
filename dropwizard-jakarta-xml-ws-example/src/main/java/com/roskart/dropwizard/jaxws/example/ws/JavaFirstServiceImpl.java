@@ -22,7 +22,7 @@ public class JavaFirstServiceImpl implements JavaFirstService {
     @Metered
     @ExceptionMetered
     public String echo(String in) throws JavaFirstServiceException {
-        if (in == null || in.trim().length() == 0) {
+        if (in == null || in.isBlank()) {
             throw new JavaFirstServiceException("Invalid parameter");
         }
 

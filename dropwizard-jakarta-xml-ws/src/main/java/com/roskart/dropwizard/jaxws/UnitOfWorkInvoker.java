@@ -66,6 +66,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     /**
      * @see io.dropwizard.hibernate.UnitOfWorkAspect#beginTransaction(UnitOfWork, Session)
      */
+    @SuppressWarnings("JavadocReference")
     private void beginTransaction(Session session, UnitOfWork unitOfWork) {
         if (unitOfWork.transactional()) {
             session.beginTransaction();
@@ -75,6 +76,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     /**
      * @see io.dropwizard.hibernate.UnitOfWorkAspect#configureSession()
      */
+    @SuppressWarnings("JavadocReference")
     private void configureSession(Session session, UnitOfWork unitOfWork) {
         session.setDefaultReadOnly(unitOfWork.readOnly());
         session.setCacheMode(unitOfWork.cacheMode());
@@ -84,6 +86,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     /**
      * @see io.dropwizard.hibernate.UnitOfWorkAspect#rollbackTransaction(UnitOfWork, Session)
      */
+    @SuppressWarnings("JavadocReference")
     private void rollbackTransaction(Session session, UnitOfWork unitOfWork) {
         if (unitOfWork.transactional()) {
             final Transaction txn = session.getTransaction();
@@ -96,6 +99,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     /**
      * @see io.dropwizard.hibernate.UnitOfWorkAspect#commitTransaction(UnitOfWork, Session)
      */
+    @SuppressWarnings("JavadocReference")
     private void commitTransaction(Session session, UnitOfWork unitOfWork) {
         if (unitOfWork.transactional()) {
             final Transaction txn = session.getTransaction();
