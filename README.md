@@ -62,7 +62,7 @@ This means you may need to change dependencies to [Jakarta XML Web Services](htt
 For the initial [0.5.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases/tag/v0.5.0) version, we will
 retain the original package names (`com.roskart.dropwizard.jaxws`).
 
-Release 0.6.0 will remove deprecated code, i.e. the deprecated methods in `JAXWSBundle`. It will also
+Release [0.6.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases/tag/v0.6.0) will remove deprecated code, i.e. the deprecated methods in `JAXWSBundle`. It will also
 rename the modules so that they are consistent, i.e. rename `dropwizard-jaxws` to `dropwizard-jakarta-xml-ws`.
 Finally, 0.6.0 *comments out* the Maven Shade plugin in the POM of `dropwizard-jakarta-xml-ws-example` so
 that the JAR deployed to Maven Central is small (a few KB instead of the 40+ MB uber-jar).
