@@ -210,7 +210,7 @@ configuration:
 </transformer>
 ```
 
-For example on building fat jar, see `dropwizard-jaxws-example/pom.xml`.
+For example on building fat jar, see `dropwizard-jakarta-xml-ws-example/pom.xml`.
 
 When using Gradle and a recent version of [shadowJar](https://github.com/johnrengelman/shadow) use the following snippet:
 
@@ -230,6 +230,6 @@ Changelog
 
 The original repository listed its complete change log at the end of this README.
 
-We have moved it [here](dropwizard-jaxws-changelog.md) for historical purposes.
+We have moved it [here](legacy-dropwizard-jaxws-changelog.md) for historical purposes.
 
 Releases in this repository use [GitHub releases](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases).

@@ -29,7 +29,7 @@ class JAXWSBundleTest {
     Bootstrap<?> bootstrap;
     ServletEnvironment servletEnvironment;
     ServletRegistration.Dynamic servlet;
-    JAXWSEnvironment jaxwsEnvironment;
+    JAXWSEnvironment jwsEnvironment;
     LifecycleEnvironment lifecycleEnvironment;
 
     @BeforeEach
@@ -38,56 +38,56 @@ class JAXWSBundleTest {
         bootstrap = mock(Bootstrap.class);
         servletEnvironment = mock(ServletEnvironment.class);
         servlet = mock(ServletRegistration.Dynamic.class);
-        jaxwsEnvironment = mock(JAXWSEnvironment.class);
+        jwsEnvironment = mock(JAXWSEnvironment.class);
         lifecycleEnvironment = mock(LifecycleEnvironment.class);
 
         when(environment.servlets()).thenReturn(servletEnvironment);
         when(environment.lifecycle()).thenReturn(lifecycleEnvironment);
         when(bootstrap.getMetricRegistry()).thenReturn(mock(MetricRegistry.class));
         when(servletEnvironment.addServlet(anyString(), any(HttpServlet.class))).thenReturn(servlet);
-        when(jaxwsEnvironment.buildServlet()).thenReturn(mock(HttpServlet.class));
-        when(jaxwsEnvironment.getDefaultPath()).thenReturn("/soap");
+        when(jwsEnvironment.buildServlet()).thenReturn(mock(HttpServlet.class));
+        when(jwsEnvironment.getDefaultPath()).thenReturn("/soap");
     }
 
     @Test
     void constructorArgumentChecks() {
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> new JAXWSBundle<>(null, jaxwsEnvironment))
+                .isThrownBy(() -> new JAXWSBundle<>(null, jwsEnvironment))
                 .withMessage("Servlet path is null");
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> new JAXWSBundle<>("soap", jaxwsEnvironment))
+                .isThrownBy(() -> new JAXWSBundle<>("soap", jwsEnvironment))
                 .withMessage("soap is not an absolute path");
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> new JAXWSBundle<>("/soap", null))
-                .withMessage("jaxwsEnvironment is null");
+                .withMessage("jwsEnvironment is null");
 
-        assertThatCode(() -> new JAXWSBundle<>("/soap", jaxwsEnvironment))
+        assertThatCode(() -> new JAXWSBundle<>("/soap", jwsEnvironment))
                 .doesNotThrowAnyException();
     }
 
     @Test
     void initializeAndRun() {
-        JAXWSBundle<?> jaxwsBundle = new JAXWSBundle<>("/soap", jaxwsEnvironment);
+        JAXWSBundle<?> jwsBundle = new JAXWSBundle<>("/soap", jwsEnvironment);
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> jaxwsBundle.run(null, null))
+                .isThrownBy(() -> jwsBundle.run(null, null))
                 .withMessage("Environment is null");
 
-        jaxwsBundle.initialize(bootstrap);
-        verify(jaxwsEnvironment).setInstrumentedInvokerBuilder(any(InstrumentedInvokerFactory.class));
+        jwsBundle.initialize(bootstrap);
+        verify(jwsEnvironment).setInstrumentedInvokerBuilder(any(InstrumentedInvokerFactory.class));
 
-        jaxwsBundle.run(null, environment);
+        jwsBundle.run(null, environment);
         verify(servletEnvironment).addServlet(startsWith("CXF Servlet"), any(Servlet.class));
         verify(lifecycleEnvironment).addServerLifecycleListener(any(ServerLifecycleListener.class));
         verify(servlet).addMapping("/soap/*");
-        verify(jaxwsEnvironment, never()).setPublishedEndpointUrlPrefix(anyString());
+        verify(jwsEnvironment, never()).setPublishedEndpointUrlPrefix(anyString());
     }
 
     @Test
     void initializeAndRunWithPublishedEndpointUrlPrefix() {
-        JAXWSBundle<?> jaxwsBundle = new JAXWSBundle<Configuration>("/soap", jaxwsEnvironment) {
+        JAXWSBundle<?> jwsBundle = new JAXWSBundle<Configuration>("/soap", jwsEnvironment) {
             @Override
             protected String getPublishedEndpointUrlPrefix(Configuration configuration) {
                 return "http://some/prefix";
@@ -95,67 +95,67 @@ class JAXWSBundleTest {
         };
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> jaxwsBundle.run(null, null))
+                .isThrownBy(() -> jwsBundle.run(null, null))
                 .withMessage("Environment is null");
 
-        jaxwsBundle.initialize(bootstrap);
-        verify(jaxwsEnvironment).setInstrumentedInvokerBuilder(any(InstrumentedInvokerFactory.class));
+        jwsBundle.initialize(bootstrap);
+        verify(jwsEnvironment).setInstrumentedInvokerBuilder(any(InstrumentedInvokerFactory.class));
 
-        jaxwsBundle.run(null, environment);
+        jwsBundle.run(null, environment);
         verify(servletEnvironment).addServlet(startsWith("CXF Servlet"), any(Servlet.class));
         verify(lifecycleEnvironment).addServerLifecycleListener(any(ServerLifecycleListener.class));
         verify(servlet).addMapping("/soap/*");
-        verify(jaxwsEnvironment).setPublishedEndpointUrlPrefix("http://some/prefix");
+        verify(jwsEnvironment).setPublishedEndpointUrlPrefix("http://some/prefix");
     }
 
     @Test
     void publishEndpoint() {
 
-        JAXWSBundle<?> jaxwsBundle = new JAXWSBundle<>("/soap", jaxwsEnvironment);
+        JAXWSBundle<?> jwsBundle = new JAXWSBundle<>("/soap", jwsEnvironment);
         Object service = new Object();
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> jaxwsBundle.publishEndpoint(new EndpointBuilder("foo", null)))
+                .isThrownBy(() -> jwsBundle.publishEndpoint(new EndpointBuilder("foo", null)))
                 .withMessage("Service is null");
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> jaxwsBundle.publishEndpoint(new EndpointBuilder(null, service)))
+                .isThrownBy(() -> jwsBundle.publishEndpoint(new EndpointBuilder(null, service)))
                 .withMessage("Path is null");
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> jaxwsBundle.publishEndpoint(new EndpointBuilder("   ", service)))
+                .isThrownBy(() -> jwsBundle.publishEndpoint(new EndpointBuilder("   ", service)))
                 .withMessage("Path is empty");
 
         EndpointBuilder builder = mock(EndpointBuilder.class);
-        jaxwsBundle.publishEndpoint(builder);
-        verify(jaxwsEnvironment).publishEndpoint(builder);
+        jwsBundle.publishEndpoint(builder);
+        verify(jwsEnvironment).publishEndpoint(builder);
     }
 
     @Test
     void getClient() {
 
-        JAXWSBundle<?> jaxwsBundle = new JAXWSBundle<>("/soap", jaxwsEnvironment);
+        JAXWSBundle<?> jwsBundle = new JAXWSBundle<>("/soap", jwsEnvironment);
 
         Class<?> cls = Object.class;
         String url = "http://foo";
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> jaxwsBundle.getClient(new ClientBuilder<>(null, null)))
+                .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(null, null)))
                 .withMessage("ServiceClass is null");
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> jaxwsBundle.getClient(new ClientBuilder<>(null, url)))
+                .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(null, url)))
                 .withMessage("ServiceClass is null");
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> jaxwsBundle.getClient(new ClientBuilder<>(cls, null)))
+                .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(cls, null)))
                 .withMessage("Address is null");
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> jaxwsBundle.getClient(new ClientBuilder<>(cls, " ")))
+                .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(cls, " ")))
                 .withMessage("Address is empty");
 
         ClientBuilder<?> builder = new ClientBuilder<>(cls, url);
-        jaxwsBundle.getClient(builder);
-        verify(jaxwsEnvironment).getClient(builder);
+        jwsBundle.getClient(builder);
+        verify(jwsEnvironment).getClient(builder);
     }
 }
