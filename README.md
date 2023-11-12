@@ -192,8 +192,8 @@ To run the example service:
 
 ```bash
 java -jar \
-  dropwizard-jaxws-example/target/dropwizard-jakarta-xml-ws-example-[version].jar \
-  server dropwizard-jaxws-example/config.yaml
+  dropwizard-jakarta-xml-ws-example/target/dropwizard-jakarta-xml-ws-example-[version].jar \
+  server dropwizard-jakarta-xml-ws-example/config.yaml
 ```
 
 Notes

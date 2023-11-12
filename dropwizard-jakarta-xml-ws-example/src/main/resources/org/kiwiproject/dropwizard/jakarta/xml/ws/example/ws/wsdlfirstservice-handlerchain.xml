@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jws:handler-chains xmlns:jws="http://java.sun.com/xml/ns/javaee">
+    <jws:handler-chain>
+        <jws:handler>
+            <jws:handler-class>org.kiwiproject.dropwizard.jakarta.xml.ws.example.ws.WsdlFirstServiceHandler
+            </jws:handler-class>
+        </jws:handler>
+    </jws:handler-chain>
+</jws:handler-chains>

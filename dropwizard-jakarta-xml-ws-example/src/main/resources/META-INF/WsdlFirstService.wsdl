@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<wsdl:definitions 
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-	xmlns:tns="http://com.roskart.dropwizard.jaxws.example.ws/WsdlFirstService"
+<wsdl:definitions
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:tns="http://org.kiwiproject.dropwizard.jakarta.xml.ws.example.ws/WsdlFirstService"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	name="WsdlFirstService"
-	targetNamespace="http://com.roskart.dropwizard.jaxws.example.ws/WsdlFirstService">
+        targetNamespace="http://org.kiwiproject.dropwizard.jakarta.xml.ws.example.ws/WsdlFirstService">
 	
   <wsdl:types>
-    <xsd:schema targetNamespace="http://com.roskart.dropwizard.jaxws.example.ws/WsdlFirstService">
+      <xsd:schema targetNamespace="http://org.kiwiproject.dropwizard.jakarta.xml.ws.example.ws/WsdlFirstService">
       
       <xsd:element name="Echo" type="tns:Echo">
       </xsd:element>
