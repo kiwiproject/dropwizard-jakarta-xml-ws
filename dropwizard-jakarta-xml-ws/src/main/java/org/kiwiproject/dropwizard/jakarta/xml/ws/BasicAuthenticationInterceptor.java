@@ -37,7 +37,7 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
 
     private static final Logger LOG = LoggerFactory.getLogger(BasicAuthenticationInterceptor.class);
 
-    public static final String PRINCIPAL_KEY = "dropwizard.jaxws.principal";
+    public static final String PRINCIPAL_KEY = "dropwizard.jakarta.xml.ws.principal";
 
     private BasicAuthentication authentication;
 

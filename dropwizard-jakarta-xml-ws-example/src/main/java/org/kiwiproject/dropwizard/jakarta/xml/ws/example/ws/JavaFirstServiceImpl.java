@@ -7,6 +7,7 @@ import jakarta.jws.WebService;
 import jakarta.xml.ws.WebServiceContext;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 @WebService(name = "JavaFirstService",
         serviceName = "JavaFirstService",
@@ -26,7 +27,7 @@ public class JavaFirstServiceImpl implements JavaFirstService {
             throw new JavaFirstServiceException("Invalid parameter");
         }
 
-        Principal user = (Principal) wsContext.getMessageContext().get("dropwizard.jaxws.principal");
-        return in + "; principal: " + user.getName();
+        Principal user = (Principal) wsContext.getMessageContext().get("dropwizard.jakarta.xml.ws.principal");
+        return in + "; principal: " + user.getName() + " at " + LocalDateTime.now();
     }
 }

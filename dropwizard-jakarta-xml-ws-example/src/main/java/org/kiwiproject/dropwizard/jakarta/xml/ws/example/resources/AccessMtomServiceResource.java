@@ -15,6 +15,7 @@ import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.mtomservice.ObjectFa
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.time.LocalDateTime;
 
 @Path("/mtomclient")
 @Produces(MediaType.APPLICATION_JSON)
@@ -39,7 +40,8 @@ public class AccessMtomServiceResource {
 
         try {
             return "Hello response: " + hr.getTitle() + ", " +
-                    IOUtils.readStringFromStream(hr.getBinary().getInputStream());
+                    IOUtils.readStringFromStream(hr.getBinary().getInputStream()) +
+                    " at " + LocalDateTime.now();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

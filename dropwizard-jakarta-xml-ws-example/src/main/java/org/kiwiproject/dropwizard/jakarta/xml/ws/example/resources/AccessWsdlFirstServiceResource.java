@@ -10,6 +10,8 @@ import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.wsdlfirstservice.Ech
 import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.wsdlfirstservice.ObjectFactory;
 import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.wsdlfirstservice.WsdlFirstService;
 
+import java.time.LocalDateTime;
+
 /**
  * A Dropwizard resource that invokes WsdlFirstService SOAP web service.
  *
@@ -35,6 +37,6 @@ public class AccessWsdlFirstServiceResource {
 
         EchoResponse er = wsdlFirstServiceClient.echo(e);
 
-        return "Echo response: " + er.getValue();
+        return "Echo response: " + er.getValue() + " at " + LocalDateTime.now();
     }
 }
