@@ -110,16 +110,16 @@ public HelloWorldSOAP {
 ```java
 public class MyApplication extends Application<MyApplicationConfiguration> {
 
-    private JAXWSBundle jaxWsBundle = new JAXWSBundle();
+  private JAXWSBundle jswBundle = new JAXWSBundle();
 
     @Override
     public void initialize(Bootstrap<MyApplicationConfiguration> bootstrap) {
-        bootstrap.addBundle(jaxWsBundle);
+      bootstrap.addBundle(jswBundle);
     }
 
     @Override
     public void run(MyApplicationConfiguration configuration, Environment environment) throws Exception {
-        jaxWsBundle.publishEndpoint(
+      jswBundle.publishEndpoint(
             new EndpointBuilder("/hello", new HelloWorldSOAP()));
     }
 
@@ -135,7 +135,7 @@ Client
 Using HelloWorldSOAP web service client:
 
 ```java
-HelloWorldSOAP helloWorld = jaxWsBundle.getClient(
+HelloWorldSOAP helloWorld=jwsBundle.getClient(
     new ClientBuilder(HelloWorldSOAP.class, "http://server/path"));
 System.out.println(helloWorld.sayHello());
 ```
