@@ -6,7 +6,7 @@ import io.dropwizard.db.DataSourceFactory;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-public class JaxWsExampleApplicationConfiguration extends Configuration {
+public class JakartaXmlWsExampleConfiguration extends Configuration {
 
     @Valid
     @NotNull

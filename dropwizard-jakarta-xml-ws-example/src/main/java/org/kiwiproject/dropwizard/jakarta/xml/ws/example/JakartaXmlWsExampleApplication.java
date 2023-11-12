@@ -30,85 +30,85 @@ import org.slf4j.LoggerFactory;
 import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.mtomservice.MtomService;
 import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.wsdlfirstservice.WsdlFirstService;
 
-public class JaxWsExampleApplication extends Application<JaxWsExampleApplicationConfiguration> {
+public class JakartaXmlWsExampleApplication extends Application<JakartaXmlWsExampleConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JaxWsExampleApplication.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JakartaXmlWsExampleApplication.class);
 
     // HibernateBundle is used by HibernateExampleService
-    private final HibernateBundle<JaxWsExampleApplicationConfiguration> hibernate = new HibernateBundle<>(Person.class) {
+    private final HibernateBundle<JakartaXmlWsExampleConfiguration> hibernate = new HibernateBundle<>(Person.class) {
         @Override
-        public DataSourceFactory getDataSourceFactory(JaxWsExampleApplicationConfiguration configuration) {
+        public DataSourceFactory getDataSourceFactory(JakartaXmlWsExampleConfiguration configuration) {
             return configuration.getDatabaseConfiguration();
         }
     };
 
     // Jakarta XML Web Services Bundle
-    private final JAXWSBundle<Object> jaxWsBundle = new JAXWSBundle<>();
-    private final JAXWSBundle<Object> anotherJaxWsBundle = new JAXWSBundle<>("/api2");
+    private final JAXWSBundle<Object> jwsBundle = new JAXWSBundle<>();
+    private final JAXWSBundle<Object> anotherJwsBundle = new JAXWSBundle<>("/api2");
 
     public static void main(String[] args) throws Exception {
-        new JaxWsExampleApplication().run(args);
+        new JakartaXmlWsExampleApplication().run(args);
     }
 
     @Override
-    public void initialize(Bootstrap<JaxWsExampleApplicationConfiguration> bootstrap) {
+    public void initialize(Bootstrap<JakartaXmlWsExampleConfiguration> bootstrap) {
         bootstrap.addBundle(hibernate);
-        bootstrap.addBundle(jaxWsBundle);
-        bootstrap.addBundle(anotherJaxWsBundle);
+        bootstrap.addBundle(jwsBundle);
+        bootstrap.addBundle(anotherJwsBundle);
     }
 
     @SuppressWarnings({ "UnusedAssignment", "java:S1854", "java:S125" })
     @Override
-    public void run(JaxWsExampleApplicationConfiguration jaxWsExampleApplicationConfiguration, Environment environment) {
+    public void run(JakartaXmlWsExampleConfiguration configuration, Environment environment) {
 
         // Hello world service
         @SuppressWarnings("unused")
-        EndpointImpl e = jaxWsBundle.publishEndpoint(
+        EndpointImpl e = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/simple", new SimpleService()));
 
         // publishEndpoint returns javax.xml.ws.Endpoint to enable further customization.
         // e.getProperties().put(...);
 
         // Publish Hello world service again using different JAXWSBundle instance
-        e = anotherJaxWsBundle.publishEndpoint(
+        e = anotherJwsBundle.publishEndpoint(
                 new EndpointBuilder("/simple", new SimpleService()));
 
         // Java first service protected with basic authentication
-        e = jaxWsBundle.publishEndpoint(
+        e = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/javafirst", new JavaFirstServiceImpl())
                         .authentication(new BasicAuthentication(new BasicAuthenticator(), "TOP_SECRET")));
 
         // WSDL first service using server side Jakarta XML Web Services handler and CXF logging interceptors.
         // The server handler is defined in the wsdlfirstservice-handlerchain.xml file, via the
         // HandlerChain annotation on WsdlFirstServiceImpl
-        e = jaxWsBundle.publishEndpoint(
+        e = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/wsdlfirst", new WsdlFirstServiceImpl())
                         .cxfInInterceptors(new LoggingInInterceptor())
                         .cxfOutInterceptors(new LoggingOutInterceptor()));
 
         // Service using Hibernate
         PersonDAO personDAO = new PersonDAO(hibernate.getSessionFactory());
-        e = jaxWsBundle.publishEndpoint(
+        e = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/hibernate",
                         new HibernateExampleService(personDAO))
                         .sessionFactory(hibernate.getSessionFactory()));
 
         // Publish the same service again using different JAXWSBundle instance
-        e = anotherJaxWsBundle.publishEndpoint(
+        e = anotherJwsBundle.publishEndpoint(
                 new EndpointBuilder("/hibernate",
                         new HibernateExampleService(personDAO))
                         .sessionFactory(hibernate.getSessionFactory()));
 
         // WSDL first service using MTOM. Invoking enableMTOM on EndpointBuilder is not necessary
         // if you use @MTOM Jakarta XML Web Services annotation on your service implementation class.
-        e = jaxWsBundle.publishEndpoint(
+        e = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/mtom", new MtomServiceImpl())
                         .enableMtom()
         );
 
         // A RESTful resource that invokes WsdlFirstService on localhost and uses client side Jakarta XML Web Services handler.
         environment.jersey().register(new AccessWsdlFirstServiceResource(
-                jaxWsBundle.getClient(
+                jwsBundle.getClient(
                         new ClientBuilder<>(
                                 WsdlFirstService.class,
                                 "http://localhost:8080/soap/wsdlfirst")
@@ -116,7 +116,7 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
 
         // A RESTful resource that invokes MtomService on localhost
         environment.jersey().register(new AccessMtomServiceResource(
-                jaxWsBundle.getClient(
+                jwsBundle.getClient(
                         new ClientBuilder<>(
                                 MtomService.class,
                                 "http://localhost:8080/soap/mtom")
@@ -125,7 +125,7 @@ public class JaxWsExampleApplication extends Application<JaxWsExampleApplication
         // A RESTful resource that invokes JavaFirstService on localhost and uses basic authentication and
         // client side CXF interceptors.
         environment.jersey().register(new AccessProtectedServiceResource(
-                jaxWsBundle.getClient(
+                jwsBundle.getClient(
                         new ClientBuilder<>(
                                 JavaFirstService.class,
                                 "http://localhost:8080/soap/javafirst")
