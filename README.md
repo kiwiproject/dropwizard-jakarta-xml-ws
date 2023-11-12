@@ -110,7 +110,7 @@ public HelloWorldSOAP {
 ```java
 public class MyApplication extends Application<MyApplicationConfiguration> {
 
-  private JAXWSBundle jswBundle = new JAXWSBundle();
+  private JakartaXmlWsBundle<MyApplicationConfiguration> jswBundle = new JakartaXmlWsBundle<>();
 
     @Override
     public void initialize(Bootstrap<MyApplicationConfiguration> bootstrap) {
@@ -142,7 +142,8 @@ System.out.println(helloWorld.sayHello());
 
 Examples
 --------
-Module `dropwizard-jakarta-xml-ws-example` contains Dropwizard application (`JaxWsExampleApplication`) with the following SOAP
+Module `dropwizard-jakarta-xml-ws-example` contains Dropwizard application (`JakartaXmlWsExampleApplication`) with the
+following SOAP
 web services and RESTful resources:
 
 * **SimpleService**: A minimal 'hello world' example.
@@ -175,7 +176,8 @@ Jakarta XML Web Services handler.
 * **AccessMtomServiceResource**: Dropwizard RESTful service which uses `MtomService` client to invoke
 `MtomService` SOAP web service on the same host as an example for client side MTOM support.
 
-* See `JaxWsExampleApplication` for examples on usage of client side Jakarta XML Web Services handler and CXF interceptors.
+* See `JakartaXmlWsExampleApplication` for examples on usage of client side Jakarta XML Web Services handler and CXF
+  interceptors.
 
 ### Running the examples:
 

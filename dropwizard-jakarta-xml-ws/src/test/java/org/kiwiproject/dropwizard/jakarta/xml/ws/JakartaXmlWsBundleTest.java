@@ -23,13 +23,13 @@ import jakarta.servlet.http.HttpServlet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class JAXWSBundleTest {
+class JakartaXmlWsBundleTest {
 
     Environment environment;
     Bootstrap<?> bootstrap;
     ServletEnvironment servletEnvironment;
     ServletRegistration.Dynamic servlet;
-    JAXWSEnvironment jwsEnvironment;
+    JakartaXmlWsEnvironment jwsEnvironment;
     LifecycleEnvironment lifecycleEnvironment;
 
     @BeforeEach
@@ -38,7 +38,7 @@ class JAXWSBundleTest {
         bootstrap = mock(Bootstrap.class);
         servletEnvironment = mock(ServletEnvironment.class);
         servlet = mock(ServletRegistration.Dynamic.class);
-        jwsEnvironment = mock(JAXWSEnvironment.class);
+        jwsEnvironment = mock(JakartaXmlWsEnvironment.class);
         lifecycleEnvironment = mock(LifecycleEnvironment.class);
 
         when(environment.servlets()).thenReturn(servletEnvironment);
@@ -52,24 +52,24 @@ class JAXWSBundleTest {
     @Test
     void constructorArgumentChecks() {
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> new JAXWSBundle<>(null, jwsEnvironment))
+                .isThrownBy(() -> new JakartaXmlWsBundle<>(null, jwsEnvironment))
                 .withMessage("Servlet path is null");
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> new JAXWSBundle<>("soap", jwsEnvironment))
+                .isThrownBy(() -> new JakartaXmlWsBundle<>("soap", jwsEnvironment))
                 .withMessage("soap is not an absolute path");
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> new JAXWSBundle<>("/soap", null))
+                .isThrownBy(() -> new JakartaXmlWsBundle<>("/soap", null))
                 .withMessage("jwsEnvironment is null");
 
-        assertThatCode(() -> new JAXWSBundle<>("/soap", jwsEnvironment))
+        assertThatCode(() -> new JakartaXmlWsBundle<>("/soap", jwsEnvironment))
                 .doesNotThrowAnyException();
     }
 
     @Test
     void initializeAndRun() {
-        JAXWSBundle<?> jwsBundle = new JAXWSBundle<>("/soap", jwsEnvironment);
+        JakartaXmlWsBundle<?> jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.run(null, null))
@@ -87,7 +87,7 @@ class JAXWSBundleTest {
 
     @Test
     void initializeAndRunWithPublishedEndpointUrlPrefix() {
-        JAXWSBundle<?> jwsBundle = new JAXWSBundle<Configuration>("/soap", jwsEnvironment) {
+        JakartaXmlWsBundle<?> jwsBundle = new JakartaXmlWsBundle<Configuration>("/soap", jwsEnvironment) {
             @Override
             protected String getPublishedEndpointUrlPrefix(Configuration configuration) {
                 return "http://some/prefix";
@@ -111,7 +111,7 @@ class JAXWSBundleTest {
     @Test
     void publishEndpoint() {
 
-        JAXWSBundle<?> jwsBundle = new JAXWSBundle<>("/soap", jwsEnvironment);
+        JakartaXmlWsBundle<?> jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
         Object service = new Object();
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.publishEndpoint(new EndpointBuilder("foo", null)))
@@ -133,7 +133,7 @@ class JAXWSBundleTest {
     @Test
     void getClient() {
 
-        JAXWSBundle<?> jwsBundle = new JAXWSBundle<>("/soap", jwsEnvironment);
+        JakartaXmlWsBundle<?> jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
 
         Class<?> cls = Object.class;
         String url = "http://foo";

@@ -11,7 +11,7 @@ import org.apache.cxf.jaxws.EndpointImpl;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.BasicAuthentication;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.ClientBuilder;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.EndpointBuilder;
-import org.kiwiproject.dropwizard.jakarta.xml.ws.JAXWSBundle;
+import org.kiwiproject.dropwizard.jakarta.xml.ws.JakartaXmlWsBundle;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.example.auth.BasicAuthenticator;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.example.core.Person;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.example.db.PersonDAO;
@@ -43,8 +43,8 @@ public class JakartaXmlWsExampleApplication extends Application<JakartaXmlWsExam
     };
 
     // Jakarta XML Web Services Bundle
-    private final JAXWSBundle<Object> jwsBundle = new JAXWSBundle<>();
-    private final JAXWSBundle<Object> anotherJwsBundle = new JAXWSBundle<>("/api2");
+    private final JakartaXmlWsBundle<JakartaXmlWsExampleConfiguration> jwsBundle = new JakartaXmlWsBundle<>();
+    private final JakartaXmlWsBundle<JakartaXmlWsExampleConfiguration> anotherJwsBundle = new JakartaXmlWsBundle<>("/api2");
 
     public static void main(String[] args) throws Exception {
         new JakartaXmlWsExampleApplication().run(args);
@@ -69,7 +69,7 @@ public class JakartaXmlWsExampleApplication extends Application<JakartaXmlWsExam
         // publishEndpoint returns javax.xml.ws.Endpoint to enable further customization.
         // e.getProperties().put(...);
 
-        // Publish Hello world service again using different JAXWSBundle instance
+        // Publish Hello world service again using different JakartaXmlWsBundle instance
         e = anotherJwsBundle.publishEndpoint(
                 new EndpointBuilder("/simple", new SimpleService()));
 
@@ -93,7 +93,7 @@ public class JakartaXmlWsExampleApplication extends Application<JakartaXmlWsExam
                         new HibernateExampleService(personDAO))
                         .sessionFactory(hibernate.getSessionFactory()));
 
-        // Publish the same service again using different JAXWSBundle instance
+        // Publish the same service again using different JakartaXmlWsBundle instance
         e = anotherJwsBundle.publishEndpoint(
                 new EndpointBuilder("/hibernate",
                         new HibernateExampleService(personDAO))
