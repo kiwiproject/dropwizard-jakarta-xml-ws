@@ -15,7 +15,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class JAXWSBundle<C> implements ConfiguredBundle<C> {
 
     protected static final String DEFAULT_PATH = "/soap";
-    protected final JAXWSEnvironment jaxwsEnvironment;
+    protected final JAXWSEnvironment jwsEnvironment;
     protected final String servletPath;
 
     /**
@@ -38,35 +38,35 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      * Create a new bundle instance using the provided JAXWSEnvironment. Service endpoints are
      * published relative to the provided servletPath.
      *
-     * @param servletPath      Root path for service endpoints. Leading slash is required.
-     * @param jaxwsEnvironment Valid JAXWSEnvironment.
+     * @param servletPath    Root path for service endpoints. Leading slash is required.
+     * @param jwsEnvironment Valid JAXWSEnvironment.
      */
-    public JAXWSBundle(String servletPath, JAXWSEnvironment jaxwsEnvironment) {
+    public JAXWSBundle(String servletPath, JAXWSEnvironment jwsEnvironment) {
         checkArgument(servletPath != null, "Servlet path is null");
         checkArgument(servletPath.startsWith("/"), "%s is not an absolute path", servletPath);
-        checkArgument(jaxwsEnvironment != null, "jaxwsEnvironment is null");
+        checkArgument(jwsEnvironment != null, "jwsEnvironment is null");
         this.servletPath = servletPath.endsWith("/") ? servletPath + "*" : servletPath + "/*";
-        this.jaxwsEnvironment = jaxwsEnvironment;
+        this.jwsEnvironment = jwsEnvironment;
     }
 
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
-        this.jaxwsEnvironment.setInstrumentedInvokerBuilder(
+        this.jwsEnvironment.setInstrumentedInvokerBuilder(
                 new InstrumentedInvokerFactory(bootstrap.getMetricRegistry()));
     }
 
     @Override
     public void run(C configuration, Environment environment) {
         checkArgument(environment != null, "Environment is null");
-        environment.servlets().addServlet("CXF Servlet " + jaxwsEnvironment.getDefaultPath(),
-                jaxwsEnvironment.buildServlet()).addMapping(servletPath);
+        environment.servlets().addServlet("CXF Servlet " + jwsEnvironment.getDefaultPath(),
+                jwsEnvironment.buildServlet()).addMapping(servletPath);
 
         environment.lifecycle().addServerLifecycleListener(
-                server -> jaxwsEnvironment.logEndpoints());
+                server -> jwsEnvironment.logEndpoints());
 
         String publishedEndpointUrlPrefix = getPublishedEndpointUrlPrefix(configuration);
         if (publishedEndpointUrlPrefix != null) {
-            jaxwsEnvironment.setPublishedEndpointUrlPrefix(publishedEndpointUrlPrefix);
+            jwsEnvironment.setPublishedEndpointUrlPrefix(publishedEndpointUrlPrefix);
         }
     }
 
@@ -78,7 +78,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      */
     public EndpointImpl publishEndpoint(EndpointBuilder endpointBuilder) {
         checkArgument(endpointBuilder != null, "EndpointBuilder is null");
-        return this.jaxwsEnvironment.publishEndpoint(endpointBuilder);
+        return this.jwsEnvironment.publishEndpoint(endpointBuilder);
     }
 
     /**
@@ -90,7 +90,7 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      */
     public <T> T getClient(ClientBuilder<T> clientBuilder) {
         checkArgument(clientBuilder != null, "ClientBuilder is null");
-        return jaxwsEnvironment.getClient(clientBuilder);
+        return jwsEnvironment.getClient(clientBuilder);
     }
 
     /**

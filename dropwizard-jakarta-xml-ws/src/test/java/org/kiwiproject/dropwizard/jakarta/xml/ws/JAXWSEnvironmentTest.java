@@ -52,7 +52,7 @@ class JAXWSEnvironmentTest {
 
     private static final String SOAP_REQUEST_FILE_NAME = "test-soap-request.xml";
 
-    private JAXWSEnvironment jaxwsEnvironment;
+    private JAXWSEnvironment jwsEnvironment;
     private Invoker mockInvoker;
     private TestUtilities testutils;
     private DummyService service;
@@ -98,7 +98,7 @@ class JAXWSEnvironmentTest {
         mockInvokerBuilder = mock(InstrumentedInvokerFactory.class);
         mockUnitOfWorkInvokerBuilder = mock(UnitOfWorkInvokerFactory.class);
 
-        jaxwsEnvironment = new JAXWSEnvironment("soap") {
+        jwsEnvironment = new JAXWSEnvironment("soap") {
             /*
             We create BasicAuthenticationInterceptor mock manually, because Mockito provided mock
             does not get invoked by CXF
@@ -115,28 +115,28 @@ class JAXWSEnvironmentTest {
         };
 
         when(mockInvokerBuilder.create(any(), any(Invoker.class))).thenReturn(mockInvoker);
-        jaxwsEnvironment.setInstrumentedInvokerBuilder(mockInvokerBuilder);
+        jwsEnvironment.setInstrumentedInvokerBuilder(mockInvokerBuilder);
 
         when(mockUnitOfWorkInvokerBuilder
                 .create(any(), any(Invoker.class), any(SessionFactory.class)))
                 .thenReturn(mockInvoker);
-        jaxwsEnvironment.setUnitOfWorkInvokerBuilder(mockUnitOfWorkInvokerBuilder);
+        jwsEnvironment.setUnitOfWorkInvokerBuilder(mockUnitOfWorkInvokerBuilder);
 
         mockBasicAuthInterceptorInvoked = 0;
 
-        testutils.setBus(jaxwsEnvironment.bus);
+        testutils.setBus(jwsEnvironment.bus);
         testutils.addNamespace("soap", "http://schemas.xmlsoap.org/soap/envelope/");
         testutils.addNamespace("a", "http://ws.xml.jakarta.dropwizard.kiwiproject.org/");
     }
 
     @AfterEach
     void teardown() {
-        jaxwsEnvironment.bus.shutdown(false);
+        jwsEnvironment.bus.shutdown(false);
     }
 
     @Test
     void buildServlet() {
-        Object result = jaxwsEnvironment.buildServlet();
+        Object result = jwsEnvironment.buildServlet();
         assertThat(result).isInstanceOf(CXFNonSpringServlet.class);
         assertThat(((CXFNonSpringServlet) result).getBus()).isInstanceOf(Bus.class);
     }
@@ -144,7 +144,7 @@ class JAXWSEnvironmentTest {
     @Test
     void publishEndpoint() throws Exception {
 
-        Endpoint e = jaxwsEnvironment.publishEndpoint(new EndpointBuilder("local://path", service));
+        Endpoint e = jwsEnvironment.publishEndpoint(new EndpointBuilder("local://path", service));
         assertThat(e).isNotNull();
 
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
@@ -184,7 +184,7 @@ class JAXWSEnvironmentTest {
     @Test
     void publishEndpointWithAuthentication() throws Exception {
 
-        jaxwsEnvironment.publishEndpoint(
+        jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
                         .authentication(mock(BasicAuthentication.class)));
 
@@ -204,7 +204,7 @@ class JAXWSEnvironmentTest {
     @Test
     void publishEndpointWithHibernateInvoker() throws Exception {
 
-        jaxwsEnvironment.publishEndpoint(
+        jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
                         .sessionFactory(mock(SessionFactory.class)));
 
@@ -226,7 +226,7 @@ class JAXWSEnvironmentTest {
         TestInterceptor inInterceptor2 = new TestInterceptor(Phase.PRE_INVOKE);
         TestInterceptor outInterceptor = new TestInterceptor(Phase.MARSHAL);
 
-        jaxwsEnvironment.publishEndpoint(
+        jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
                         .cxfInInterceptors(inInterceptor, inInterceptor2)
                         .cxfOutInterceptors(outInterceptor));
@@ -258,7 +258,7 @@ class JAXWSEnvironmentTest {
     @Test
     void publishEndpointWithMtom() throws Exception {
 
-        jaxwsEnvironment.publishEndpoint(
+        jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
                         .enableMtom());
 
@@ -278,7 +278,7 @@ class JAXWSEnvironmentTest {
     @Test
     void publishEndpointWithCustomPublishedUrl() throws Exception {
 
-        jaxwsEnvironment.publishEndpoint(
+        jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
                         .publishedEndpointUrl("http://external.server/external/path")
         );
@@ -299,7 +299,7 @@ class JAXWSEnvironmentTest {
         HashMap<String, Object> props = new HashMap<>();
         props.put("key", "value");
 
-        Endpoint e = jaxwsEnvironment.publishEndpoint(
+        Endpoint e = jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
                         .properties(props));
 
@@ -320,9 +320,9 @@ class JAXWSEnvironmentTest {
     @Test
     void publishEndpointWithPublishedUrlPrefix() throws WSDLException {
 
-        jaxwsEnvironment.setPublishedEndpointUrlPrefix("http://external/prefix");
+        jwsEnvironment.setPublishedEndpointUrlPrefix("http://external/prefix");
 
-        jaxwsEnvironment.publishEndpoint(
+        jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("/path", service)
         );
 
@@ -359,7 +359,7 @@ class JAXWSEnvironmentTest {
         var handler = mock(Handler.class);
 
         // simple
-        DummyInterface clientProxy = jaxwsEnvironment.getClient(
+        DummyInterface clientProxy = jwsEnvironment.getClient(
                 new ClientBuilder<>(DummyInterface.class, address)
         );
         assertThat(clientProxy).isInstanceOf(Proxy.class);
@@ -379,7 +379,7 @@ class JAXWSEnvironmentTest {
         TestInterceptor inInterceptor2 = new TestInterceptor(Phase.PRE_INVOKE);
         TestInterceptor outInterceptor = new TestInterceptor(Phase.MARSHAL);
 
-        clientProxy = jaxwsEnvironment.getClient(
+        clientProxy = jwsEnvironment.getClient(
                 new ClientBuilder<>(DummyInterface.class, address)
                         .connectTimeout(123)
                         .receiveTimeout(456)
