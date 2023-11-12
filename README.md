@@ -57,7 +57,8 @@ groupId is org.kiwiproject, the artifactId is dropwizard-jakarta-xml-ws, and cho
 
 Second, when we imported this repository, we updated it from the Dropwizard 2.x and JAX-WS to Dropwizard 4.x
 and Jakarta XML Web Services, which means that all the package names have changed from `javax` to `jakarta`.
-This means you may need to change dependencies to [Jakarta XML Web Services](https://mvnrepository.com/artifact/jakarta.xml).
+This means you will need to change dependencies
+to [Jakarta XML Web Services](https://mvnrepository.com/artifact/jakarta.xml).
 
 For the initial [0.5.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases/tag/v0.5.0) version, we will
 retain the original package names (`com.roskart.dropwizard.jaxws`).
@@ -67,13 +68,16 @@ rename the modules so that they are consistent, i.e. rename `dropwizard-jaxws` t
 Finally, 0.6.0 *comments out* the Maven Shade plugin in the POM of `dropwizard-jakarta-xml-ws-example` so
 that the JAR deployed to Maven Central is small (a few KB instead of the 40+ MB uber-jar).
 
-In some future version, we will rename the packages to use the `org.kiwiproject` prefix and
-then some suffix, e.g. `dropwizard.jakarta.xml.ws` (which matches the actual Jakarta packages which begin
-with `jakarta.xml.ws`). We may extract the example application into a separate repository which will not
-be deployed to Maven Central, as the original repository did.
+_**Release [0.7.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases/tag/v0.7.0) has multiple
+breaking API changes**_. First, it renames the packages to `org.kiwiproject.dropwizard.jakarta.xml.ws` (which
+matches the actual Jakarta packages which begin with `jakarta.xml.ws`). Release 0.7.0 also renames the bundle
+and environment classes to start with `JakartaXmlWs` instead of `JAXWS`, so they become `JakartaXmlWsBundle`
+and `JakartaXmlWsEnvironment` respectively. Finally, it renames the application and configuration classes
+in the example application to `JakartaXmlWsExampleApplication` and `JakartaXmlWsExampleConfiguration`
+respectively.
 
-In subsequent releases, we will also rename classes containing `JAXWS` in them, for example
-rename `JAXWSEnvironment` to `JakartaXmlWsEnvironment` or similar.
+We may, in a future release, extract the example application into a separate repository
+which will not be deployed to Maven Central, as the original repository did.
 
 
 Using
