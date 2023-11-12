@@ -48,11 +48,11 @@ import javax.wsdl.WSDLException;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 
-class JAXWSEnvironmentTest {
+class JakartaXmlWsEnvironmentTest {
 
     private static final String SOAP_REQUEST_FILE_NAME = "test-soap-request.xml";
 
-    private JAXWSEnvironment jwsEnvironment;
+    private JakartaXmlWsEnvironment jwsEnvironment;
     private Invoker mockInvoker;
     private TestUtilities testutils;
     private DummyService service;
@@ -93,12 +93,12 @@ class JAXWSEnvironmentTest {
         ((ch.qos.logback.classic.Logger) LoggerFactory.getLogger("org.apache.cxf")).setLevel(Level.INFO);
 
         mockInvoker = mock(Invoker.class);
-        testutils = new TestUtilities(JAXWSEnvironmentTest.class);
+        testutils = new TestUtilities(JakartaXmlWsEnvironmentTest.class);
         service = new DummyService();
         mockInvokerBuilder = mock(InstrumentedInvokerFactory.class);
         mockUnitOfWorkInvokerBuilder = mock(UnitOfWorkInvokerFactory.class);
 
-        jwsEnvironment = new JAXWSEnvironment("soap") {
+        jwsEnvironment = new JakartaXmlWsEnvironment("soap") {
             /*
             We create BasicAuthenticationInterceptor mock manually, because Mockito provided mock
             does not get invoked by CXF
@@ -162,13 +162,13 @@ class JAXWSEnvironmentTest {
     void publishEndpointWithAnotherEnvironment() throws Exception {
 
         // creating new runtime environment simulates using separate bundles
-        JAXWSEnvironment anotherJaxwsEnvironment = new JAXWSEnvironment("soap2");
-        anotherJaxwsEnvironment.setInstrumentedInvokerBuilder(mockInvokerBuilder);
-        anotherJaxwsEnvironment.setUnitOfWorkInvokerBuilder(mockUnitOfWorkInvokerBuilder);
+        var anotherJwsEnvironment = new JakartaXmlWsEnvironment("soap2");
+        anotherJwsEnvironment.setInstrumentedInvokerBuilder(mockInvokerBuilder);
+        anotherJwsEnvironment.setUnitOfWorkInvokerBuilder(mockUnitOfWorkInvokerBuilder);
 
-        testutils.setBus(anotherJaxwsEnvironment.bus);
+        testutils.setBus(anotherJwsEnvironment.bus);
 
-        anotherJaxwsEnvironment.publishEndpoint(new EndpointBuilder("local://path", service));
+        anotherJwsEnvironment.publishEndpoint(new EndpointBuilder("local://path", service));
 
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);

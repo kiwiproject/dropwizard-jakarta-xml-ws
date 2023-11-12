@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
  * Performs CXF Bus setup and provides methods for publishing Jakarta XML Web Services endpoints and creating
  * Jakarta XML Web Services clients.
  */
-public class JAXWSEnvironment {
+public class JakartaXmlWsEnvironment {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JAXWSEnvironment.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JakartaXmlWsEnvironment.class);
 
     protected final Bus bus;
     protected final String defaultPath;
@@ -41,7 +41,7 @@ public class JAXWSEnvironment {
         return this.defaultPath;
     }
 
-    public JAXWSEnvironment(String defaultPath) {
+    public JakartaXmlWsEnvironment(String defaultPath) {
 
         System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
         /*

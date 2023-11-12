@@ -12,16 +12,16 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * A Dropwizard bundle that enables Dropwizard applications to publish SOAP web services using
  * Jakarta XML Web Services and to create web service clients.
  */
-public class JAXWSBundle<C> implements ConfiguredBundle<C> {
+public class JakartaXmlWsBundle<C> implements ConfiguredBundle<C> {
 
     protected static final String DEFAULT_PATH = "/soap";
-    protected final JAXWSEnvironment jwsEnvironment;
+    protected final JakartaXmlWsEnvironment jwsEnvironment;
     protected final String servletPath;
 
     /**
      * Create a new bundle instance. Service endpoints are published relative to '/soap'.
      */
-    public JAXWSBundle() {
+    public JakartaXmlWsBundle() {
         this(DEFAULT_PATH);
     }
 
@@ -30,18 +30,18 @@ public class JAXWSBundle<C> implements ConfiguredBundle<C> {
      *
      * @param servletPath Root path for service endpoints. Leading slash is required.
      */
-    public JAXWSBundle(String servletPath) {
-        this(servletPath, new JAXWSEnvironment(servletPath));
+    public JakartaXmlWsBundle(String servletPath) {
+        this(servletPath, new JakartaXmlWsEnvironment(servletPath));
     }
 
     /**
-     * Create a new bundle instance using the provided JAXWSEnvironment. Service endpoints are
+     * Create a new bundle instance using the provided JakartaXmlWsEnvironment. Service endpoints are
      * published relative to the provided servletPath.
      *
      * @param servletPath    Root path for service endpoints. Leading slash is required.
-     * @param jwsEnvironment Valid JAXWSEnvironment.
+     * @param jwsEnvironment Valid JakartaXmlWsEnvironment.
      */
-    public JAXWSBundle(String servletPath, JAXWSEnvironment jwsEnvironment) {
+    public JakartaXmlWsBundle(String servletPath, JakartaXmlWsEnvironment jwsEnvironment) {
         checkArgument(servletPath != null, "Servlet path is null");
         checkArgument(servletPath.startsWith("/"), "%s is not an absolute path", servletPath);
         checkArgument(jwsEnvironment != null, "jwsEnvironment is null");
