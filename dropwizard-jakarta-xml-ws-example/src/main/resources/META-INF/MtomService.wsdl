@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wsdl:definitions
         xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-        xmlns:tns="http://com.roskart.dropwizard.jaxws.example.ws/MtomService"
+        xmlns:tns="http://org.kiwiproject.dropwizard.jakarta.xml.ws.example.ws/MtomService"
         xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
         name="MtomService"
-        targetNamespace="http://com.roskart.dropwizard.jaxws.example.ws/MtomService">
+        targetNamespace="http://org.kiwiproject.dropwizard.jakarta.xml.ws.example.ws/MtomService">
 
     <wsdl:types>
-        <xsd:schema targetNamespace="http://com.roskart.dropwizard.jaxws.example.ws/MtomService">
+        <xsd:schema targetNamespace="http://org.kiwiproject.dropwizard.jakarta.xml.ws.example.ws/MtomService">
 
             <xsd:element name="Hello" type="tns:Hello">
             </xsd:element>
