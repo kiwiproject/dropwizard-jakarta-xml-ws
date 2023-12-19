@@ -27,6 +27,7 @@
     <properties>
         <cxf.version>4.0.3</cxf.version>
         <jakarta.mail-api.version>2.1.2</jakarta.mail-api.version>
+        <angus.mail.version>2.0.2</angus.mail.version>
 
         <!--
         NOTE:
@@ -125,6 +126,12 @@
                 <groupId>jakarta.mail</groupId>
                 <artifactId>jakarta.mail-api</artifactId>
                 <version>${jakarta.mail-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.angus</groupId>
+                <artifactId>angus-mail</artifactId>
+                <version>${angus.mail.version}</version>
             </dependency>
 
         </dependencies>
