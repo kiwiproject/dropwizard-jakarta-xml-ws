@@ -44,7 +44,7 @@
         <jakarta.transaction-api.version>2.0.1</jakarta.transaction-api.version>
         <jakarta.xml.soap-api.version>3.0.1</jakarta.xml.soap-api.version>
         <jaxb-runtime.version>4.0.4</jaxb-runtime.version>
-        <kiwi-bom.version>2.0.6</kiwi-bom.version>
+        <kiwi-bom.version>2.0.7</kiwi-bom.version>
 
         <!-- Sonar properties -->
         <sonar.projectKey>kiwiproject_dropwizard-jakarta-xml-ws</sonar.projectKey>
