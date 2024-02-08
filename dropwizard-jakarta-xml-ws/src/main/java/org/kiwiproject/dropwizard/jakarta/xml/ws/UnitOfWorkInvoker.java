@@ -1,5 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.collect.ImmutableMap;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.cxf.message.Exchange;
@@ -12,7 +14,15 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 /**
  * Wraps underlying invoker in a Hibernate session. Code in this class is based on Dropwizard's UnitOfWorkApplication
- * listener and UnitOfWorkAspect. We don't use UnitOfWorkAspect here because it is declared package private.
+ * listener and UnitOfWorkAspect.
+ * <p>
+ * <strong>Background information:</strong>
+ * The javadocs used to state "We don't use UnitOfWorkAspect here because it is declared package private." This
+ * was true up until Dropwizard 1.1.0, which made UnitOfWorkAspect public in
+ * <a href="https://github.com/dropwizard/dropwizard/pull/1661">this PR</a>. See
+ * <a href="https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/discussions/91">this discussion</a> which
+ * proposes to change this class to use UnitOfWorkAspect directly.
+ * 
  *
  * @see io.dropwizard.hibernate.UnitOfWorkAspect
  * @see io.dropwizard.hibernate.UnitOfWorkApplicationListener
@@ -34,14 +44,12 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     public Object invoke(Exchange exchange, Object o) {
 
         Object result;
-        String methodname = this.getTargetMethod(exchange).getName();
+        String methodName = this.getTargetMethod(exchange).getName();
 
-        if (unitOfWorkMethods.containsKey(methodname)) {
+        if (unitOfWorkMethods.containsKey(methodName)) {
 
-            final Session session = sessionFactory.openSession();
-            UnitOfWork unitOfWork = unitOfWorkMethods.get(methodname);
-
-            try {
+            try (var session = sessionFactory.openSession()) {
+                UnitOfWork unitOfWork = requireNonNull(unitOfWorkMethods.get(methodName));
                 configureSession(session, unitOfWork);
                 ManagedSessionContext.bind(session);
                 beginTransaction(session, unitOfWork);
@@ -51,11 +59,10 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
                     return result;
                 } catch (Exception e) {
                     rollbackTransaction(session, unitOfWork);
-                    this.<RuntimeException>rethrow(e); // unchecked rethrow
+                    this.rethrow(e); // unchecked rethrow
                     return null; // avoid compiler warning
                 }
             } finally {
-                session.close();
                 ManagedSessionContext.unbind(sessionFactory);
             }
         } else {
