@@ -14,8 +14,7 @@ public class UnitOfWorkInvokerFactory {
      */
     public Invoker create(Object service, Invoker rootInvoker, SessionFactory sessionFactory) {
 
-        ImmutableMap.Builder<String, UnitOfWork> unitOfWorkMethodsBuilder =
-                new ImmutableMap.Builder<>();
+        var unitOfWorkMethodsBuilder = new ImmutableMap.Builder<String, UnitOfWork>();
 
         for (Method m : service.getClass().getMethods()) {
             if (m.isAnnotationPresent(UnitOfWork.class)) {
@@ -24,13 +23,11 @@ public class UnitOfWorkInvokerFactory {
         }
         ImmutableMap<String, UnitOfWork> unitOfWorkMethods = unitOfWorkMethodsBuilder.build();
 
-        Invoker invoker = rootInvoker;
-
-        if (!unitOfWorkMethods.isEmpty()) {
-            invoker = new UnitOfWorkInvoker(invoker, unitOfWorkMethods, sessionFactory);
+        if (unitOfWorkMethods.isEmpty()) {
+            return rootInvoker;
         }
 
-        return invoker;
+        return new UnitOfWorkInvoker(rootInvoker, unitOfWorkMethods, sessionFactory);
     }
 
 }
