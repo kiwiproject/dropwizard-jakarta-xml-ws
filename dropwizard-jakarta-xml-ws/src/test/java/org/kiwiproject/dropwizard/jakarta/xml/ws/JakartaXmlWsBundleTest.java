@@ -71,6 +71,7 @@ class JakartaXmlWsBundleTest {
     void initializeAndRun() {
         JakartaXmlWsBundle<?> jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
 
+        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.run(null, null))
                 .withMessage("Environment is null");
@@ -94,6 +95,7 @@ class JakartaXmlWsBundleTest {
             }
         };
 
+        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.run(null, null))
                 .withMessage("Environment is null");
@@ -108,6 +110,7 @@ class JakartaXmlWsBundleTest {
         verify(jwsEnvironment).setPublishedEndpointUrlPrefix("http://some/prefix");
     }
 
+    @SuppressWarnings("resource")
     @Test
     void publishEndpoint() {
 
@@ -117,6 +120,7 @@ class JakartaXmlWsBundleTest {
                 .isThrownBy(() -> jwsBundle.publishEndpoint(new EndpointBuilder("foo", null)))
                 .withMessage("Service is null");
 
+        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.publishEndpoint(new EndpointBuilder(null, service)))
                 .withMessage("Path is null");
@@ -138,6 +142,7 @@ class JakartaXmlWsBundleTest {
         Class<?> cls = Object.class;
         String url = "http://foo";
 
+        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(null, null)))
                 .withMessage("ServiceClass is null");
@@ -146,6 +151,7 @@ class JakartaXmlWsBundleTest {
                 .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(null, url)))
                 .withMessage("ServiceClass is null");
 
+        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(cls, null)))
                 .withMessage("Address is null");
