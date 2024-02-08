@@ -1,5 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
+import static java.util.Objects.requireNonNull;
+
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.Timer;
 import com.google.common.collect.ImmutableMap;
@@ -33,15 +35,14 @@ public class InstrumentedInvokers {
         public Object invoke(Exchange exchange, Object o) {
 
             Object result;
-            String methodname = this.getTargetMethod(exchange).getName();
+            String methodName = this.getTargetMethod(exchange).getName();
 
-            if (timers.containsKey(methodname)) {
-                Timer timer = timers.get(methodname);
-                final Timer.Context context = timer.time();
-                try {
+            if (timers.containsKey(methodName)) {
+                var timer = requireNonNull(timers.get(methodName));
+
+                // Timer.Context is AutoCloseable, so this starts and closes (stops) the Timer.Context
+                try (Timer.Context ignored = timer.time()) {
                     result = this.underlying.invoke(exchange, o);
-                } finally {
-                    context.stop();
                 }
             } else {
                 result = this.underlying.invoke(exchange, o);
@@ -66,10 +67,10 @@ public class InstrumentedInvokers {
         public Object invoke(Exchange exchange, Object o) {
 
             Object result;
-            String methodname = this.getTargetMethod(exchange).getName();
+            String methodName = this.getTargetMethod(exchange).getName();
 
-            if (meters.containsKey(methodname)) {
-                Meter meter = meters.get(methodname);
+            if (meters.containsKey(methodName)) {
+                var meter = requireNonNull(meters.get(methodName));
                 meter.mark();
             }
             result = this.underlying.invoke(exchange, o);
@@ -111,22 +112,23 @@ public class InstrumentedInvokers {
         public Object invoke(Exchange exchange, Object o) {
 
             Object result;
-            String methodname = this.getTargetMethod(exchange).getName();
+            String methodName = this.getTargetMethod(exchange).getName();
 
             try {
                 result = this.underlying.invoke(exchange, o);
                 return result;
             } catch (Exception e) {
 
-                if (meters.containsKey(methodname)) {
-                    ExceptionMeter meter = meters.get(methodname);
-                    if (meter.getExceptionClass().isAssignableFrom(e.getClass()) ||
+                if (meters.containsKey(methodName)) {
+                    var exceptionMeter = requireNonNull(meters.get(methodName));
+                    var exceptionClass = exceptionMeter.getExceptionClass();
+                    if (exceptionClass.isAssignableFrom(e.getClass()) ||
                             (e.getCause() != null &&
-                                    meter.getExceptionClass().isAssignableFrom(e.getCause().getClass()))) {
-                        meter.getMeter().mark();
+                                    exceptionClass.isAssignableFrom(e.getCause().getClass()))) {
+                        exceptionMeter.getMeter().mark();
                     }
                 }
-                this.<RuntimeException>rethrow(e); // unchecked rethrow
+                this.rethrow(e); // unchecked rethrow
                 return null; // avoid compiler warning
             }
         }
