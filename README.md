@@ -6,7 +6,7 @@ Dropwizard Jakarta XML Web Services
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kiwiproject_dropwizard-jakarta-xml-ws&metric=coverage)](https://sonarcloud.io/summary/new_code?id=kiwiproject_dropwizard-jakarta-xml-ws)
 [![javadoc](https://javadoc.io/badge2/org.kiwiproject/dropwizard-jakarta-xml-ws/javadoc.svg)](https://javadoc.io/doc/org.kiwiproject/dropwizard-jakarta-xml-ws)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![Maven Central](https://img.shields.io/maven-central/v/org.kiwiproject/dropwizard-jakarta-xml-ws)
+[![Maven Central](https://img.shields.io/maven-central/v/org.kiwiproject/dropwizard-jakarta-xml-ws)](https://central.sonatype.com/artifact/org.kiwiproject/dropwizard-jakarta-xml-ws/)
 
 ---
 
