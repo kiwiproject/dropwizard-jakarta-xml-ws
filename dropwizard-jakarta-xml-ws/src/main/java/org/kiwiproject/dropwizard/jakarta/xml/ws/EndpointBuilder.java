@@ -64,7 +64,7 @@ public class EndpointBuilder extends AbstractBuilder {
 
     /**
      * Publish Jakarta XML Web Services endpoint with Dropwizard Hibernate Bundle integration.
-     * Service will be scanned for @UnitOfWork annotations.
+     * The service will be scanned for @UnitOfWork annotations.
      *
      * @param sessionFactory Hibernate session factory.
      */

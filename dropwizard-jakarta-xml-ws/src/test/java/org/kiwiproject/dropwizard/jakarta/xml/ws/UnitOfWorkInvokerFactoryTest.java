@@ -80,7 +80,7 @@ class UnitOfWorkInvokerFactoryTest {
     Session session;
     Transaction transaction;
 
-    // CXF Exchange contains message exchange and is used by Invoker to obtain invoked method name
+    // CXF Exchange contains message exchange and is used by Invoker to get invoked method name
     Exchange exchange;
 
     @BeforeEach
@@ -102,7 +102,7 @@ class UnitOfWorkInvokerFactoryTest {
     }
 
     /**
-     * Utility method that mimics runtime CXF behaviour. Enables AbstractInvoker.getTargetMethod to work properly
+     * Utility method that mimics runtime CXF behavior. Enables AbstractInvoker.getTargetMethod to work properly
      * during the test.
      */
     private void setTargetMethod(Exchange exchange, Class<?> serviceClass, String methodName, Class<?>... parameterTypes) {

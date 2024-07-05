@@ -108,7 +108,6 @@ class JakartaXmlWsBundleTest {
         verify(jwsEnvironment).setPublishedEndpointUrlPrefix("http://some/prefix");
     }
 
-    @SuppressWarnings("resource")
     @Test
     void publishEndpoint() {
         var jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);

@@ -27,11 +27,11 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * A CXF interceptor that manages HTTP Basic Authentication. Implementation is based on combination of
+ * A CXF interceptor that manages HTTP Basic Authentication. Implementation is based on the combination of
  * CXF JAASLoginInterceptor code and the following GitHub Gist:
  * <a href="https://gist.github.com/palesz/3438143">Basic HTTP Authentication Interceptor for Apache CXF</a>.
  * <p>
- * Dropwizard authenticator is used for credentials authentication. Authenticated principal is stored in message
+ * Dropwizard authenticator is used for credential authentication. Authenticated principal is stored in message
  * exchange and is available in the service implementation through a Jakarta XML Web Services
  * {@link jakarta.xml.ws.WebServiceContext WebServiceContext}.
  */

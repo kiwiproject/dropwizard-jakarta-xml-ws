@@ -101,7 +101,7 @@ class ValidatingInvokerTest {
     }
 
     /**
-     * Utility method that mimics runtime CXF behaviour. Enables AbstractInvoker.getTargetMethod to work properly
+     * Utility method that mimics runtime CXF behavior. Enables AbstractInvoker.getTargetMethod to work properly
      * during the test.
      */
     private void setTargetMethod(Exchange exchange, String methodName, Class<?>... parameterTypes) {

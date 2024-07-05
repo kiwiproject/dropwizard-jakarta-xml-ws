@@ -72,7 +72,7 @@ public class JakartaXmlWsExampleApplication extends Application<JakartaXmlWsExam
         endpoint = anotherJwsBundle.publishEndpoint(
                 new EndpointBuilder("/simple", new SimpleService()));
 
-        // Java first service protected with basic authentication
+        // Java-first service protected with basic authentication
         endpoint = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/javafirst", new JavaFirstServiceImpl())
                         .authentication(new BasicAuthentication(new BasicAuthenticator(), "TOP_SECRET")));
