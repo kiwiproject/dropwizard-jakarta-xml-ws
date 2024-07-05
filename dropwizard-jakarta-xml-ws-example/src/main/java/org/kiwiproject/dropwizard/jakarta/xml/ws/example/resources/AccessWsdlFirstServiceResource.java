@@ -5,8 +5,6 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.wsdlfirstservice.Echo;
-import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.wsdlfirstservice.EchoResponse;
 import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.wsdlfirstservice.ObjectFactory;
 import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.wsdlfirstservice.WsdlFirstService;
 
@@ -30,13 +28,12 @@ public class AccessWsdlFirstServiceResource {
     @GET
     @Timed
     public String getFoo() {
+        var objectFactory = new ObjectFactory();
+        var echo = objectFactory.createEcho();
+        echo.setValue("echo value");
 
-        ObjectFactory of = new ObjectFactory();
-        Echo e = of.createEcho();
-        e.setValue("echo value");
+        var echoResponse = wsdlFirstServiceClient.echo(echo);
 
-        EchoResponse er = wsdlFirstServiceClient.echo(e);
-
-        return "Echo response: " + er.getValue() + " at " + LocalDateTime.now();
+        return "Echo response: " + echoResponse.getValue() + " at " + LocalDateTime.now();
     }
 }

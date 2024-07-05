@@ -64,7 +64,7 @@ public class JakartaXmlWsBundle<C> implements ConfiguredBundle<C> {
         environment.lifecycle().addServerLifecycleListener(
                 server -> jwsEnvironment.logEndpoints());
 
-        String publishedEndpointUrlPrefix = getPublishedEndpointUrlPrefix(configuration);
+        var publishedEndpointUrlPrefix = getPublishedEndpointUrlPrefix(configuration);
         if (publishedEndpointUrlPrefix != null) {
             jwsEnvironment.setPublishedEndpointUrlPrefix(publishedEndpointUrlPrefix);
         }

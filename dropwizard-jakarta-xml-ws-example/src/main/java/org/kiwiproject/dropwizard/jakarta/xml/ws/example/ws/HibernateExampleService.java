@@ -8,7 +8,6 @@ import org.kiwiproject.dropwizard.jakarta.xml.ws.example.core.Person;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.example.db.PersonDAO;
 
 import java.util.List;
-import java.util.Optional;
 
 @WebService
 public class HibernateExampleService {
@@ -31,9 +30,9 @@ public class HibernateExampleService {
     @WebMethod
     @UnitOfWork
     public Person getPerson(long id) throws Exception {
-        Optional<Person> result = this.personDAO.findById(id);
-        if (result.isPresent()) {
-            return result.get();
+        var personOptional = this.personDAO.findById(id);
+        if (personOptional.isPresent()) {
+            return personOptional.get();
         }
 
         throw new Exception("Person with id " + id + " not found");

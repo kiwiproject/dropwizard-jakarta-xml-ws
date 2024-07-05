@@ -5,8 +5,6 @@ import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.cxf.service.invoker.Invoker;
 import org.hibernate.SessionFactory;
 
-import java.lang.reflect.Method;
-
 public class UnitOfWorkInvokerFactory {
 
     /**
@@ -14,20 +12,20 @@ public class UnitOfWorkInvokerFactory {
      */
     public Invoker create(Object service, Invoker rootInvoker, SessionFactory sessionFactory) {
 
-        var unitOfWorkMethodsBuilder = new ImmutableMap.Builder<String, UnitOfWork>();
+        var unitOfWorkMethodsMapBuilder = new ImmutableMap.Builder<String, UnitOfWork>();
 
-        for (Method m : service.getClass().getMethods()) {
-            if (m.isAnnotationPresent(UnitOfWork.class)) {
-                unitOfWorkMethodsBuilder.put(m.getName(), m.getAnnotation(UnitOfWork.class));
+        for (var method : service.getClass().getMethods()) {
+            if (method.isAnnotationPresent(UnitOfWork.class)) {
+                unitOfWorkMethodsMapBuilder.put(method.getName(), method.getAnnotation(UnitOfWork.class));
             }
         }
-        ImmutableMap<String, UnitOfWork> unitOfWorkMethods = unitOfWorkMethodsBuilder.build();
+        var unitOfWorkMethodsMap = unitOfWorkMethodsMapBuilder.build();
 
-        if (unitOfWorkMethods.isEmpty()) {
+        if (unitOfWorkMethodsMap.isEmpty()) {
             return rootInvoker;
         }
 
-        return new UnitOfWorkInvoker(rootInvoker, unitOfWorkMethods, sessionFactory);
+        return new UnitOfWorkInvoker(rootInvoker, unitOfWorkMethodsMap, sessionFactory);
     }
 
 }

@@ -94,10 +94,10 @@ class ValidatingInvokerTest {
         invoker = new ValidatingInvoker(underlying, Validation.buildDefaultValidatorFactory().getValidator());
         exchange = mock(Exchange.class);
         when(exchange.getInMessage()).thenReturn(mock(Message.class));
-        BindingOperationInfo boi = mock(BindingOperationInfo.class);
-        when(exchange.getBindingOperationInfo()).thenReturn(boi);
-        OperationInfo oi = mock(OperationInfo.class);
-        when(boi.getOperationInfo()).thenReturn(oi);
+        var bindingOperationInfo = mock(BindingOperationInfo.class);
+        when(exchange.getBindingOperationInfo()).thenReturn(bindingOperationInfo);
+        var operationInfo = mock(OperationInfo.class);
+        when(bindingOperationInfo.getOperationInfo()).thenReturn(operationInfo);
     }
 
     /**
@@ -106,8 +106,8 @@ class ValidatingInvokerTest {
      */
     private void setTargetMethod(Exchange exchange, String methodName, Class<?>... parameterTypes) {
         try {
-            OperationInfo oi = exchange.getBindingOperationInfo().getOperationInfo();
-            when(oi.getProperty(Method.class.getName()))
+            var operationInfo = exchange.getBindingOperationInfo().getOperationInfo();
+            when(operationInfo.getProperty(Method.class.getName()))
                     .thenReturn(DummyService.class.getMethod(methodName, parameterTypes));
         } catch (Exception e) {
             throw new RuntimeException("setTargetMethod failed", e);
@@ -125,7 +125,7 @@ class ValidatingInvokerTest {
     void invokeWithoutValidation() {
         setTargetMethod(exchange, "noValidation", RootParam1.class, RootParam2.class);
 
-        List<Object> params = Arrays.asList(null, null);
+        var params = Arrays.asList(null, null);
         invoker.invoke(exchange, params);
         verify(underlying).invoke(exchange, params);
 

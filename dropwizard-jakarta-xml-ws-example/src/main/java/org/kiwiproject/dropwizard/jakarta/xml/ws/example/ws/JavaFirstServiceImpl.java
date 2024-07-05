@@ -27,7 +27,7 @@ public class JavaFirstServiceImpl implements JavaFirstService {
             throw new JavaFirstServiceException("Invalid parameter");
         }
 
-        Principal user = (Principal) wsContext.getMessageContext().get("dropwizard.jakarta.xml.ws.principal");
-        return in + "; principal: " + user.getName() + " at " + LocalDateTime.now();
+        var userPrincipal = (Principal) wsContext.getMessageContext().get("dropwizard.jakarta.xml.ws.principal");
+        return in + "; principal: " + userPrincipal.getName() + " at " + LocalDateTime.now();
     }
 }

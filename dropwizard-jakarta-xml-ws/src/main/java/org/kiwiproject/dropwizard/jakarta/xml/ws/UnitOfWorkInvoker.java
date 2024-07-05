@@ -8,7 +8,6 @@ import org.apache.cxf.message.Exchange;
 import org.apache.cxf.service.invoker.Invoker;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.context.internal.ManagedSessionContext;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
@@ -44,12 +43,12 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     public Object invoke(Exchange exchange, Object o) {
 
         Object result;
-        String methodName = this.getTargetMethod(exchange).getName();
+        var methodName = this.getTargetMethod(exchange).getName();
 
         if (unitOfWorkMethods.containsKey(methodName)) {
 
             try (var session = sessionFactory.openSession()) {
-                UnitOfWork unitOfWork = requireNonNull(unitOfWorkMethods.get(methodName));
+                var unitOfWork = requireNonNull(unitOfWorkMethods.get(methodName));
                 configureSession(session, unitOfWork);
                 ManagedSessionContext.bind(session);
                 beginTransaction(session, unitOfWork);
@@ -96,7 +95,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     @SuppressWarnings("JavadocReference")
     private void rollbackTransaction(Session session, UnitOfWork unitOfWork) {
         if (unitOfWork.transactional()) {
-            final Transaction txn = session.getTransaction();
+            var txn = session.getTransaction();
             if (txn != null && txn.getStatus().equals(TransactionStatus.ACTIVE)) {
                 txn.rollback();
             }
@@ -109,7 +108,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     @SuppressWarnings("JavadocReference")
     private void commitTransaction(Session session, UnitOfWork unitOfWork) {
         if (unitOfWork.transactional()) {
-            final Transaction txn = session.getTransaction();
+            var txn = session.getTransaction();
             if (txn != null && txn.getStatus().equals(TransactionStatus.ACTIVE)) {
                 txn.commit();
             }

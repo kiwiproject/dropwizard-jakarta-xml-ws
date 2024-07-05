@@ -21,9 +21,9 @@ public abstract class AbstractInvoker implements Invoker {
      */
     public Method getTargetMethod(Exchange exchange) {
 
-        Object o = exchange.getBindingOperationInfo().getOperationInfo().getProperty(Method.class.getName());
+        var object = exchange.getBindingOperationInfo().getOperationInfo().getProperty(Method.class.getName());
 
-        if (o instanceof Method method) {
+        if (object instanceof Method method) {
             return method;
         } else {
             throw new IllegalStateException("Target method not found on OperationInfo");

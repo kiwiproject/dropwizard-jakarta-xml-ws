@@ -58,52 +58,52 @@ class BasicAuthenticationInterceptorTest {
 
     @Test
     void shouldAuthenticateValidUser() {
-        BasicAuthenticationInterceptor target = new BasicAuthenticationInterceptor();
-        target.setAuthenticator(basicAuthentication);
-        Message message = createMessageWithUsernameAndPassword(USERNAME, CORRECT_PASSWORD);
+        var interceptor = new BasicAuthenticationInterceptor();
+        interceptor.setAuthenticator(basicAuthentication);
+        var message = createMessageWithUsernameAndPassword(USERNAME, CORRECT_PASSWORD);
 
-        target.handleMessage(message);
+        interceptor.handleMessage(message);
 
         verify(inMessageMock).put(eq(PRINCIPAL_KEY), any(Principal.class));
     }
 
     @Test
     void shouldReturnUnauthorizedCodeForInvalidCredentials() {
-        BasicAuthenticationInterceptor target = new BasicAuthenticationInterceptor();
-        target.setAuthenticator(basicAuthentication);
-        Message message = createMessageWithUsernameAndPassword(USERNAME, "foo");
+        var interceptor = new BasicAuthenticationInterceptor();
+        interceptor.setAuthenticator(basicAuthentication);
+        var message = createMessageWithUsernameAndPassword(USERNAME, "foo");
 
-        target.handleMessage(message);
+        interceptor.handleMessage(message);
 
         verify(outMessageMock).put(Message.RESPONSE_CODE, HttpURLConnection.HTTP_UNAUTHORIZED);
     }
 
     @Test
     void shouldNotCrashOnNullPassword() {
-        BasicAuthenticationInterceptor target = new BasicAuthenticationInterceptor();
-        target.setAuthenticator(basicAuthentication);
-        Message message = createMessageWithUsernameAndPassword(USERNAME, null);
+        var interceptor = new BasicAuthenticationInterceptor();
+        interceptor.setAuthenticator(basicAuthentication);
+        var message = createMessageWithUsernameAndPassword(USERNAME, null);
 
-        target.handleMessage(message);
+        interceptor.handleMessage(message);
 
         verify(outMessageMock).put(Message.RESPONSE_CODE, HttpURLConnection.HTTP_UNAUTHORIZED);
     }
 
     @Test
     void shouldNotCrashOnNullUser() {
-        BasicAuthenticationInterceptor target = new BasicAuthenticationInterceptor();
-        target.setAuthenticator(basicAuthentication);
-        Message message = createMessageWithUsernameAndPassword(null, CORRECT_PASSWORD);
+        var interceptor = new BasicAuthenticationInterceptor();
+        interceptor.setAuthenticator(basicAuthentication);
+        var message = createMessageWithUsernameAndPassword(null, CORRECT_PASSWORD);
 
-        target.handleMessage(message);
+        interceptor.handleMessage(message);
 
         verify(outMessageMock).put(Message.RESPONSE_CODE, HttpURLConnection.HTTP_UNAUTHORIZED);
     }
 
     private Message createMessageWithUsernameAndPassword(String username, String password) {
-        Message message = createEmptyMessage();
+        var message = createEmptyMessage();
 
-        AuthorizationPolicy policy = new AuthorizationPolicy();
+        var policy = new AuthorizationPolicy();
         policy.setUserName(username);
         policy.setPassword(password);
         message.put(AuthorizationPolicy.class, policy);

@@ -28,13 +28,13 @@ public class InstrumentedInvokerFactory {
      */
     private Invoker timed(Invoker invoker, List<Method> timedMethods) {
 
-        ImmutableMap.Builder<String, Timer> timers = new ImmutableMap.Builder<>();
+        var timers = new ImmutableMap.Builder<String, Timer>();
 
-        for (Method m : timedMethods) {
-            Timed annotation = m.getAnnotation(Timed.class);
-            final String name = chooseName(annotation.name(), annotation.absolute(), m);
-            Timer timer = metricRegistry.timer(name);
-            timers.put(m.getName(), timer);
+        for (var method : timedMethods) {
+            var timed = method.getAnnotation(Timed.class);
+            var name = chooseName(timed.name(), timed.absolute(), method);
+            var timer = metricRegistry.timer(name);
+            timers.put(method.getName(), timer);
         }
 
         return new InstrumentedInvokers.TimedInvoker(invoker, timers.build());
@@ -45,13 +45,13 @@ public class InstrumentedInvokerFactory {
      */
     private Invoker metered(Invoker invoker, List<Method> meteredMethods) {
 
-        ImmutableMap.Builder<String, Meter> meters = new ImmutableMap.Builder<>();
+        var meters = new ImmutableMap.Builder<String, Meter>();
 
-        for (Method m : meteredMethods) {
-            Metered annotation = m.getAnnotation(Metered.class);
-            final String name = chooseName(annotation.name(), annotation.absolute(), m);
-            Meter meter = metricRegistry.meter(name);
-            meters.put(m.getName(), meter);
+        for (var method : meteredMethods) {
+            var metered = method.getAnnotation(Metered.class);
+            var name = chooseName(metered.name(), metered.absolute(), method);
+            var meter = metricRegistry.meter(name);
+            meters.put(method.getName(), meter);
         }
 
         return new InstrumentedInvokers.MeteredInvoker(invoker, meters.build());
@@ -62,19 +62,18 @@ public class InstrumentedInvokerFactory {
      */
     private Invoker exceptionMetered(Invoker invoker, List<Method> meteredMethods) {
 
-        ImmutableMap.Builder<String, InstrumentedInvokers.ExceptionMeter> meters =
-                new ImmutableMap.Builder<>();
+        var meters = new ImmutableMap.Builder<String, InstrumentedInvokers.ExceptionMeter>();
 
-        for (Method m : meteredMethods) {
+        for (var method : meteredMethods) {
 
-            ExceptionMetered annotation = m.getAnnotation(ExceptionMetered.class);
-            final String name = chooseName(
-                    annotation.name(),
-                    annotation.absolute(),
-                    m,
+            var exceptionMetered = method.getAnnotation(ExceptionMetered.class);
+            var name = chooseName(
+                    exceptionMetered.name(),
+                    exceptionMetered.absolute(),
+                    method,
                     ExceptionMetered.DEFAULT_NAME_SUFFIX);
-            Meter meter = metricRegistry.meter(name);
-            meters.put(m.getName(), new InstrumentedInvokers.ExceptionMeter(meter, annotation.cause()));
+            var meter = metricRegistry.meter(name);
+            meters.put(method.getName(), new InstrumentedInvokers.ExceptionMeter(meter, exceptionMetered.cause()));
         }
 
         return new InstrumentedInvokers.ExceptionMeteredInvoker(invoker, meters.build());
@@ -118,22 +117,22 @@ public class InstrumentedInvokerFactory {
         List<Method> meteredmethods = new ArrayList<>();
         List<Method> exceptionmeteredmethods = new ArrayList<>();
 
-        for (Method m : service.getClass().getMethods()) {
+        for (var method : service.getClass().getMethods()) {
 
-            if (m.isAnnotationPresent(Timed.class)) {
-                timedmethods.add(m);
+            if (method.isAnnotationPresent(Timed.class)) {
+                timedmethods.add(method);
             }
 
-            if (m.isAnnotationPresent(Metered.class)) {
-                meteredmethods.add(m);
+            if (method.isAnnotationPresent(Metered.class)) {
+                meteredmethods.add(method);
             }
 
-            if (m.isAnnotationPresent(ExceptionMetered.class)) {
-                exceptionmeteredmethods.add(m);
+            if (method.isAnnotationPresent(ExceptionMetered.class)) {
+                exceptionmeteredmethods.add(method);
             }
         }
 
-        Invoker invoker = rootInvoker;
+        var invoker = rootInvoker;
 
         if (!timedmethods.isEmpty()) {
             invoker = this.timed(invoker, timedmethods);

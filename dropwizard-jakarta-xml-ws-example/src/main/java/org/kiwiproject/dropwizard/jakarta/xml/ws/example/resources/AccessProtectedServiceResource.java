@@ -25,10 +25,9 @@ public class AccessProtectedServiceResource {
     @GET
     public String getEcho() {
         try {
-
-            BindingProvider bp = (BindingProvider) javaFirstService;
-            bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, "johndoe");
-            bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, "secret");
+            var bindingProvider = (BindingProvider) javaFirstService;
+            bindingProvider.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, "johndoe");
+            bindingProvider.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, "secret");
 
             return this.javaFirstService.echo("Hello from the protected service!");
         } catch (JavaFirstService.JavaFirstServiceException jfse) {
