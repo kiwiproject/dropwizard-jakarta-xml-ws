@@ -1,5 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
+import static java.util.Objects.nonNull;
+
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
@@ -87,7 +89,7 @@ public class InstrumentedInvokerFactory {
      * @see com.codahale.metrics.jersey3.InstrumentedResourceMethodApplicationListener
      */
     private String chooseName(String explicitName, boolean absolute, Method method, String... suffixes) {
-        if (explicitName != null && !explicitName.isEmpty()) {
+        if (nonNull(explicitName) && !explicitName.isEmpty()) {
             if (absolute) {
                 return explicitName;
             }

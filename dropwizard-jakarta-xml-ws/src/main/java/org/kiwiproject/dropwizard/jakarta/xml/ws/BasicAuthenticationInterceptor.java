@@ -1,5 +1,8 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
+import static java.util.Collections.singletonList;
+import static java.util.Objects.nonNull;
+
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.basic.BasicCredentials;
 import org.apache.cxf.common.security.SecurityToken;
@@ -18,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -57,12 +59,12 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
 
         try {
             var policy = message.get(AuthorizationPolicy.class);
-            if (policy != null && policy.getUserName() != null && policy.getPassword() != null) {
+            if (nonNull(policy) && nonNull(policy.getUserName()) && nonNull(policy.getPassword())) {
                 credentials = new BasicCredentials(policy.getUserName(), policy.getPassword());
             } else {
                 // try the WS-Security UsernameToken
                 var token = message.get(SecurityToken.class);
-                if (token != null && token.getTokenType() == TokenType.UsernameToken) {
+                if (nonNull(token) && token.getTokenType() == TokenType.UsernameToken) {
                     var usernameToken = (UsernameToken) token;
                     credentials = new BasicCredentials(usernameToken.getName(), usernameToken.getPassword());
                 }
@@ -94,9 +96,9 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
         // Set the response headers
         @SuppressWarnings("unchecked")
         var responseHeaders = (Map<String, List<String>>) message.get(Message.PROTOCOL_HEADERS);
-        if (responseHeaders != null) {
-            responseHeaders.put("WWW-Authenticate", Collections.singletonList("Basic realm=" + authentication.getRealm()));
-            responseHeaders.put("Content-length", Collections.singletonList("0"));
+        if (nonNull(responseHeaders)) {
+            responseHeaders.put("WWW-Authenticate", singletonList("Basic realm=" + authentication.getRealm()));
+            responseHeaders.put("Content-length", singletonList("0"));
         }
         message.getInterceptorChain().abort();
         try {

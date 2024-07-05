@@ -1,6 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.nonNull;
 
 import jakarta.servlet.http.HttpServlet;
 import jakarta.validation.Validation;
@@ -99,12 +100,12 @@ public class JakartaXmlWsEnvironment {
      * to allow further customization.
      */
     public EndpointImpl publishEndpoint(EndpointBuilder endpointBuilder) {
-        checkArgument(endpointBuilder != null, "EndpointBuilder is null");
+        checkArgument(nonNull(endpointBuilder), "EndpointBuilder is null");
 
         var cxfEndpoint = new EndpointImpl(bus, endpointBuilder.getService());
-        if (endpointBuilder.publishedEndpointUrl() != null) {
+        if (nonNull(endpointBuilder.publishedEndpointUrl())) {
             cxfEndpoint.setPublishedEndpointUrl(endpointBuilder.publishedEndpointUrl());
-        } else if (publishedEndpointUrlPrefix != null) {
+        } else if (nonNull(publishedEndpointUrlPrefix)) {
             cxfEndpoint.setPublishedEndpointUrl(publishedEndpointUrlPrefix + endpointBuilder.getPath());
         }
         cxfEndpoint.publish(endpointBuilder.getPath());
@@ -120,7 +121,7 @@ public class JakartaXmlWsEnvironment {
         var validatorFactory = Validation.buildDefaultValidatorFactory();
         invoker = this.createValidatingInvoker(invoker, validatorFactory.getValidator());
 
-        if (endpointBuilder.getSessionFactory() != null) {
+        if (nonNull(endpointBuilder.getSessionFactory())) {
             // Add invoker to handle UnitOfWork annotations. Note that this invoker is set up before
             // instrumented invoker(s) in order for instrumented invoker(s) to wrap "unit of work" invoker.
             invoker = unitOfWorkInvokerBuilder.create(
@@ -132,7 +133,7 @@ public class JakartaXmlWsEnvironment {
         invoker = instrumentedInvokerBuilder.create(endpointBuilder.getService(), invoker);
         cxfEndpoint.getService().setInvoker(invoker);
 
-        if (endpointBuilder.getAuthentication() != null) {
+        if (nonNull(endpointBuilder.getAuthentication())) {
             // Configure CXF in interceptor to handle basic authentication
             var basicAuthInterceptor = this.createBasicAuthenticationInterceptor();
             basicAuthInterceptor.setAuthenticator(endpointBuilder.getAuthentication());
@@ -141,23 +142,23 @@ public class JakartaXmlWsEnvironment {
 
         // CXF interceptors
 
-        if (endpointBuilder.getCxfInInterceptors() != null) {
+        if (nonNull(endpointBuilder.getCxfInInterceptors())) {
             cxfEndpoint.getInInterceptors().addAll(endpointBuilder.getCxfInInterceptors());
         }
 
-        if (endpointBuilder.getCxfInFaultInterceptors() != null) {
+        if (nonNull(endpointBuilder.getCxfInFaultInterceptors())) {
             cxfEndpoint.getInFaultInterceptors().addAll(endpointBuilder.getCxfInFaultInterceptors());
         }
 
-        if (endpointBuilder.getCxfOutInterceptors() != null) {
+        if (nonNull(endpointBuilder.getCxfOutInterceptors())) {
             cxfEndpoint.getOutInterceptors().addAll(endpointBuilder.getCxfOutInterceptors());
         }
 
-        if (endpointBuilder.getCxfOutFaultInterceptors() != null) {
+        if (nonNull(endpointBuilder.getCxfOutFaultInterceptors())) {
             cxfEndpoint.getOutFaultInterceptors().addAll(endpointBuilder.getCxfOutFaultInterceptors());
         }
 
-        if (endpointBuilder.getProperties() != null) {
+        if (nonNull(endpointBuilder.getProperties())) {
             cxfEndpoint.getProperties().putAll(
                     endpointBuilder.getProperties());
         }
@@ -179,28 +180,28 @@ public class JakartaXmlWsEnvironment {
         proxyFactory.setAddress(clientBuilder.getAddress());
 
         // Jakarta XML Web Services handlers
-        if (clientBuilder.getHandlers() != null) {
+        if (nonNull(clientBuilder.getHandlers())) {
             for (var h : clientBuilder.getHandlers()) {
                 proxyFactory.getHandlers().add(h);
             }
         }
 
         // ClientProxyFactoryBean bindingId
-        if (clientBuilder.getBindingId() != null) {
+        if (nonNull(clientBuilder.getBindingId())) {
             proxyFactory.setBindingId(clientBuilder.getBindingId());
         }
 
         // CXF interceptors
-        if (clientBuilder.getCxfInInterceptors() != null) {
+        if (nonNull(clientBuilder.getCxfInInterceptors())) {
             proxyFactory.getInInterceptors().addAll(clientBuilder.getCxfInInterceptors());
         }
-        if (clientBuilder.getCxfInFaultInterceptors() != null) {
+        if (nonNull(clientBuilder.getCxfInFaultInterceptors())) {
             proxyFactory.getInFaultInterceptors().addAll(clientBuilder.getCxfInFaultInterceptors());
         }
-        if (clientBuilder.getCxfOutInterceptors() != null) {
+        if (nonNull(clientBuilder.getCxfOutInterceptors())) {
             proxyFactory.getOutInterceptors().addAll(clientBuilder.getCxfOutInterceptors());
         }
-        if (clientBuilder.getCxfOutFaultInterceptors() != null) {
+        if (nonNull(clientBuilder.getCxfOutFaultInterceptors())) {
             proxyFactory.getOutFaultInterceptors().addAll(clientBuilder.getCxfOutFaultInterceptors());
         }
 

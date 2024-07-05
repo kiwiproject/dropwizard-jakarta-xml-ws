@@ -1,5 +1,6 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
+import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableMap;
@@ -96,7 +97,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     private void rollbackTransaction(Session session, UnitOfWork unitOfWork) {
         if (unitOfWork.transactional()) {
             var txn = session.getTransaction();
-            if (txn != null && txn.getStatus().equals(TransactionStatus.ACTIVE)) {
+            if (nonNull(txn) && txn.getStatus().equals(TransactionStatus.ACTIVE)) {
                 txn.rollback();
             }
         }
@@ -109,7 +110,7 @@ public class UnitOfWorkInvoker extends AbstractInvoker {
     private void commitTransaction(Session session, UnitOfWork unitOfWork) {
         if (unitOfWork.transactional()) {
             var txn = session.getTransaction();
-            if (txn != null && txn.getStatus().equals(TransactionStatus.ACTIVE)) {
+            if (nonNull(txn) && txn.getStatus().equals(TransactionStatus.ACTIVE)) {
                 txn.commit();
             }
         }

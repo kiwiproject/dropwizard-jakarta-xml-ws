@@ -1,5 +1,6 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
+import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
 import com.codahale.metrics.Meter;
@@ -123,7 +124,7 @@ public class InstrumentedInvokers {
                     var exceptionMeter = requireNonNull(meters.get(methodName));
                     var exceptionClass = exceptionMeter.getExceptionClass();
                     if (exceptionClass.isAssignableFrom(e.getClass()) ||
-                            (e.getCause() != null &&
+                            (nonNull(e.getCause()) &&
                                     exceptionClass.isAssignableFrom(e.getCause().getClass()))) {
                         exceptionMeter.getMeter().mark();
                     }

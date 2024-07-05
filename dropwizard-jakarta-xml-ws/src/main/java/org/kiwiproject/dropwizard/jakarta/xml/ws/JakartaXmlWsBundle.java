@@ -1,6 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.nonNull;
 
 import io.dropwizard.core.ConfiguredBundle;
 import io.dropwizard.core.setup.Bootstrap;
@@ -42,9 +43,9 @@ public class JakartaXmlWsBundle<C> implements ConfiguredBundle<C> {
      * @param jwsEnvironment Valid JakartaXmlWsEnvironment.
      */
     public JakartaXmlWsBundle(String servletPath, JakartaXmlWsEnvironment jwsEnvironment) {
-        checkArgument(servletPath != null, "Servlet path is null");
+        checkArgument(nonNull(servletPath), "Servlet path is null");
         checkArgument(servletPath.startsWith("/"), "%s is not an absolute path", servletPath);
-        checkArgument(jwsEnvironment != null, "jwsEnvironment is null");
+        checkArgument(nonNull(jwsEnvironment), "jwsEnvironment is null");
         this.servletPath = servletPath.endsWith("/") ? servletPath + "*" : servletPath + "/*";
         this.jwsEnvironment = jwsEnvironment;
     }
@@ -57,7 +58,7 @@ public class JakartaXmlWsBundle<C> implements ConfiguredBundle<C> {
 
     @Override
     public void run(C configuration, Environment environment) {
-        checkArgument(environment != null, "Environment is null");
+        checkArgument(nonNull(environment), "Environment is null");
         environment.servlets().addServlet("CXF Servlet " + jwsEnvironment.getDefaultPath(),
                 jwsEnvironment.buildServlet()).addMapping(servletPath);
 
@@ -65,7 +66,7 @@ public class JakartaXmlWsBundle<C> implements ConfiguredBundle<C> {
                 server -> jwsEnvironment.logEndpoints());
 
         var publishedEndpointUrlPrefix = getPublishedEndpointUrlPrefix(configuration);
-        if (publishedEndpointUrlPrefix != null) {
+        if (nonNull(publishedEndpointUrlPrefix)) {
             jwsEnvironment.setPublishedEndpointUrlPrefix(publishedEndpointUrlPrefix);
         }
     }
@@ -77,7 +78,7 @@ public class JakartaXmlWsBundle<C> implements ConfiguredBundle<C> {
      * @return javax.xml.ws.Endpoint
      */
     public EndpointImpl publishEndpoint(EndpointBuilder endpointBuilder) {
-        checkArgument(endpointBuilder != null, "EndpointBuilder is null");
+        checkArgument(nonNull(endpointBuilder), "EndpointBuilder is null");
         return this.jwsEnvironment.publishEndpoint(endpointBuilder);
     }
 
@@ -89,7 +90,7 @@ public class JakartaXmlWsBundle<C> implements ConfiguredBundle<C> {
      * @return Jakarta XML Web Services client proxy.
      */
     public <T> T getClient(ClientBuilder<T> clientBuilder) {
-        checkArgument(clientBuilder != null, "ClientBuilder is null");
+        checkArgument(nonNull(clientBuilder), "ClientBuilder is null");
         return jwsEnvironment.getClient(clientBuilder);
     }
 
