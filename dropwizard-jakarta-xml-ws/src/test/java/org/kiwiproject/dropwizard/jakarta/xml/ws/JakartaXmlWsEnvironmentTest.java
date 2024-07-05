@@ -333,7 +333,6 @@ class JakartaXmlWsEnvironmentTest {
                 .isThrownBy(() -> new EndpointBuilder("foo", null))
                 .withMessage("Service is null");
 
-        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> new EndpointBuilder(null, service))
                 .withMessage("Path is null");

@@ -69,9 +69,8 @@ class JakartaXmlWsBundleTest {
 
     @Test
     void initializeAndRun() {
-        JakartaXmlWsBundle<?> jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
+        var jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
 
-        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.run(null, null))
                 .withMessage("Environment is null");
@@ -95,7 +94,6 @@ class JakartaXmlWsBundleTest {
             }
         };
 
-        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.run(null, null))
                 .withMessage("Environment is null");
@@ -119,7 +117,6 @@ class JakartaXmlWsBundleTest {
                 .isThrownBy(() -> jwsBundle.publishEndpoint(new EndpointBuilder("foo", null)))
                 .withMessage("Service is null");
 
-        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.publishEndpoint(new EndpointBuilder(null, service)))
                 .withMessage("Path is null");
@@ -135,12 +132,11 @@ class JakartaXmlWsBundleTest {
 
     @Test
     void getClient() {
-        JakartaXmlWsBundle<?> jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
+        var jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
 
         Class<?> cls = Object.class;
         var url = "http://foo";
 
-        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(null, null)))
                 .withMessage("ServiceClass is null");
@@ -149,7 +145,6 @@ class JakartaXmlWsBundleTest {
                 .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(null, url)))
                 .withMessage("ServiceClass is null");
 
-        //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(cls, null)))
                 .withMessage("Address is null");

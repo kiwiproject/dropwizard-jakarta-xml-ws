@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 
 import org.apache.cxf.configuration.security.AuthorizationPolicy;
 import org.apache.cxf.interceptor.InterceptorChain;
-import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.ExchangeImpl;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageImpl;
@@ -111,12 +110,12 @@ class BasicAuthenticationInterceptorTest {
     }
 
     private Message createEmptyMessage() {
-        Exchange exchange = new ExchangeImpl();
+        var exchange = new ExchangeImpl();
         exchange.setInMessage(inMessageMock);
         exchange.setOutMessage(outMessageMock);
         exchange.setDestination(destinationMock);
 
-        Message message = new MessageImpl();
+        var message = new MessageImpl();
         message.setExchange(exchange);
         message.setInterceptorChain(interceptorChainMock);
         return message;
