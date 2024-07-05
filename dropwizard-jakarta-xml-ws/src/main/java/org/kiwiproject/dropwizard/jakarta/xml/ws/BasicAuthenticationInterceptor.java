@@ -1,6 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
 import static java.util.Collections.singletonList;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import io.dropwizard.auth.AuthenticationException;
@@ -70,7 +71,7 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
                 }
             }
 
-            if (credentials == null) {
+            if (isNull(credentials)) {
                 sendErrorResponse(message, HttpURLConnection.HTTP_UNAUTHORIZED);
                 return;
             }
@@ -112,7 +113,7 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
     private Message getOutMessage(Message inMessage) {
         var exchange = inMessage.getExchange();
         var outMessage = exchange.getOutMessage();
-        if (outMessage == null) {
+        if (isNull(outMessage)) {
             var endpoint = exchange.get(Endpoint.class);
             outMessage = endpoint.getBinding().createMessage();
             exchange.setOutMessage(outMessage);

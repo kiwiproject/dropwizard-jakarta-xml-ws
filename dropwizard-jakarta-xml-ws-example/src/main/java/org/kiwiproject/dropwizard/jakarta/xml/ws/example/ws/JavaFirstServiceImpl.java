@@ -1,5 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws.example.ws;
 
+import static java.util.Objects.isNull;
+
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import jakarta.annotation.Resource;
@@ -23,7 +25,7 @@ public class JavaFirstServiceImpl implements JavaFirstService {
     @Metered
     @ExceptionMetered
     public String echo(String in) throws JavaFirstServiceException {
-        if (in == null || in.isBlank()) {
+        if (isNull(in) || in.isBlank()) {
             throw new JavaFirstServiceException("Invalid parameter");
         }
 

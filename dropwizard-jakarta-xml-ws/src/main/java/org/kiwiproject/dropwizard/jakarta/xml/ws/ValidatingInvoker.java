@@ -1,5 +1,6 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import io.dropwizard.validation.ConstraintViolations;
@@ -55,7 +56,7 @@ public class ValidatingInvoker extends AbstractInvoker {
             var i = 0;
             try {
                 for (var parameter : params) {
-                    if (parameter == null || !AsyncHandler.class.isAssignableFrom(parameter.getClass())) {
+                    if (isNull(parameter) || !AsyncHandler.class.isAssignableFrom(parameter.getClass())) {
                         validate(parameterAnnotations[i++], parameter);
                     }
                 }
