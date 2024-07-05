@@ -3,6 +3,7 @@ package org.kiwiproject.dropwizard.jakarta.xml.ws;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.dropwizard.validation.ConstraintViolations;
 import io.dropwizard.validation.Validated;
 import jakarta.validation.Valid;
@@ -79,6 +80,7 @@ public class ValidatingInvoker extends AbstractInvoker {
      * for null parameter values:
      * java.lang.IllegalArgumentException: HV000116: The object to be validated must not be null.
      */
+    @CanIgnoreReturnValue
     private Object validate(Annotation[] annotations, Object value) {
         var classes = findValidationGroups(annotations);
 
