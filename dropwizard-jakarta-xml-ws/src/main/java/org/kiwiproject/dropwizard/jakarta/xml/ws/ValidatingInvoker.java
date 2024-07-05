@@ -1,5 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
+import static java.util.Objects.nonNull;
+
 import io.dropwizard.validation.ConstraintViolations;
 import io.dropwizard.validation.Validated;
 import jakarta.validation.Valid;
@@ -43,13 +45,13 @@ public class ValidatingInvoker extends AbstractInvoker {
         List<Object> params = null;
         if (o instanceof List) {
             params = CastUtils.cast((List<?>) o);
-        } else if (o != null) {
+        } else if (nonNull(o)) {
             params = new MessageContentsList(o);
         }
         /* Get actual parameter list end */
 
         // validate each parameter in the list
-        if (params != null) {
+        if (nonNull(params)) {
             var i = 0;
             try {
                 for (var parameter : params) {
@@ -79,7 +81,7 @@ public class ValidatingInvoker extends AbstractInvoker {
     private Object validate(Annotation[] annotations, Object value) {
         var classes = findValidationGroups(annotations);
 
-        if (classes != null && classes.length > 0) {
+        if (nonNull(classes) && classes.length > 0) {
             var errors = ConstraintViolations.format(validator.validate(value, classes));
             if (errors.isEmpty()) {
                 return value;

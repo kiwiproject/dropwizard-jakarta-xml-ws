@@ -1,6 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.nonNull;
 
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.message.Message;
@@ -51,8 +52,8 @@ public class EndpointBuilder extends AbstractBuilder {
      * @param service Service implementation.
      */
     public EndpointBuilder(String path, Object service) {
-        checkArgument(service != null, "Service is null");
-        checkArgument(path != null, "Path is null");
+        checkArgument(nonNull(service), "Service is null");
+        checkArgument(nonNull(path), "Path is null");
         checkArgument(!path.isBlank(), "Path is empty");
         if (!path.startsWith("local:")) { // local transport is used in tests
             path = (path.startsWith("/")) ? path : "/" + path;

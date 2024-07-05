@@ -1,6 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.nonNull;
 
 import com.google.common.collect.ImmutableList;
 import jakarta.xml.ws.handler.Handler;
@@ -50,8 +51,8 @@ public class ClientBuilder<T> extends AbstractBuilder {
      * @param address      Endpoint URL address..
      */
     public ClientBuilder(Class<T> serviceClass, String address) {
-        checkArgument(serviceClass != null, "ServiceClass is null");
-        checkArgument(address != null, "Address is null");
+        checkArgument(nonNull(serviceClass), "ServiceClass is null");
+        checkArgument(nonNull(address), "Address is null");
         checkArgument(!address.isBlank(), "Address is empty");
         this.serviceClass = serviceClass;
         this.address = address;
