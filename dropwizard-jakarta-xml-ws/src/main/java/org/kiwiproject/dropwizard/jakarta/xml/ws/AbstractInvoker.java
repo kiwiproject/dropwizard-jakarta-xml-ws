@@ -33,7 +33,7 @@ public abstract class AbstractInvoker implements Invoker {
 
     /**
      * Rethrows exception, without requiring to handle checked exception.
-     * Type-erasure happens at compile time, therefore if E is RuntimeException,
+     * Type-erasure happens at compile time, therefore, if E is RuntimeException,
      * checked exception can be re-thrown without declaring them.
      */
     @SuppressWarnings("unchecked")

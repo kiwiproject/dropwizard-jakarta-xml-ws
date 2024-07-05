@@ -24,7 +24,7 @@ Features
 --------
 * Uses [Apache CXF](https://cxf.apache.org/) web services framework (no Spring Framework dependency).
 * Java-first and WSDL-first service development.
-* Use standard Jakarta XML Web Services annotations, without custom deployment descriptors.
+* Use standard Jakarta XML Web Services annotations without custom deployment descriptors.
 * [Metrics](https://metrics.dropwizard.io/) instrumentation: @Metered, @Timed and @ExceptionMetered annotations.
 * Dropwizard validation support.
 * Dropwizard Hibernate support (@UnitOfWork).
@@ -38,21 +38,26 @@ Background
 This library was imported from [roskart/dropwizard-jaxws](https://github.com/roskart/dropwizard-jaxws), which
 as of November 2023 seems to be no longer maintained by the original creator.
 
-Since we are still using this library in our services which use Dropwizard and Jakarta XML Web Services, we decided to import the original repository and continue maintaining it for our own use, and anyone else who might want to use it. _We make no guarantees whatsoever about how long we will maintain it, and also plan to make our own changes such as changing the base package name to org.kiwiproject to be consistent with our other libraries._
+Since we are still using this library in our REST web services that use Dropwizard and Jakarta XML Web Services,
+we decided to import the original repository and continue maintaining it for our own use.
+And of course, anyone else who might want to use it.
+
+_We make no guarantees whatsoever about how long we will maintain it, and also plan to make
+our own changes such as changing the base package name to org.kiwiproject to be consistent with our other libraries._
 
 All other [kiwiproject](https://github.com/kiwiproject/) projects are MIT-licensed. However, because the original
 `dropwizard-jaxws` uses the Apache 2.0 license, we are keeping the Apache 2.0 license (otherwise to switch to MIT we
-would have to gain consent of all contributors, which we do not want to do and probably can't since the original
+would have to gain consent of all contributors, which we do not want to do. And, we probably can't since the original
 author has not been active since October 2022).
 
-Another thing to note is that we _imported_ this repository from the original, so that it is a "disconnected fork". We
+Another thing to note is that we _imported_ this repository from the original, so that it is a "disconnected fork." We
 did not want a reference to the original repository since it seems no longer maintained and so no changes here will ever
-be pushed back upstream. Thus, while we maintain the history that this is a fork , it is completely disconnected and is
+be pushed back upstream. Thus, while we maintain the history that this is a fork, it is completely disconnected and is
 now a standalone (normal) repository.
 
 Migrating from roskart/dropwizard-jaxws
 ---------------------------------------
-There are two things you need to do in order to migrate. First, change the Maven coordinates so that the
+There are two things you need to do to migrate. First, change the Maven coordinates so that the
 groupId is org.kiwiproject, the artifactId is dropwizard-jakarta-xml-ws, and choose the latest version.
 
 Second, when we imported this repository, we updated it from the Dropwizard 2.x and JAX-WS to Dropwizard 4.x
@@ -63,8 +68,9 @@ to [Jakarta XML Web Services](https://mvnrepository.com/artifact/jakarta.xml).
 For the initial [0.5.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases/tag/v0.5.0) version, we will
 retain the original package names (`com.roskart.dropwizard.jaxws`).
 
-Release [0.6.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases/tag/v0.6.0) will remove deprecated code, i.e. the deprecated methods in `JAXWSBundle`. It will also
-rename the modules so that they are consistent, i.e. rename `dropwizard-jaxws` to `dropwizard-jakarta-xml-ws`.
+Release [0.6.0](https://github.com/kiwiproject/dropwizard-jakarta-xml-ws/releases/tag/v0.6.0) will remove
+deprecated code, i.e., the deprecated methods in `JAXWSBundle`. It will also
+rename the modules so that they are consistent, i.e., rename `dropwizard-jaxws` to `dropwizard-jakarta-xml-ws`.
 Finally, 0.6.0 *comments out* the Maven Shade plugin in the POM of `dropwizard-jakarta-xml-ws-example` so
 that the JAR deployed to Maven Central is small (a few KB instead of the 40+ MB uber-jar).
 

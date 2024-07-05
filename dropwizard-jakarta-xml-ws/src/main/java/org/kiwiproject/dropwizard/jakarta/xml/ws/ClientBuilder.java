@@ -45,7 +45,7 @@ public class ClientBuilder<T> extends AbstractBuilder {
     }
 
     /**
-     * Create new ClientBuilder. Endpoint will be published relative to the CXF servlet path.
+     * Create a new ClientBuilder. Endpoint will be published relative to the CXF servlet path.
      *
      * @param serviceClass Service interface class.
      * @param address      Endpoint URL address..

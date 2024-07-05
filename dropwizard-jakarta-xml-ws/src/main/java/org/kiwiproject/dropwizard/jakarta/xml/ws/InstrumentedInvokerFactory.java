@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Provides factory method for creating instrumented CXF invoker chain.
+ * Provides factory methods for creating an instrumented CXF invoker chain.
  *
  * @see InstrumentedInvokers
  * @see com.codahale.metrics.jersey3.InstrumentedResourceMethodApplicationListener
@@ -84,7 +84,7 @@ public class InstrumentedInvokerFactory {
     /**
      * Based on the private chooseName method in
      * com.codahale.metrics.jerseyX.InstrumentedResourceMethodApplicationListener,
-     * where X is Jersey version such as 2, 3, 31 (for 3.1), etc.
+     * where X is a Jersey version such as 2, 3, 31 (for 3.1), etc.
      *
      * @see com.codahale.metrics.jersey3.InstrumentedResourceMethodApplicationListener
      */
@@ -111,7 +111,7 @@ public class InstrumentedInvokerFactory {
 
 
     /**
-     * Factory method for creating instrumented invoker chain.
+     * Factory method for creating an instrumented invoker chain.
      */
     public Invoker create(Object service, Invoker rootInvoker) {
 

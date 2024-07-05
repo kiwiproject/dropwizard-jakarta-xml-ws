@@ -41,9 +41,9 @@ public class JakartaXmlWsEnvironment {
 
         System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
         /*
-        Instruct CXF to use CXFBusFactory instead of SpringBusFactory. CXFBusFactory provides ExtensionManagerBus
-        which loads extension based on contents of META-INF/cxf/bus-extensions.txt file. Many CXF modules contain
-        such file. When building shaded jar for dropwizard service, these files have to be merged into single
+        Instruct CXF to use CXFBusFactory instead of SpringBusFactory. CXFBusFactory provides ExtensionManagerBus,
+        which loads an extension based on the contents of the META-INF/cxf/bus-extensions.txt file. Many CXF modules
+        contain this file. When building shaded jar for dropwizard service, these files have to be merged into single
         bus-extension.txt file by using AppendingTransformer with Maven shade plugin.
         */
         System.setProperty(BusFactory.BUS_FACTORY_PROPERTY_NAME, "org.apache.cxf.bus.CXFBusFactory");

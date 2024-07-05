@@ -43,14 +43,14 @@ public class ValidatingInvoker extends AbstractInvoker {
         // get annotations declared on parameters
         Annotation[][] parameterAnnotations = this.getTargetMethod(exchange).getParameterAnnotations();
 
-        /* Get actual parameter list start (code copied from org.apache.cxf.service.invoker.AbstractInvoker.invoke) */
+        /* Begin: Get the actual parameter list (code copied from org.apache.cxf.service.invoker.AbstractInvoker.invoke) */
         List<Object> params = null;
         if (o instanceof List) {
             params = CastUtils.cast((List<?>) o);
         } else if (nonNull(o)) {
             params = new MessageContentsList(o);
         }
-        /* Get actual parameter list end */
+        /* End: Get the actual parameter list */
 
         // validate each parameter in the list
         if (nonNull(params)) {

@@ -54,7 +54,7 @@ class InstrumentedInvokerFactoryTest {
     MetricRegistry mockMetricRegistry;
     InstrumentedInvokerFactory invokerBuilder;
     InstrumentedService instrumentedService;
-    // CXF Exchange contains message exchange and is used by Invoker to obtain invoked method name
+    // CXF Exchange contains message exchange and is used by Invoker to get invoked method name
     Exchange exchange;
 
     /* Invokers that invoke test service implementation */
@@ -94,8 +94,9 @@ class InstrumentedInvokerFactoryTest {
     }
 
     /**
-     * Utility method that mimics runtime CXF behaviour. Enables AbstractInvoker.getTargetMethod to work properly
-     * during the test.
+     * Utility method that mimics runtime CXF behavior.
+     * <p>
+     * Enables AbstractInvoker.getTargetMethod to work properly during the test.
      */
     private void setTargetMethod(Exchange exchange, String methodName, Class<?>... parameterTypes) {
         try {
