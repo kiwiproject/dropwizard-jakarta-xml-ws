@@ -14,11 +14,11 @@ class EndpointBuilderTest {
 
     @Test
     void buildEndpoint() {
-        Object service = new Object();
-        String path = "/foo";
-        String publishedUrl = "http://external/url";
-        BasicAuthentication basicAuth = mock(BasicAuthentication.class);
-        SessionFactory sessionFactory = mock(SessionFactory.class);
+        var service = new Object();
+        var path = "/foo";
+        var publishedUrl = "http://external/url";
+        var basicAuth = mock(BasicAuthentication.class);
+        var sessionFactory = mock(SessionFactory.class);
         Interceptor<?> inInterceptor = mock(Interceptor.class);
         Interceptor<?> inFaultInterceptor = mock(Interceptor.class);
         Interceptor<?> outInterceptor = mock(Interceptor.class);
@@ -26,7 +26,7 @@ class EndpointBuilderTest {
         Map<String, Object> props = new HashMap<>();
         props.put("key", "value");
 
-        EndpointBuilder builder = new EndpointBuilder(path, service)
+        var builder = new EndpointBuilder(path, service)
                 .publishedEndpointUrl(publishedUrl)
                 .authentication(basicAuth)
                 .sessionFactory(sessionFactory)

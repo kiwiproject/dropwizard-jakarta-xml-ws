@@ -8,7 +8,6 @@ import org.apache.cxf.common.security.UsernameToken;
 import org.apache.cxf.configuration.security.AuthorizationPolicy;
 import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.interceptor.Fault;
-import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
@@ -52,20 +51,20 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
     @Override
     public void handleMessage(final Message message) throws Fault {
 
-        final Exchange exchange = message.getExchange();
+        final var exchange = message.getExchange();
 
         BasicCredentials credentials = null;
 
         try {
-            AuthorizationPolicy policy = message.get(AuthorizationPolicy.class);
+            var policy = message.get(AuthorizationPolicy.class);
             if (policy != null && policy.getUserName() != null && policy.getPassword() != null) {
                 credentials = new BasicCredentials(policy.getUserName(), policy.getPassword());
             } else {
                 // try the WS-Security UsernameToken
-                SecurityToken token = message.get(SecurityToken.class);
+                var token = message.get(SecurityToken.class);
                 if (token != null && token.getTokenType() == TokenType.UsernameToken) {
-                    UsernameToken ut = (UsernameToken) token;
-                    credentials = new BasicCredentials(ut.getName(), ut.getPassword());
+                    var usernameToken = (UsernameToken) token;
+                    credentials = new BasicCredentials(usernameToken.getName(), usernameToken.getPassword());
                 }
             }
 
@@ -90,7 +89,7 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
     }
 
     private void sendErrorResponse(Message message, int responseCode) {
-        Message outMessage = getOutMessage(message);
+        var outMessage = getOutMessage(message);
         outMessage.put(Message.RESPONSE_CODE, responseCode);
         // Set the response headers
         @SuppressWarnings("unchecked")
@@ -109,10 +108,10 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
     }
 
     private Message getOutMessage(Message inMessage) {
-        Exchange exchange = inMessage.getExchange();
-        Message outMessage = exchange.getOutMessage();
+        var exchange = inMessage.getExchange();
+        var outMessage = exchange.getOutMessage();
         if (outMessage == null) {
-            Endpoint endpoint = exchange.get(Endpoint.class);
+            var endpoint = exchange.get(Endpoint.class);
             outMessage = endpoint.getBinding().createMessage();
             exchange.setOutMessage(outMessage);
         }
@@ -121,15 +120,15 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
     }
 
     private Conduit getConduit(Message inMessage) throws IOException {
-        Exchange exchange = inMessage.getExchange();
-        Conduit conduit = exchange.getDestination().getBackChannel(inMessage);
+        var exchange = inMessage.getExchange();
+        var conduit = exchange.getDestination().getBackChannel(inMessage);
         exchange.setConduit(conduit);
         return conduit;
     }
 
     private void close(Message outMessage) throws IOException {
-        OutputStream os = outMessage.getContent(OutputStream.class);
-        os.flush();
-        os.close();
+        var outputStream = outMessage.getContent(OutputStream.class);
+        outputStream.flush();
+        outputStream.close();
     }
 }

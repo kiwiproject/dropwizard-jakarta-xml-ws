@@ -14,7 +14,6 @@ import org.apache.cxf.message.MessageContentsList;
 import org.apache.cxf.service.invoker.Invoker;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -51,9 +50,9 @@ public class ValidatingInvoker extends AbstractInvoker {
 
         // validate each parameter in the list
         if (params != null) {
-            int i = 0;
+            var i = 0;
             try {
-                for (Object parameter : params) {
+                for (var parameter : params) {
                     if (parameter == null || !AsyncHandler.class.isAssignableFrom(parameter.getClass())) {
                         validate(parameterAnnotations[i++], parameter);
                     }
@@ -78,19 +77,19 @@ public class ValidatingInvoker extends AbstractInvoker {
      * java.lang.IllegalArgumentException: HV000116: The object to be validated must not be null.
      */
     private Object validate(Annotation[] annotations, Object value) {
-        final Class<?>[] classes = findValidationGroups(annotations);
+        var classes = findValidationGroups(annotations);
 
         if (classes != null && classes.length > 0) {
-            final Collection<String> errors = ConstraintViolations.format(
-                    validator.validate(value, classes));
-
-            if (!errors.isEmpty()) {
-                var message = new StringBuilder("\n");
-                for (String error : errors) {
-                    message.append("    ").append(error).append("\n");
-                }
-                throw new ValidationException(message.toString());
+            var errors = ConstraintViolations.format(validator.validate(value, classes));
+            if (errors.isEmpty()) {
+                return value;
             }
+
+            var message = new StringBuilder("\n");
+            for (var error : errors) {
+                message.append("    ").append(error).append("\n");
+            }
+            throw new ValidationException(message.toString());
         }
 
         return value;
@@ -100,7 +99,7 @@ public class ValidatingInvoker extends AbstractInvoker {
      * Copied from com.yammer.dropwizard.jersey.jackson.JacksonMessageBodyProvider#findValidationGroups()
      */
     private Class<?>[] findValidationGroups(Annotation[] annotations) {
-        for (Annotation annotation : annotations) {
+        for (var annotation : annotations) {
             if (annotation.annotationType() == Valid.class) {
                 return DEFAULT_GROUP_ARRAY;
             } else if (annotation.annotationType() == Validated.class) {

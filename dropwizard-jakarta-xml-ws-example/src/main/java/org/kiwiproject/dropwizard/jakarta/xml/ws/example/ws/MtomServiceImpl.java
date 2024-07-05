@@ -23,10 +23,10 @@ public class MtomServiceImpl implements MtomService {
     @Override
     public HelloResponse hello(Hello parameters) {
         try {
-            byte[] bin = IOUtils.readBytesFromStream(parameters.getBinary().getInputStream());
-            HelloResponse response = new HelloResponse();
+            var bytes = IOUtils.readBytesFromStream(parameters.getBinary().getInputStream());
+            var response = new HelloResponse();
             response.setTitle(parameters.getTitle());
-            response.setBinary(new DataHandler(new ByteArrayDataSource(bin,
+            response.setBinary(new DataHandler(new ByteArrayDataSource(bytes,
                     parameters.getBinary().getContentType())));
             return response;
         } catch (IOException e) {

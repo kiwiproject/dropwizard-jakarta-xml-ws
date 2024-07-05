@@ -7,7 +7,6 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import org.apache.cxf.ext.logging.LoggingInInterceptor;
 import org.apache.cxf.ext.logging.LoggingOutInterceptor;
-import org.apache.cxf.jaxws.EndpointImpl;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.BasicAuthentication;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.ClientBuilder;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.EndpointBuilder;
@@ -63,45 +62,45 @@ public class JakartaXmlWsExampleApplication extends Application<JakartaXmlWsExam
 
         // Hello world service
         @SuppressWarnings("unused")
-        EndpointImpl e = jwsBundle.publishEndpoint(
+        var endpoint = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/simple", new SimpleService()));
 
         // publishEndpoint returns javax.xml.ws.Endpoint to enable further customization.
         // e.getProperties().put(...);
 
         // Publish Hello world service again using different JakartaXmlWsBundle instance
-        e = anotherJwsBundle.publishEndpoint(
+        endpoint = anotherJwsBundle.publishEndpoint(
                 new EndpointBuilder("/simple", new SimpleService()));
 
         // Java first service protected with basic authentication
-        e = jwsBundle.publishEndpoint(
+        endpoint = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/javafirst", new JavaFirstServiceImpl())
                         .authentication(new BasicAuthentication(new BasicAuthenticator(), "TOP_SECRET")));
 
         // WSDL first service using server side Jakarta XML Web Services handler and CXF logging interceptors.
         // The server handler is defined in the wsdlfirstservice-handlerchain.xml file, via the
         // HandlerChain annotation on WsdlFirstServiceImpl
-        e = jwsBundle.publishEndpoint(
+        endpoint = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/wsdlfirst", new WsdlFirstServiceImpl())
                         .cxfInInterceptors(new LoggingInInterceptor())
                         .cxfOutInterceptors(new LoggingOutInterceptor()));
 
         // Service using Hibernate
-        PersonDAO personDAO = new PersonDAO(hibernate.getSessionFactory());
-        e = jwsBundle.publishEndpoint(
+        var personDAO = new PersonDAO(hibernate.getSessionFactory());
+        endpoint = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/hibernate",
                         new HibernateExampleService(personDAO))
                         .sessionFactory(hibernate.getSessionFactory()));
 
         // Publish the same service again using different JakartaXmlWsBundle instance
-        e = anotherJwsBundle.publishEndpoint(
+        endpoint = anotherJwsBundle.publishEndpoint(
                 new EndpointBuilder("/hibernate",
                         new HibernateExampleService(personDAO))
                         .sessionFactory(hibernate.getSessionFactory()));
 
         // WSDL first service using MTOM. Invoking enableMTOM on EndpointBuilder is not necessary
         // if you use @MTOM Jakarta XML Web Services annotation on your service implementation class.
-        e = jwsBundle.publishEndpoint(
+        endpoint = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/mtom", new MtomServiceImpl())
                         .enableMtom()
         );

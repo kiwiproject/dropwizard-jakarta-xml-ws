@@ -1,7 +1,6 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws.example.db;
 
 import io.dropwizard.hibernate.AbstractDAO;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.example.core.Person;
@@ -19,15 +18,15 @@ public class PersonDAO extends AbstractDAO<Person> {
 
         // set up embedded database
 
-        Session sess = sessionFactory.openSession();
+        var session = sessionFactory.openSession();
         try {
-            sess.beginTransaction();
-            sess.createNativeQuery("create table people(id bigint primary key auto_increment not null, " +
+            session.beginTransaction();
+            session.createNativeQuery("create table people(id bigint primary key auto_increment not null, " +
                     "fullname varchar(256) not null, jobtitle varchar(256) not null);", Void.class).executeUpdate();
-            sess.createNativeQuery("create sequence hibernate_sequence", Void.class).executeUpdate();
+            session.createNativeQuery("create sequence hibernate_sequence", Void.class).executeUpdate();
         } finally {
-            sess.getTransaction().commit();
-            sess.close();
+            session.getTransaction().commit();
+            session.close();
         }
     }
 
@@ -41,7 +40,7 @@ public class PersonDAO extends AbstractDAO<Person> {
 
     public List<Person> findAll() {
         @SuppressWarnings("unchecked")
-        Query<Person> query =
+        var query =
                 (Query<Person>) namedQuery("org.kiwiproject.dropwizard.jakarta.xml.ws.example.core.Person.findAll");
         return list(query);
     }

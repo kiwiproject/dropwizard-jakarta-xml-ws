@@ -86,10 +86,10 @@ class UnitOfWorkInvokerFactoryTest {
     @BeforeEach
     void setUp() {
         exchange = mock(Exchange.class);
-        BindingOperationInfo boi = mock(BindingOperationInfo.class);
-        when(exchange.getBindingOperationInfo()).thenReturn(boi);
-        OperationInfo oi = mock(OperationInfo.class);
-        when(boi.getOperationInfo()).thenReturn(oi);
+        var bindingOperationInfo = mock(BindingOperationInfo.class);
+        when(exchange.getBindingOperationInfo()).thenReturn(bindingOperationInfo);
+        var operationInfo = mock(OperationInfo.class);
+        when(bindingOperationInfo.getOperationInfo()).thenReturn(operationInfo);
         invokerBuilder = new UnitOfWorkInvokerFactory();
         fooService = new FooService();
         barService = new BarService();
@@ -108,8 +108,8 @@ class UnitOfWorkInvokerFactoryTest {
     private void setTargetMethod(Exchange exchange, Class<?> serviceClass, String methodName, Class<?>... parameterTypes) {
 
         try {
-            OperationInfo oi = exchange.getBindingOperationInfo().getOperationInfo();
-            when(oi.getProperty(Method.class.getName()))
+            var operationInfo = exchange.getBindingOperationInfo().getOperationInfo();
+            when(operationInfo.getProperty(Method.class.getName()))
                     .thenReturn(serviceClass.getMethod(methodName, parameterTypes));
         } catch (Exception e) {
             throw new RuntimeException("setTargetMethod failed", e);
@@ -118,10 +118,10 @@ class UnitOfWorkInvokerFactoryTest {
 
     @Test
     void noAnnotation() {
-        Invoker invoker = invokerBuilder.create(fooService, new FooInvoker(), sessionFactory);
+        var invoker = invokerBuilder.create(fooService, new FooInvoker(), sessionFactory);
         this.setTargetMethod(exchange, FooService.class, "foo"); // simulate CXF behavior
 
-        Object result = invoker.invoke(exchange, null);
+        var result = invoker.invoke(exchange, null);
         assertThat(result).isEqualTo("foo return");
 
         verifyNoInteractions(sessionFactory);
@@ -145,10 +145,10 @@ class UnitOfWorkInvokerFactoryTest {
     @Test
     void unitOfWorkAnnotation() {
         // use underlying invoker which invokes fooService.unitOfWork(false)
-        Invoker invoker = invokerBuilder.create(fooService, new UnitOfWorkInvoker(false), sessionFactory);
+        var invoker = invokerBuilder.create(fooService, new UnitOfWorkInvoker(false), sessionFactory);
         this.setTargetMethod(exchange, FooService.class, "unitOfWork", boolean.class); // simulate CXF behavior
 
-        Object result = invoker.invoke(exchange, null);
+        var result = invoker.invoke(exchange, null);
         assertThat(result).isEqualTo("unitOfWork return");
 
         verify(session, times(1)).beginTransaction();
@@ -160,7 +160,7 @@ class UnitOfWorkInvokerFactoryTest {
     @Test
     void unitOfWorkWithException() {
         // use underlying invoker which invokes fooService.unitOfWork(true) - exception is thrown
-        Invoker invoker = invokerBuilder.create(fooService, new UnitOfWorkInvoker(true), sessionFactory);
+        var invoker = invokerBuilder.create(fooService, new UnitOfWorkInvoker(true), sessionFactory);
         this.setTargetMethod(exchange, FooService.class, "unitOfWork", boolean.class);  // simulate CXF behavior
 
         assertThatRuntimeException()

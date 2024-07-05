@@ -8,8 +8,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.apache.cxf.helpers.IOUtils;
-import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.mtomservice.Hello;
-import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.mtomservice.HelloResponse;
 import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.mtomservice.MtomService;
 import ws.example.ws.xml.jakarta.dropwizard.kiwiproject.org.mtomservice.ObjectFactory;
 
@@ -31,16 +29,16 @@ public class AccessMtomServiceResource {
     @Timed
     public String getFoo() {
 
-        ObjectFactory of = new ObjectFactory();
-        Hello h = of.createHello();
-        h.setTitle("Hello");
-        h.setBinary(new DataHandler(new ByteArrayDataSource("test".getBytes(), "text/plain")));
+        var objectFactory = new ObjectFactory();
+        var hello = objectFactory.createHello();
+        hello.setTitle("Hello");
+        hello.setBinary(new DataHandler(new ByteArrayDataSource("test".getBytes(), "text/plain")));
 
-        HelloResponse hr = mtomServiceClient.hello(h);
+        var helloResponse = mtomServiceClient.hello(hello);
 
         try {
-            return "Hello response: " + hr.getTitle() + ", " +
-                    IOUtils.readStringFromStream(hr.getBinary().getInputStream()) +
+            return "Hello response: " + helloResponse.getTitle() + ", " +
+                    IOUtils.readStringFromStream(helloResponse.getBinary().getInputStream()) +
                     " at " + LocalDateTime.now();
         } catch (IOException e) {
             throw new UncheckedIOException(e);

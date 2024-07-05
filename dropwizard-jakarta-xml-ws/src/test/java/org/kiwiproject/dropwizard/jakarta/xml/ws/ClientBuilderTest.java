@@ -19,7 +19,7 @@ class ClientBuilderTest {
         Interceptor<?> outInterceptor = mock(Interceptor.class);
         Interceptor<?> outFaultInterceptor = mock(Interceptor.class);
 
-        ClientBuilder<Object> builder = new ClientBuilder<>(Object.class, "address")
+        var builder = new ClientBuilder<>(Object.class, "address")
                 .connectTimeout(1234)
                 .receiveTimeout(5678)
                 .handlers(handler, handler)

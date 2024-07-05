@@ -5,21 +5,16 @@ import static com.google.common.base.Preconditions.checkArgument;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import jakarta.xml.ws.BindingProvider;
-import jakarta.xml.ws.handler.Handler;
 import jakarta.xml.ws.soap.SOAPBinding;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
-import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.endpoint.ServerRegistry;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.service.invoker.Invoker;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
-import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +51,7 @@ public class JakartaXmlWsEnvironment {
     }
 
     public HttpServlet buildServlet() {
-        CXFNonSpringServlet cxf = new CXFNonSpringServlet();
+        var cxf = new CXFNonSpringServlet();
         cxf.setBus(bus);
         return cxf;
     }
@@ -82,15 +77,15 @@ public class JakartaXmlWsEnvironment {
     }
 
     public void logEndpoints() {
-        ServerRegistry sr = bus.getExtension(org.apache.cxf.endpoint.ServerRegistry.class);
-        if (!sr.getServers().isEmpty()) {
+        var serverRegistry = bus.getExtension(org.apache.cxf.endpoint.ServerRegistry.class);
+        if (!serverRegistry.getServers().isEmpty()) {
             var endpoints = new StringBuilder();
-            for (Server s : sr.getServers()) {
+            for (var server : serverRegistry.getServers()) {
                 endpoints.append("    ")
                         .append(this.defaultPath)
-                        .append(s.getEndpoint().getEndpointInfo().getAddress())
+                        .append(server.getEndpoint().getEndpointInfo().getAddress())
                         .append(" (")
-                        .append(s.getEndpoint().getEndpointInfo().getInterface().getName())
+                        .append(server.getEndpoint().getEndpointInfo().getInterface().getName())
                         .append(")\n");
             }
             LOG.info("Jakarta XML Web Services service endpoints [{}]:\n\n{}", this.defaultPath, endpoints);
@@ -106,68 +101,68 @@ public class JakartaXmlWsEnvironment {
     public EndpointImpl publishEndpoint(EndpointBuilder endpointBuilder) {
         checkArgument(endpointBuilder != null, "EndpointBuilder is null");
 
-        EndpointImpl cxfendpoint = new EndpointImpl(bus, endpointBuilder.getService());
+        var cxfEndpoint = new EndpointImpl(bus, endpointBuilder.getService());
         if (endpointBuilder.publishedEndpointUrl() != null) {
-            cxfendpoint.setPublishedEndpointUrl(endpointBuilder.publishedEndpointUrl());
+            cxfEndpoint.setPublishedEndpointUrl(endpointBuilder.publishedEndpointUrl());
         } else if (publishedEndpointUrlPrefix != null) {
-            cxfendpoint.setPublishedEndpointUrl(publishedEndpointUrlPrefix + endpointBuilder.getPath());
+            cxfEndpoint.setPublishedEndpointUrl(publishedEndpointUrlPrefix + endpointBuilder.getPath());
         }
-        cxfendpoint.publish(endpointBuilder.getPath());
+        cxfEndpoint.publish(endpointBuilder.getPath());
 
         // MTOM support
         if (endpointBuilder.isMtomEnabled()) {
-            ((SOAPBinding) cxfendpoint.getBinding()).setMTOMEnabled(true);
+            ((SOAPBinding) cxfEndpoint.getBinding()).setMTOMEnabled(true);
         }
 
-        Invoker invoker = cxfendpoint.getService().getInvoker();
+        var invoker = cxfEndpoint.getService().getInvoker();
 
         // validating invoker
-        ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
-        invoker = this.createValidatingInvoker(invoker, vf.getValidator());
+        var validatorFactory = Validation.buildDefaultValidatorFactory();
+        invoker = this.createValidatingInvoker(invoker, validatorFactory.getValidator());
 
         if (endpointBuilder.getSessionFactory() != null) {
             // Add invoker to handle UnitOfWork annotations. Note that this invoker is set up before
             // instrumented invoker(s) in order for instrumented invoker(s) to wrap "unit of work" invoker.
             invoker = unitOfWorkInvokerBuilder.create(
                     endpointBuilder.getService(), invoker, endpointBuilder.getSessionFactory());
-            cxfendpoint.getService().setInvoker(invoker);
+            cxfEndpoint.getService().setInvoker(invoker);
         }
 
         // Replace CXF service invoker with instrumented invoker(s)
         invoker = instrumentedInvokerBuilder.create(endpointBuilder.getService(), invoker);
-        cxfendpoint.getService().setInvoker(invoker);
+        cxfEndpoint.getService().setInvoker(invoker);
 
         if (endpointBuilder.getAuthentication() != null) {
             // Configure CXF in interceptor to handle basic authentication
-            BasicAuthenticationInterceptor basicAuthInterceptor = this.createBasicAuthenticationInterceptor();
+            var basicAuthInterceptor = this.createBasicAuthenticationInterceptor();
             basicAuthInterceptor.setAuthenticator(endpointBuilder.getAuthentication());
-            cxfendpoint.getInInterceptors().add(basicAuthInterceptor);
+            cxfEndpoint.getInInterceptors().add(basicAuthInterceptor);
         }
 
         // CXF interceptors
 
         if (endpointBuilder.getCxfInInterceptors() != null) {
-            cxfendpoint.getInInterceptors().addAll(endpointBuilder.getCxfInInterceptors());
+            cxfEndpoint.getInInterceptors().addAll(endpointBuilder.getCxfInInterceptors());
         }
 
         if (endpointBuilder.getCxfInFaultInterceptors() != null) {
-            cxfendpoint.getInFaultInterceptors().addAll(endpointBuilder.getCxfInFaultInterceptors());
+            cxfEndpoint.getInFaultInterceptors().addAll(endpointBuilder.getCxfInFaultInterceptors());
         }
 
         if (endpointBuilder.getCxfOutInterceptors() != null) {
-            cxfendpoint.getOutInterceptors().addAll(endpointBuilder.getCxfOutInterceptors());
+            cxfEndpoint.getOutInterceptors().addAll(endpointBuilder.getCxfOutInterceptors());
         }
 
         if (endpointBuilder.getCxfOutFaultInterceptors() != null) {
-            cxfendpoint.getOutFaultInterceptors().addAll(endpointBuilder.getCxfOutFaultInterceptors());
+            cxfEndpoint.getOutFaultInterceptors().addAll(endpointBuilder.getCxfOutFaultInterceptors());
         }
 
         if (endpointBuilder.getProperties() != null) {
-            cxfendpoint.getProperties().putAll(
+            cxfEndpoint.getProperties().putAll(
                     endpointBuilder.getProperties());
         }
 
-        return cxfendpoint;
+        return cxfEndpoint;
     }
 
     /**
@@ -179,13 +174,13 @@ public class JakartaXmlWsEnvironment {
      */
     public <T> T getClient(ClientBuilder<T> clientBuilder) {
 
-        JaxWsProxyFactoryBean proxyFactory = new JaxWsProxyFactoryBean();
+        var proxyFactory = new JaxWsProxyFactoryBean();
         proxyFactory.setServiceClass(clientBuilder.getServiceClass());
         proxyFactory.setAddress(clientBuilder.getAddress());
 
         // Jakarta XML Web Services handlers
         if (clientBuilder.getHandlers() != null) {
-            for (Handler h : clientBuilder.getHandlers()) {
+            for (var h : clientBuilder.getHandlers()) {
                 proxyFactory.getHandlers().add(h);
             }
         }
@@ -209,17 +204,17 @@ public class JakartaXmlWsEnvironment {
             proxyFactory.getOutFaultInterceptors().addAll(clientBuilder.getCxfOutFaultInterceptors());
         }
 
-        T proxy = clientBuilder.getServiceClass().cast(proxyFactory.create());
+        var proxy = clientBuilder.getServiceClass().cast(proxyFactory.create());
 
         // MTOM support
         if (clientBuilder.isMtomEnabled()) {
-            BindingProvider bp = (BindingProvider) proxy;
-            SOAPBinding binding = (SOAPBinding) bp.getBinding();
+            var bp = (BindingProvider) proxy;
+            var binding = (SOAPBinding) bp.getBinding();
             binding.setMTOMEnabled(true);
         }
 
-        HTTPConduit http = (HTTPConduit) ClientProxy.getClient(proxy).getConduit();
-        HTTPClientPolicy client = http.getClient();
+        var httpConduit = (HTTPConduit) ClientProxy.getClient(proxy).getConduit();
+        var client = httpConduit.getClient();
         client.setConnectionTimeout(clientBuilder.getConnectTimeout());
         client.setReceiveTimeout(clientBuilder.getReceiveTimeout());
 

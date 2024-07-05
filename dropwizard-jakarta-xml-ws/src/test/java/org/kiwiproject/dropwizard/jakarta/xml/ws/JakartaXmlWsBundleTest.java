@@ -113,9 +113,8 @@ class JakartaXmlWsBundleTest {
     @SuppressWarnings("resource")
     @Test
     void publishEndpoint() {
-
-        JakartaXmlWsBundle<?> jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
-        Object service = new Object();
+        var jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
+        var service = new Object();
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> jwsBundle.publishEndpoint(new EndpointBuilder("foo", null)))
                 .withMessage("Service is null");
@@ -129,18 +128,17 @@ class JakartaXmlWsBundleTest {
                 .isThrownBy(() -> jwsBundle.publishEndpoint(new EndpointBuilder("   ", service)))
                 .withMessage("Path is empty");
 
-        EndpointBuilder builder = mock(EndpointBuilder.class);
+        var builder = mock(EndpointBuilder.class);
         jwsBundle.publishEndpoint(builder);
         verify(jwsEnvironment).publishEndpoint(builder);
     }
 
     @Test
     void getClient() {
-
         JakartaXmlWsBundle<?> jwsBundle = new JakartaXmlWsBundle<>("/soap", jwsEnvironment);
 
         Class<?> cls = Object.class;
-        String url = "http://foo";
+        var url = "http://foo";
 
         //noinspection DataFlowIssue
         assertThatIllegalArgumentException()
@@ -160,7 +158,7 @@ class JakartaXmlWsBundleTest {
                 .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(cls, " ")))
                 .withMessage("Address is empty");
 
-        ClientBuilder<?> builder = new ClientBuilder<>(cls, url);
+        var builder = new ClientBuilder<>(cls, url);
         jwsBundle.getClient(builder);
         verify(jwsEnvironment).getClient(builder);
     }

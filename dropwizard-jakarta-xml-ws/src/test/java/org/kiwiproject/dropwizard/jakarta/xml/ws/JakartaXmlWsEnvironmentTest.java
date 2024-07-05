@@ -15,13 +15,10 @@ import jakarta.jws.WebService;
 import jakarta.mail.internet.MimeMultipart;
 import jakarta.mail.util.ByteArrayDataSource;
 import jakarta.xml.ws.BindingProvider;
-import jakarta.xml.ws.Endpoint;
 import jakarta.xml.ws.handler.Handler;
 import jakarta.xml.ws.soap.SOAPBinding;
 import org.apache.cxf.Bus;
 import org.apache.cxf.binding.soap.SoapBindingFactory;
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.frontend.WSDLGetUtils;
 import org.apache.cxf.interceptor.Fault;
@@ -36,17 +33,16 @@ import org.apache.cxf.transport.AbstractDestination;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transport.local.LocalTransportFactory;
 import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
-import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Node;
 
-import javax.wsdl.WSDLException;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
+
+import javax.wsdl.WSDLException;
 
 class JakartaXmlWsEnvironmentTest {
 
@@ -143,19 +139,18 @@ class JakartaXmlWsEnvironmentTest {
 
     @Test
     void publishEndpoint() throws Exception {
-
-        Endpoint e = jwsEnvironment.publishEndpoint(new EndpointBuilder("local://path", service));
-        assertThat(e).isNotNull();
+        var endpoint = jwsEnvironment.publishEndpoint(new EndpointBuilder("local://path", service));
+        assertThat(endpoint).isNotNull();
 
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
 
-        Node soapResponse = testutils.invoke("local://path",
+        var soapResponseNode = testutils.invoke("local://path",
                 LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
-        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
+        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponseNode);
     }
 
     @Test
@@ -173,17 +168,16 @@ class JakartaXmlWsEnvironmentTest {
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
 
-        Node soapResponse = testutils.invoke("local://path",
+        var soapResponseNode = testutils.invoke("local://path",
                 LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
-        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
+        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponseNode);
     }
 
     @Test
     void publishEndpointWithAuthentication() throws Exception {
-
         jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
                         .authentication(mock(BasicAuthentication.class)));
@@ -191,19 +185,18 @@ class JakartaXmlWsEnvironmentTest {
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
 
-        Node soapResponse = testutils.invoke("local://path",
+        var soapResponseNode = testutils.invoke("local://path",
                 LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
-        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
+        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponseNode);
 
         assertThat(mockBasicAuthInterceptorInvoked).isEqualTo(1);
     }
 
     @Test
     void publishEndpointWithHibernateInvoker() throws Exception {
-
         jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
                         .sessionFactory(mock(SessionFactory.class)));
@@ -211,20 +204,19 @@ class JakartaXmlWsEnvironmentTest {
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verify(mockUnitOfWorkInvokerBuilder).create(any(), any(Invoker.class), any(SessionFactory.class));
 
-        Node soapResponse = testutils.invoke("local://path",
+        var soapResponseNode = testutils.invoke("local://path",
                 LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
-        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
+        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponseNode);
     }
 
     @Test
     void publishEndpointWithCxfInterceptors() throws Exception {
-
-        TestInterceptor inInterceptor = new TestInterceptor(Phase.UNMARSHAL);
-        TestInterceptor inInterceptor2 = new TestInterceptor(Phase.PRE_INVOKE);
-        TestInterceptor outInterceptor = new TestInterceptor(Phase.MARSHAL);
+        var inInterceptor = new TestInterceptor(Phase.UNMARSHAL);
+        var inInterceptor2 = new TestInterceptor(Phase.PRE_INVOKE);
+        var outInterceptor = new TestInterceptor(Phase.MARSHAL);
 
         jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
@@ -233,7 +225,7 @@ class JakartaXmlWsEnvironmentTest {
 
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
 
-        Node soapResponse = testutils.invoke("local://path",
+        var soapResponseNode = testutils.invoke("local://path",
                 LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
@@ -241,9 +233,9 @@ class JakartaXmlWsEnvironmentTest {
         assertThat(inInterceptor2.getInvocationCount()).isEqualTo(1);
         assertThat(outInterceptor.getInvocationCount()).isEqualTo(1);
 
-        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
+        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponseNode);
 
-        soapResponse = testutils.invoke("local://path",
+        soapResponseNode = testutils.invoke("local://path",
                 LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker, times(2)).invoke(any(Exchange.class), any());
@@ -251,24 +243,23 @@ class JakartaXmlWsEnvironmentTest {
         assertThat(inInterceptor2.getInvocationCount()).isEqualTo(2);
         assertThat(outInterceptor.getInvocationCount()).isEqualTo(2);
 
-        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
+        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponseNode);
     }
 
 
     @Test
     void publishEndpointWithMtom() throws Exception {
-
         jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
                         .enableMtom());
 
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
 
-        byte[] response = testutils.invokeBytes("local://path", LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
+        var bytes = testutils.invokeBytes("local://path", LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
-        MimeMultipart mimeMultipart = new MimeMultipart(new ByteArrayDataSource(response,
+        var mimeMultipart = new MimeMultipart(new ByteArrayDataSource(bytes,
                 "application/xop+xml; charset=UTF-8; type=\"text/xml\""));
         assertThat(mimeMultipart.getCount()).isEqualTo(1);
         testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse",
@@ -286,40 +277,39 @@ class JakartaXmlWsEnvironmentTest {
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
 
-        Server server = testutils.getServerForAddress("local://path");
-        AbstractDestination destination = (AbstractDestination) server.getDestination();
-        String publishedEndpointUrl = destination.getEndpointInfo().getProperty(WSDLGetUtils.PUBLISHED_ENDPOINT_URL, String.class);
+        var server = testutils.getServerForAddress("local://path");
+        var destination = (AbstractDestination) server.getDestination();
+        var publishedEndpointUrl = destination.getEndpointInfo()
+                .getProperty(WSDLGetUtils.PUBLISHED_ENDPOINT_URL, String.class);
 
         assertThat(publishedEndpointUrl).isEqualTo("http://external.server/external/path");
     }
 
     @Test
     void publishEndpointWithProperties() throws Exception {
-
-        HashMap<String, Object> props = new HashMap<>();
+        var props = new HashMap<String, Object>();
         props.put("key", "value");
 
-        Endpoint e = jwsEnvironment.publishEndpoint(
+        var endpoint = jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
                         .properties(props));
 
-        assertThat(e).isNotNull();
-        assertThat(e.getProperties()).containsEntry("key", "value");
+        assertThat(endpoint).isNotNull();
+        assertThat(endpoint.getProperties()).containsEntry("key", "value");
 
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
 
-        Node soapResponse = testutils.invoke("local://path",
+        var soapResponseNode = testutils.invoke("local://path",
                 LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
 
-        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponse);
+        testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponseNode);
     }
 
     @Test
     void publishEndpointWithPublishedUrlPrefix() throws WSDLException {
-
         jwsEnvironment.setPublishedEndpointUrlPrefix("http://external/prefix");
 
         jwsEnvironment.publishEndpoint(
@@ -329,16 +319,16 @@ class JakartaXmlWsEnvironmentTest {
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
 
-        Server server = testutils.getServerForAddress("/path");
-        AbstractDestination destination = (AbstractDestination) server.getDestination();
-        String publishedEndpointUrl = destination.getEndpointInfo().getProperty(WSDLGetUtils.PUBLISHED_ENDPOINT_URL, String.class);
+        var server = testutils.getServerForAddress("/path");
+        var destination = (AbstractDestination) server.getDestination();
+        var publishedEndpointUrl = destination.getEndpointInfo()
+                .getProperty(WSDLGetUtils.PUBLISHED_ENDPOINT_URL, String.class);
 
         assertThat(publishedEndpointUrl).isEqualTo("http://external/prefix/path");
     }
 
     @Test
     void publishEndpointWithInvalidArguments() {
-
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> new EndpointBuilder("foo", null))
                 .withMessage("Service is null");
@@ -355,30 +345,29 @@ class JakartaXmlWsEnvironmentTest {
 
     @Test
     void getClient() {
-
         var address = "http://address";
         var handler = mock(Handler.class);
 
         // simple
-        DummyInterface clientProxy = jwsEnvironment.getClient(
+        var clientProxy = jwsEnvironment.getClient(
                 new ClientBuilder<>(DummyInterface.class, address)
         );
         assertThat(clientProxy).isInstanceOf(Proxy.class);
 
-        Client c = ClientProxy.getClient(clientProxy);
-        assertThat(c.getEndpoint().getEndpointInfo().getAddress()).isEqualTo(address);
-        assertThat(c.getEndpoint().getService()).containsEntry("endpoint.class", DummyInterface.class);
+        var client = ClientProxy.getClient(clientProxy);
+        assertThat(client.getEndpoint().getEndpointInfo().getAddress()).isEqualTo(address);
+        assertThat(client.getEndpoint().getService()).containsEntry("endpoint.class", DummyInterface.class);
         assertThat(((BindingProvider) clientProxy).getBinding().getHandlerChain()).isEmpty();
 
-        HTTPClientPolicy httpclient = ((HTTPConduit) c.getConduit()).getClient();
-        assertThat(httpclient.getConnectionTimeout()).isEqualTo(500L);
-        assertThat(httpclient.getReceiveTimeout()).isEqualTo(2000L);
+        var httpClientPolicy = ((HTTPConduit) client.getConduit()).getClient();
+        assertThat(httpClientPolicy.getConnectionTimeout()).isEqualTo(500L);
+        assertThat(httpClientPolicy.getReceiveTimeout()).isEqualTo(2000L);
 
         // with timeouts, handlers, interceptors, properties and MTOM
 
-        TestInterceptor inInterceptor = new TestInterceptor(Phase.UNMARSHAL);
-        TestInterceptor inInterceptor2 = new TestInterceptor(Phase.PRE_INVOKE);
-        TestInterceptor outInterceptor = new TestInterceptor(Phase.MARSHAL);
+        var inInterceptor = new TestInterceptor(Phase.UNMARSHAL);
+        var inInterceptor2 = new TestInterceptor(Phase.PRE_INVOKE);
+        var outInterceptor = new TestInterceptor(Phase.MARSHAL);
 
         clientProxy = jwsEnvironment.getClient(
                 new ClientBuilder<>(DummyInterface.class, address)
@@ -389,19 +378,19 @@ class JakartaXmlWsEnvironmentTest {
                         .cxfInInterceptors(inInterceptor, inInterceptor2)
                         .cxfOutInterceptors(outInterceptor)
                         .enableMtom());
-        c = ClientProxy.getClient(clientProxy);
+        client = ClientProxy.getClient(clientProxy);
         assertThat(((BindingProvider) clientProxy).getBinding().getBindingID()).isEqualTo("http://www.w3.org/2003/05/soap/bindings/HTTP/");
-        assertThat(c.getEndpoint().getEndpointInfo().getAddress()).isEqualTo(address);
-        assertThat(c.getEndpoint().getService()).containsEntry("endpoint.class", DummyInterface.class);
+        assertThat(client.getEndpoint().getEndpointInfo().getAddress()).isEqualTo(address);
+        assertThat(client.getEndpoint().getService()).containsEntry("endpoint.class", DummyInterface.class);
 
-        httpclient = ((HTTPConduit) c.getConduit()).getClient();
-        assertThat(httpclient.getConnectionTimeout()).isEqualTo(123L);
-        assertThat(httpclient.getReceiveTimeout()).isEqualTo(456L);
+        httpClientPolicy = ((HTTPConduit) client.getConduit()).getClient();
+        assertThat(httpClientPolicy.getConnectionTimeout()).isEqualTo(123L);
+        assertThat(httpClientPolicy.getReceiveTimeout()).isEqualTo(456L);
 
         assertThat(((BindingProvider) clientProxy).getBinding().getHandlerChain()).contains(handler);
 
-        BindingProvider bp = (BindingProvider) clientProxy;
-        SOAPBinding binding = (SOAPBinding) bp.getBinding();
-        assertThat(binding.isMTOMEnabled()).isTrue();
+        var bindingProvider = (BindingProvider) clientProxy;
+        var soapBinding = (SOAPBinding) bindingProvider.getBinding();
+        assertThat(soapBinding.isMTOMEnabled()).isTrue();
     }
 }

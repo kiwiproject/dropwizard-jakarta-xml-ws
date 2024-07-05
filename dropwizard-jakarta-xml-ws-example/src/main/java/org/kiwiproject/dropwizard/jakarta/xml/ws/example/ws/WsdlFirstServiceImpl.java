@@ -22,7 +22,7 @@ public class WsdlFirstServiceImpl implements WsdlFirstService {
     @Override
     @Metered
     public EchoResponse echo(Echo parameters) {
-        EchoResponse response = new EchoResponse();
+        var response = new EchoResponse();
         response.setValue(parameters.getValue());
         return response;
     }
@@ -31,7 +31,7 @@ public class WsdlFirstServiceImpl implements WsdlFirstService {
     @UseAsyncMethod
     @Metered
     public EchoResponse nonBlockingEcho(NonBlockingEcho parameters) {
-        EchoResponse response = new EchoResponse();
+        var response = new EchoResponse();
         response.setValue("Blocking: " + parameters.getValue());
         return response;
     }
@@ -40,21 +40,21 @@ public class WsdlFirstServiceImpl implements WsdlFirstService {
             final NonBlockingEcho parameters,
             final AsyncHandler<EchoResponse> asyncHandler) {
 
-        final ServerAsyncResponse<EchoResponse> sar = new ServerAsyncResponse<>();
+        final var asyncResponse = new ServerAsyncResponse<EchoResponse>();
 
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
-                EchoResponse response = new EchoResponse();
+                var response = new EchoResponse();
                 response.setValue("Non-blocking: " + parameters.getValue());
-                sar.set(response);
+                asyncResponse.set(response);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                sar.exception(e);
+                asyncResponse.exception(e);
             }
-            asyncHandler.handleResponse(sar);
+            asyncHandler.handleResponse(asyncResponse);
         }).start();
 
-        return sar;
+        return asyncResponse;
     }
 }

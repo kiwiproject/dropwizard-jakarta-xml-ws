@@ -35,13 +35,13 @@ public class InstrumentedInvokers {
         public Object invoke(Exchange exchange, Object o) {
 
             Object result;
-            String methodName = this.getTargetMethod(exchange).getName();
+            var methodName = this.getTargetMethod(exchange).getName();
 
             if (timers.containsKey(methodName)) {
                 var timer = requireNonNull(timers.get(methodName));
 
                 // Timer.Context is AutoCloseable, so this starts and closes (stops) the Timer.Context
-                try (Timer.Context ignored = timer.time()) {
+                try (var ignored = timer.time()) {
                     result = this.underlying.invoke(exchange, o);
                 }
             } else {
@@ -67,7 +67,7 @@ public class InstrumentedInvokers {
         public Object invoke(Exchange exchange, Object o) {
 
             Object result;
-            String methodName = this.getTargetMethod(exchange).getName();
+            var methodName = this.getTargetMethod(exchange).getName();
 
             if (meters.containsKey(methodName)) {
                 var meter = requireNonNull(meters.get(methodName));
@@ -112,7 +112,7 @@ public class InstrumentedInvokers {
         public Object invoke(Exchange exchange, Object o) {
 
             Object result;
-            String methodName = this.getTargetMethod(exchange).getName();
+            var methodName = this.getTargetMethod(exchange).getName();
 
             try {
                 result = this.underlying.invoke(exchange, o);

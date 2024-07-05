@@ -7,9 +7,7 @@ import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
@@ -100,10 +98,9 @@ class InstrumentedInvokerFactoryTest {
      * during the test.
      */
     private void setTargetMethod(Exchange exchange, String methodName, Class<?>... parameterTypes) {
-
         try {
-            OperationInfo oi = exchange.getBindingOperationInfo().getOperationInfo();
-            when(oi.getProperty(Method.class.getName()))
+            var operationInfo = exchange.getBindingOperationInfo().getOperationInfo();
+            when(operationInfo.getProperty(Method.class.getName()))
                     .thenReturn(InstrumentedService.class.getMethod(methodName, parameterTypes));
         } catch (Exception e) {
             throw new RuntimeException("setTargetMethod failed", e);
@@ -114,11 +111,11 @@ class InstrumentedInvokerFactoryTest {
     void setUp() {
         exchange = mock(Exchange.class);
 
-        BindingOperationInfo boi = mock(BindingOperationInfo.class);
-        when(exchange.getBindingOperationInfo()).thenReturn(boi);
+        var bindingOperationInfo = mock(BindingOperationInfo.class);
+        when(exchange.getBindingOperationInfo()).thenReturn(bindingOperationInfo);
 
-        OperationInfo oi = mock(OperationInfo.class);
-        when(boi.getOperationInfo()).thenReturn(oi);
+        var operationInfo = mock(OperationInfo.class);
+        when(bindingOperationInfo.getOperationInfo()).thenReturn(operationInfo);
 
         testMetricRegistry = new MetricRegistry();
         mockMetricRegistry = mock(MetricRegistry.class);
@@ -129,92 +126,88 @@ class InstrumentedInvokerFactoryTest {
 
     @Test
     void noAnnotation() {
-
-        Timer timer = testMetricRegistry.timer("timed");
-        Meter meter = testMetricRegistry.meter("metered");
+        var timer = testMetricRegistry.timer("timed");
+        var meter = testMetricRegistry.meter("metered");
         when(mockMetricRegistry.timer(anyString())).thenReturn(timer);
         when(mockMetricRegistry.meter(anyString())).thenReturn(meter);
 
-        long oldtimervalue = timer.getCount();
-        long oldmetervalue = meter.getCount();
+        var oldTimerValue = timer.getCount();
+        var oldMeterValue = meter.getCount();
 
-        Invoker invoker = invokerBuilder.create(instrumentedService, new FooInvoker());
+        var invoker = invokerBuilder.create(instrumentedService, new FooInvoker());
         this.setTargetMethod(exchange, "foo"); // simulate CXF behavior
 
-        Object result = invoker.invoke(exchange, null);
+        var result = invoker.invoke(exchange, null);
         assertThat(result).isEqualTo("fooReturn");
 
-        assertThat(timer.getCount()).isEqualTo(oldtimervalue);
-        assertThat(meter.getCount()).isEqualTo(oldmetervalue);
+        assertThat(timer.getCount()).isEqualTo(oldTimerValue);
+        assertThat(meter.getCount()).isEqualTo(oldMeterValue);
     }
 
     @Test
     void meteredAnnotation() {
-
-        Timer timer = testMetricRegistry.timer("timed");
-        Meter meter = testMetricRegistry.meter("metered");
+        var timer = testMetricRegistry.timer("timed");
+        var meter = testMetricRegistry.meter("metered");
         when(mockMetricRegistry.timer(anyString())).thenReturn(timer);
         when(mockMetricRegistry.meter(anyString())).thenReturn(meter);
 
-        long oldtimervalue = timer.getCount();
-        long oldmetervalue = meter.getCount();
+        var oldTimerValue = timer.getCount();
+        var oldMeterValue = meter.getCount();
 
-        Invoker invoker = invokerBuilder.create(instrumentedService, new MeteredInvoker());
+        var invoker = invokerBuilder.create(instrumentedService, new MeteredInvoker());
         this.setTargetMethod(exchange, "metered"); // simulate CXF behavior
 
-        Object result = invoker.invoke(exchange, null);
+        var result = invoker.invoke(exchange, null);
         assertThat(result).isEqualTo("meteredReturn");
 
-        assertThat(timer.getCount()).isEqualTo(oldtimervalue);
-        assertThat(meter.getCount()).isEqualTo(1 + oldmetervalue);
+        assertThat(timer.getCount()).isEqualTo(oldTimerValue);
+        assertThat(meter.getCount()).isEqualTo(1 + oldMeterValue);
     }
 
     @Test
     void timedAnnotation() {
-
-        Timer timer = testMetricRegistry.timer("timed");
-        Meter meter = testMetricRegistry.meter("metered");
+        var timer = testMetricRegistry.timer("timed");
+        var meter = testMetricRegistry.meter("metered");
         when(mockMetricRegistry.timer(anyString())).thenReturn(timer);
         when(mockMetricRegistry.meter(anyString())).thenReturn(meter);
 
-        long oldtimervalue = timer.getCount();
-        long oldmetervalue = meter.getCount();
+        var oldTimerValue = timer.getCount();
+        var oldMeterValue = meter.getCount();
 
-        Invoker invoker = invokerBuilder.create(instrumentedService, new TimedInvoker());
+        var invoker = invokerBuilder.create(instrumentedService, new TimedInvoker());
         this.setTargetMethod(exchange, "timed"); // simulate CXF behavior
 
-        Object result = invoker.invoke(exchange, null);
+        var result = invoker.invoke(exchange, null);
         assertThat(result).isEqualTo("timedReturn");
 
-        assertThat(timer.getCount()).isEqualTo(1 + oldtimervalue);
-        assertThat(meter.getCount()).isEqualTo(oldmetervalue);
+        assertThat(timer.getCount()).isEqualTo(1 + oldTimerValue);
+        assertThat(meter.getCount()).isEqualTo(oldMeterValue);
     }
 
     @Test
     void exceptionMeteredAnnotation() {
-
-        Timer timer = testMetricRegistry.timer("timed");
-        Meter meter = testMetricRegistry.meter("metered");
-        Meter exceptionmeter = testMetricRegistry.meter("exceptionMeteredExceptions");
+        var timer = testMetricRegistry.timer("timed");
+        var meter = testMetricRegistry.meter("metered");
+        var exceptionmeter = testMetricRegistry.meter("exceptionMeteredExceptions");
         when(mockMetricRegistry.timer(anyString())).thenReturn(timer);
         when(mockMetricRegistry.meter(contains("metered"))).thenReturn(meter);
         when(mockMetricRegistry.meter(contains("exceptionMetered"))).thenReturn(exceptionmeter);
 
-        long oldtimervalue = timer.getCount();
-        long oldmetervalue = meter.getCount();
-        long oldexceptionmetervalue = exceptionmeter.getCount();
+        var oldTimerValue = timer.getCount();
+        var oldMeterValue = meter.getCount();
+        var oldExceptionMeterValue = exceptionmeter.getCount();
 
         // Invoke InstrumentedResource.exceptionMetered without exception being thrown
 
-        Invoker invoker = invokerBuilder.create(instrumentedService, new ExceptionMeteredInvoker(false));
+        var invoker = invokerBuilder.create(instrumentedService, new ExceptionMeteredInvoker(false));
         this.setTargetMethod(exchange, "exceptionMetered", boolean.class); // simulate CXF behavior
 
-        Object result = invoker.invoke(exchange, null);
+        var result = invoker.invoke(exchange, null);
         assertThat(result).isEqualTo("exceptionMeteredReturn");
 
-        assertThat(timer.getCount()).isEqualTo(oldtimervalue);
-        assertThat(meter.getCount()).isEqualTo(oldmetervalue);
-        assertThat(exceptionmeter.getCount()).isEqualTo(oldexceptionmetervalue);
+        assertThat(timer.getCount()).isEqualTo(oldTimerValue);
+        assertThat(meter.getCount()).isEqualTo(oldMeterValue);
+        assertThat(exceptionmeter.getCount()).isEqualTo(oldExceptionMeterValue);
 
         // Invoke InstrumentedResource.exceptionMetered with exception being thrown
 
@@ -222,9 +215,9 @@ class InstrumentedInvokerFactoryTest {
 
         assertThatRuntimeException().isThrownBy(() -> throwingInvoker.invoke(exchange, null));
 
-        assertThat(timer.getCount()).isEqualTo(oldtimervalue);
-        assertThat(meter.getCount()).isEqualTo(oldmetervalue);
-        assertThat(exceptionmeter.getCount()).isEqualTo(1 + oldexceptionmetervalue);
+        assertThat(timer.getCount()).isEqualTo(oldTimerValue);
+        assertThat(meter.getCount()).isEqualTo(oldMeterValue);
+        assertThat(exceptionmeter.getCount()).isEqualTo(1 + oldExceptionMeterValue);
     }
 
 }
