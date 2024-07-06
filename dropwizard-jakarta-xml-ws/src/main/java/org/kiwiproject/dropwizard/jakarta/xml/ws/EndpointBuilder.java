@@ -38,8 +38,9 @@ public class EndpointBuilder extends AbstractBuilder {
         return sessionFactory;
     }
 
-    public BasicAuthentication<? extends Principal> getAuthentication() {
-        return authentication;
+    @SuppressWarnings("unchecked")
+    public <P extends Principal> BasicAuthentication<P> getAuthentication() {
+        return (BasicAuthentication<P>) authentication;
     }
 
     public Map<String, Object> getProperties() {
@@ -79,7 +80,7 @@ public class EndpointBuilder extends AbstractBuilder {
      *
      * @param authentication BasicAuthentication implementation.
      */
-    public EndpointBuilder authentication(BasicAuthentication<? extends Principal> authentication) {
+    public <P extends Principal> EndpointBuilder authentication(BasicAuthentication<P> authentication) {
         this.authentication = authentication;
         return this;
     }

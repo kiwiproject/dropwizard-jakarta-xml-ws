@@ -19,6 +19,8 @@ import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.Principal;
+
 /**
  * Performs CXF Bus setup and provides methods for publishing Jakarta XML Web Services endpoints and creating
  * Jakarta XML Web Services clients.
@@ -69,8 +71,8 @@ public class JakartaXmlWsEnvironment {
         this.unitOfWorkInvokerBuilder = unitOfWorkInvokerBuilder;
     }
 
-    protected BasicAuthenticationInterceptor createBasicAuthenticationInterceptor() {
-        return new BasicAuthenticationInterceptor();
+    protected <P extends Principal> BasicAuthenticationInterceptor<P> createBasicAuthenticationInterceptor() {
+        return new BasicAuthenticationInterceptor<>();
     }
 
     protected ValidatingInvoker createValidatingInvoker(Invoker invoker, Validator validator) {

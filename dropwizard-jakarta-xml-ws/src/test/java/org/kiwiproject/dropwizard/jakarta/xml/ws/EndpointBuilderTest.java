@@ -7,8 +7,8 @@ import static org.mockito.Mockito.mock;
 import org.apache.cxf.interceptor.Interceptor;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
+import org.kiwiproject.dropwizard.jakarta.xml.ws.auth.User;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +20,7 @@ class EndpointBuilderTest {
         var path = "/foo";
         var publishedUrl = "http://external/url";
         var sessionFactory = mock(SessionFactory.class);
-        BasicAuthentication<? extends Principal> basicAuth = mock();
+        BasicAuthentication<User> basicAuth = mock();
         Interceptor<?> inInterceptor = mock(Interceptor.class);
         Interceptor<?> inFaultInterceptor = mock(Interceptor.class);
         Interceptor<?> outInterceptor = mock(Interceptor.class);

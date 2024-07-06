@@ -58,7 +58,7 @@ class BasicAuthenticationInterceptorTest {
 
     @Test
     void shouldAuthenticateValidUser() {
-        var interceptor = new BasicAuthenticationInterceptor();
+        var interceptor = new BasicAuthenticationInterceptor<User>();
         interceptor.setAuthenticator(basicAuthentication);
         var message = createMessageWithUsernameAndPassword(USERNAME, CORRECT_PASSWORD);
 
@@ -69,7 +69,7 @@ class BasicAuthenticationInterceptorTest {
 
     @Test
     void shouldReturnUnauthorizedCodeForInvalidCredentials() {
-        var interceptor = new BasicAuthenticationInterceptor();
+        var interceptor = new BasicAuthenticationInterceptor<User>();
         interceptor.setAuthenticator(basicAuthentication);
         var message = createMessageWithUsernameAndPassword(USERNAME, "foo");
 
@@ -80,7 +80,7 @@ class BasicAuthenticationInterceptorTest {
 
     @Test
     void shouldNotCrashOnNullPassword() {
-        var interceptor = new BasicAuthenticationInterceptor();
+        var interceptor = new BasicAuthenticationInterceptor<User>();
         interceptor.setAuthenticator(basicAuthentication);
         var message = createMessageWithUsernameAndPassword(USERNAME, null);
 
@@ -91,7 +91,7 @@ class BasicAuthenticationInterceptorTest {
 
     @Test
     void shouldNotCrashOnNullUser() {
-        var interceptor = new BasicAuthenticationInterceptor();
+        var interceptor = new BasicAuthenticationInterceptor<User>();
         interceptor.setAuthenticator(basicAuthentication);
         var message = createMessageWithUsernameAndPassword(null, CORRECT_PASSWORD);
 

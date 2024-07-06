@@ -102,8 +102,8 @@ class JakartaXmlWsEnvironmentTest {
             does not get invoked by CXF
             */
             @Override
-            protected BasicAuthenticationInterceptor createBasicAuthenticationInterceptor() {
-                return new BasicAuthenticationInterceptor() {
+            protected <P extends Principal> BasicAuthenticationInterceptor<P> createBasicAuthenticationInterceptor() {
+                return new BasicAuthenticationInterceptor<>() {
                     @Override
                     public void handleMessage(Message message) throws Fault {
                         mockBasicAuthInterceptorInvoked++;

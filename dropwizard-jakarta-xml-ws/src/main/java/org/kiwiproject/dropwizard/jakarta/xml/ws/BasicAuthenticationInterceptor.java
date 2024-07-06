@@ -36,19 +36,19 @@ import java.util.Optional;
  * exchange and is available in the service implementation through a Jakarta XML Web Services
  * {@link jakarta.xml.ws.WebServiceContext WebServiceContext}.
  */
-public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Message> {
+public class BasicAuthenticationInterceptor<P extends Principal> extends AbstractPhaseInterceptor<Message> {
 
     private static final Logger LOG = LoggerFactory.getLogger(BasicAuthenticationInterceptor.class);
 
     public static final String PRINCIPAL_KEY = "dropwizard.jakarta.xml.ws.principal";
 
-    private BasicAuthentication<? extends Principal> authentication;
+    private BasicAuthentication<P> authentication;
 
     public BasicAuthenticationInterceptor() {
         super(Phase.UNMARSHAL);
     }
 
-    public void setAuthenticator(BasicAuthentication<? extends Principal> authentication) {
+    public void setAuthenticator(BasicAuthentication<P> authentication) {
         this.authentication = authentication;
     }
 
@@ -77,7 +77,7 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
                 return;
             }
 
-            Optional<? extends Principal> principal = authentication.getAuthenticator().authenticate(
+            Optional<P> principal = authentication.getAuthenticator().authenticate(
                     new BasicCredentials(credentials.getUsername(), credentials.getPassword()));
 
             if (principal.isEmpty()) {
