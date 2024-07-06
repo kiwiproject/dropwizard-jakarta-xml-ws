@@ -9,5 +9,6 @@ public class DummyService {
     @SuppressWarnings("EmptyMethod")
     @WebMethod
     public void foo() {
+        // This is a fake service that does nothing.
     }
 }
