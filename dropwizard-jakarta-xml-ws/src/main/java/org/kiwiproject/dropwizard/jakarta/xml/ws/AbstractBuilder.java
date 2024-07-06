@@ -93,6 +93,9 @@ public abstract class AbstractBuilder {
 
     /**
      * Enable MTOM for binary attachments.
+     *
+     * @see <a href="https://www.w3.org/TR/soap12-mtom/">SOAP Message Transmission Optimization Mechanism (W3C)</a>
+     * @see <a href="https://en.wikipedia.org/wiki/Message_Transmission_Optimization_Mechanism">MTOM (Wikipedia)</a>
      */
     public AbstractBuilder enableMtom() {
         this.mtomEnabled = true;

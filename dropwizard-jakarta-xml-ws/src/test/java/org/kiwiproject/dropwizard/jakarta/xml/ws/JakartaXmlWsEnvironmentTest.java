@@ -2,6 +2,7 @@ package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -57,7 +58,7 @@ class JakartaXmlWsEnvironmentTest {
     private int mockBasicAuthInterceptorInvoked;
 
 
-    // DummyInterface is used by getClient test
+    // DummyInterface is used by getClient tests
     @WebService
     public interface DummyInterface {
         @WebMethod
@@ -132,9 +133,12 @@ class JakartaXmlWsEnvironmentTest {
 
     @Test
     void buildServlet() {
-        Object result = jwsEnvironment.buildServlet();
-        assertThat(result).isInstanceOf(CXFNonSpringServlet.class);
-        assertThat(((CXFNonSpringServlet) result).getBus()).isInstanceOf(Bus.class);
+        var result = jwsEnvironment.buildServlet();
+
+        assertAll(
+                () -> assertThat(result).isInstanceOf(CXFNonSpringServlet.class),
+                () -> assertThat(((CXFNonSpringServlet) result).getBus()).isInstanceOf(Bus.class)
+        );
     }
 
     @Test
@@ -229,9 +233,11 @@ class JakartaXmlWsEnvironmentTest {
                 LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker).invoke(any(Exchange.class), any());
-        assertThat(inInterceptor.getInvocationCount()).isEqualTo(1);
-        assertThat(inInterceptor2.getInvocationCount()).isEqualTo(1);
-        assertThat(outInterceptor.getInvocationCount()).isEqualTo(1);
+        assertAll(
+                () -> assertThat(inInterceptor.getInvocationCount()).isEqualTo(1),
+                () -> assertThat(inInterceptor2.getInvocationCount()).isEqualTo(1),
+                () -> assertThat(outInterceptor.getInvocationCount()).isEqualTo(1)
+        );
 
         testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponseNode);
 
@@ -239,9 +245,11 @@ class JakartaXmlWsEnvironmentTest {
                 LocalTransportFactory.TRANSPORT_ID, SOAP_REQUEST_FILE_NAME);
 
         verify(mockInvoker, times(2)).invoke(any(Exchange.class), any());
-        assertThat(inInterceptor.getInvocationCount()).isEqualTo(2);
-        assertThat(inInterceptor2.getInvocationCount()).isEqualTo(2);
-        assertThat(outInterceptor.getInvocationCount()).isEqualTo(2);
+        assertAll(
+                () -> assertThat(inInterceptor.getInvocationCount()).isEqualTo(2),
+                () -> assertThat(inInterceptor2.getInvocationCount()).isEqualTo(2),
+                () -> assertThat(outInterceptor.getInvocationCount()).isEqualTo(2)
+        );
 
         testutils.assertValid("/soap:Envelope/soap:Body/a:fooResponse", soapResponseNode);
     }
@@ -329,23 +337,24 @@ class JakartaXmlWsEnvironmentTest {
 
     @Test
     void publishEndpointWithInvalidArguments() {
-        assertThatIllegalArgumentException()
-                .isThrownBy(() -> new EndpointBuilder("foo", null))
-                .withMessage("Service is null");
+        assertAll(
+                () -> assertThatIllegalArgumentException()
+                        .isThrownBy(() -> new EndpointBuilder("foo", null))
+                        .withMessage("Service is null"),
 
-        assertThatIllegalArgumentException()
-                .isThrownBy(() -> new EndpointBuilder(null, service))
-                .withMessage("Path is null");
+                () -> assertThatIllegalArgumentException()
+                        .isThrownBy(() -> new EndpointBuilder(null, service))
+                        .withMessage("Path is null"),
 
-        assertThatIllegalArgumentException()
-                .isThrownBy(() -> new EndpointBuilder("   ", service))
-                .withMessage("Path is empty");
+                () -> assertThatIllegalArgumentException()
+                        .isThrownBy(() -> new EndpointBuilder("   ", service))
+                        .withMessage("Path is empty")
+        );
     }
 
     @Test
-    void getClient() {
+    void getClientSimple() {
         var address = "http://address";
-        var handler = mock(Handler.class);
 
         // simple
         var clientProxy = jwsEnvironment.getClient(
@@ -354,21 +363,31 @@ class JakartaXmlWsEnvironmentTest {
         assertThat(clientProxy).isInstanceOf(Proxy.class);
 
         var client = ClientProxy.getClient(clientProxy);
-        assertThat(client.getEndpoint().getEndpointInfo().getAddress()).isEqualTo(address);
-        assertThat(client.getEndpoint().getService()).containsEntry("endpoint.class", DummyInterface.class);
-        assertThat(((BindingProvider) clientProxy).getBinding().getHandlerChain()).isEmpty();
+        assertAll(
+                () -> assertThat(client.getEndpoint().getEndpointInfo().getAddress()).isEqualTo(address),
+                () -> assertThat(client.getEndpoint().getService()).containsEntry("endpoint.class", DummyInterface.class),
+                () -> assertThat(((BindingProvider) clientProxy).getBinding().getHandlerChain()).isEmpty()
+        );
 
         var httpClientPolicy = ((HTTPConduit) client.getConduit()).getClient();
-        assertThat(httpClientPolicy.getConnectionTimeout()).isEqualTo(500L);
-        assertThat(httpClientPolicy.getReceiveTimeout()).isEqualTo(2000L);
+        assertAll(
+                () -> assertThat(httpClientPolicy.getConnectionTimeout()).isEqualTo(500L),
+                () -> assertThat(httpClientPolicy.getReceiveTimeout()).isEqualTo(2000L)
+        );
+    }
+
+    @Test
+    void getClientComplex() {
+        var address = "http://address";
 
         // with timeouts, handlers, interceptors, properties and MTOM
 
+        var handler = mock(Handler.class);
         var inInterceptor = new TestInterceptor(Phase.UNMARSHAL);
         var inInterceptor2 = new TestInterceptor(Phase.PRE_INVOKE);
         var outInterceptor = new TestInterceptor(Phase.MARSHAL);
 
-        clientProxy = jwsEnvironment.getClient(
+        var clientProxy = jwsEnvironment.getClient(
                 new ClientBuilder<>(DummyInterface.class, address)
                         .connectTimeout(123)
                         .receiveTimeout(456)
@@ -377,19 +396,24 @@ class JakartaXmlWsEnvironmentTest {
                         .cxfInInterceptors(inInterceptor, inInterceptor2)
                         .cxfOutInterceptors(outInterceptor)
                         .enableMtom());
-        client = ClientProxy.getClient(clientProxy);
-        assertThat(((BindingProvider) clientProxy).getBinding().getBindingID()).isEqualTo("http://www.w3.org/2003/05/soap/bindings/HTTP/");
-        assertThat(client.getEndpoint().getEndpointInfo().getAddress()).isEqualTo(address);
-        assertThat(client.getEndpoint().getService()).containsEntry("endpoint.class", DummyInterface.class);
 
-        httpClientPolicy = ((HTTPConduit) client.getConduit()).getClient();
-        assertThat(httpClientPolicy.getConnectionTimeout()).isEqualTo(123L);
-        assertThat(httpClientPolicy.getReceiveTimeout()).isEqualTo(456L);
-
-        assertThat(((BindingProvider) clientProxy).getBinding().getHandlerChain()).contains(handler);
-
+        var client = ClientProxy.getClient(clientProxy);
         var bindingProvider = (BindingProvider) clientProxy;
-        var soapBinding = (SOAPBinding) bindingProvider.getBinding();
-        assertThat(soapBinding.isMTOMEnabled()).isTrue();
+        assertAll(
+                () -> assertThat(bindingProvider.getBinding().getBindingID()).isEqualTo("http://www.w3.org/2003/05/soap/bindings/HTTP/"),
+                () -> assertThat(bindingProvider.getBinding().getHandlerChain()).contains(handler),
+                () -> {
+                    var soapBinding = (SOAPBinding) bindingProvider.getBinding();
+                    assertThat(soapBinding.isMTOMEnabled()).isTrue();
+                },
+                () -> assertThat(client.getEndpoint().getEndpointInfo().getAddress()).isEqualTo(address),
+                () -> assertThat(client.getEndpoint().getService()).containsEntry("endpoint.class", DummyInterface.class)
+        );
+
+        var httpClientPolicy = ((HTTPConduit) client.getConduit()).getClient();
+        assertAll(
+                () -> assertThat(httpClientPolicy.getConnectionTimeout()).isEqualTo(123L),
+                () -> assertThat(httpClientPolicy.getReceiveTimeout()).isEqualTo(456L)
+        );
     }
 }
