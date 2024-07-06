@@ -2,6 +2,7 @@ package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatRuntimeException;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
@@ -139,10 +140,12 @@ class InstrumentedInvokerFactoryTest {
         this.setTargetMethod(exchange, "foo"); // simulate CXF behavior
 
         var result = invoker.invoke(exchange, null);
-        assertThat(result).isEqualTo("fooReturn");
 
-        assertThat(timer.getCount()).isEqualTo(oldTimerValue);
-        assertThat(meter.getCount()).isEqualTo(oldMeterValue);
+        assertAll(
+                () -> assertThat(result).isEqualTo("fooReturn"),
+                () -> assertThat(timer.getCount()).isEqualTo(oldTimerValue),
+                () -> assertThat(meter.getCount()).isEqualTo(oldMeterValue)
+        );
     }
 
     @Test
@@ -159,10 +162,11 @@ class InstrumentedInvokerFactoryTest {
         this.setTargetMethod(exchange, "metered"); // simulate CXF behavior
 
         var result = invoker.invoke(exchange, null);
-        assertThat(result).isEqualTo("meteredReturn");
-
-        assertThat(timer.getCount()).isEqualTo(oldTimerValue);
-        assertThat(meter.getCount()).isEqualTo(1 + oldMeterValue);
+        assertAll(
+                () -> assertThat(result).isEqualTo("meteredReturn"),
+                () -> assertThat(timer.getCount()).isEqualTo(oldTimerValue),
+                () -> assertThat(meter.getCount()).isEqualTo(1 + oldMeterValue)
+        );
     }
 
     @Test
@@ -186,39 +190,54 @@ class InstrumentedInvokerFactoryTest {
     }
 
     @Test
-    void exceptionMeteredAnnotation() {
+    void exceptionMeteredAnnotation_WhenExceptionIsNotThrown() {
         var timer = testMetricRegistry.timer("timed");
         var meter = testMetricRegistry.meter("metered");
-        var exceptionmeter = testMetricRegistry.meter("exceptionMeteredExceptions");
+        var exceptionMeter = testMetricRegistry.meter("exceptionMeteredExceptions");
         when(mockMetricRegistry.timer(anyString())).thenReturn(timer);
         when(mockMetricRegistry.meter(contains("metered"))).thenReturn(meter);
-        when(mockMetricRegistry.meter(contains("exceptionMetered"))).thenReturn(exceptionmeter);
+        when(mockMetricRegistry.meter(contains("exceptionMetered"))).thenReturn(exceptionMeter);
 
         var oldTimerValue = timer.getCount();
         var oldMeterValue = meter.getCount();
-        var oldExceptionMeterValue = exceptionmeter.getCount();
-
-        // Invoke InstrumentedResource.exceptionMetered without exception being thrown
+        var oldExceptionMeterValue = exceptionMeter.getCount();
 
         var invoker = invokerBuilder.create(instrumentedService, new ExceptionMeteredInvoker(false));
         this.setTargetMethod(exchange, "exceptionMetered", boolean.class); // simulate CXF behavior
 
         var result = invoker.invoke(exchange, null);
-        assertThat(result).isEqualTo("exceptionMeteredReturn");
 
-        assertThat(timer.getCount()).isEqualTo(oldTimerValue);
-        assertThat(meter.getCount()).isEqualTo(oldMeterValue);
-        assertThat(exceptionmeter.getCount()).isEqualTo(oldExceptionMeterValue);
+        assertAll(
+                () -> assertThat(result).isEqualTo("exceptionMeteredReturn"),
+                () -> assertThat(timer.getCount()).isEqualTo(oldTimerValue),
+                () -> assertThat(meter.getCount()).isEqualTo(oldMeterValue),
+                () -> assertThat(exceptionMeter.getCount()).isEqualTo(oldExceptionMeterValue)
+        );
+    }
 
-        // Invoke InstrumentedResource.exceptionMetered with exception being thrown
+    @Test
+    void exceptionMeteredAnnotation_WhenExceptionIsThrown() {
+        var timer = testMetricRegistry.timer("timed");
+        var meter = testMetricRegistry.meter("metered");
+        var exceptionMeter = testMetricRegistry.meter("exceptionMeteredExceptions");
+        when(mockMetricRegistry.timer(anyString())).thenReturn(timer);
+        when(mockMetricRegistry.meter(contains("metered"))).thenReturn(meter);
+        when(mockMetricRegistry.meter(contains("exceptionMetered"))).thenReturn(exceptionMeter);
+
+        var oldTimerValue = timer.getCount();
+        var oldMeterValue = meter.getCount();
+        var oldExceptionMeterValue = exceptionMeter.getCount();
+
+        this.setTargetMethod(exchange, "exceptionMetered", boolean.class); // simulate CXF behavior
 
         var throwingInvoker = invokerBuilder.create(instrumentedService, new ExceptionMeteredInvoker(true));
 
-        assertThatRuntimeException().isThrownBy(() -> throwingInvoker.invoke(exchange, null));
-
-        assertThat(timer.getCount()).isEqualTo(oldTimerValue);
-        assertThat(meter.getCount()).isEqualTo(oldMeterValue);
-        assertThat(exceptionmeter.getCount()).isEqualTo(1 + oldExceptionMeterValue);
+        assertAll(
+                () -> assertThatRuntimeException().isThrownBy(() -> throwingInvoker.invoke(exchange, null)),
+                () -> assertThat(timer.getCount()).isEqualTo(oldTimerValue),
+                () -> assertThat(meter.getCount()).isEqualTo(oldMeterValue),
+                () -> assertThat(exceptionMeter.getCount()).isEqualTo(1 + oldExceptionMeterValue)
+        );
     }
 
 }

@@ -1,6 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 
 import jakarta.xml.ws.handler.Handler;
@@ -29,14 +30,16 @@ class ClientBuilderTest {
                 .cxfOutInterceptors(outInterceptor, outInterceptor)
                 .cxfOutFaultInterceptors(outFaultInterceptor, outFaultInterceptor);
 
-        assertThat(builder.getAddress()).isEqualTo("address");
-        assertThat(builder.getServiceClass()).isEqualTo(Object.class);
-        assertThat(builder.getConnectTimeout()).isEqualTo(1234);
-        assertThat(builder.getReceiveTimeout()).isEqualTo(5678);
-        assertThat(builder.getBindingId()).isEqualTo("binding id");
-        assertThat(builder.getCxfInInterceptors()).contains(inInterceptor, inInterceptor);
-        assertThat(builder.getCxfInFaultInterceptors()).contains(inFaultInterceptor, inFaultInterceptor);
-        assertThat(builder.getCxfOutInterceptors()).contains(outInterceptor, outInterceptor);
-        assertThat(builder.getCxfOutFaultInterceptors()).contains(outFaultInterceptor, outFaultInterceptor);
+        assertAll(
+                () -> assertThat(builder.getAddress()).isEqualTo("address"),
+                () -> assertThat(builder.getServiceClass()).isEqualTo(Object.class),
+                () -> assertThat(builder.getConnectTimeout()).isEqualTo(1234),
+                () -> assertThat(builder.getReceiveTimeout()).isEqualTo(5678),
+                () -> assertThat(builder.getBindingId()).isEqualTo("binding id"),
+                () -> assertThat(builder.getCxfInInterceptors()).contains(inInterceptor, inInterceptor),
+                () -> assertThat(builder.getCxfInFaultInterceptors()).contains(inFaultInterceptor, inFaultInterceptor),
+                () -> assertThat(builder.getCxfOutInterceptors()).contains(outInterceptor, outInterceptor),
+                () -> assertThat(builder.getCxfOutFaultInterceptors()).contains(outFaultInterceptor, outFaultInterceptor)
+        );
     }
 }

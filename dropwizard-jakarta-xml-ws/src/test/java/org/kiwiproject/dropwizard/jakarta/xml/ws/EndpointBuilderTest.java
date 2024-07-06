@@ -1,6 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 
 import org.apache.cxf.interceptor.Interceptor;
@@ -36,15 +37,17 @@ class EndpointBuilderTest {
                 .cxfOutFaultInterceptors(outFaultInterceptor, outFaultInterceptor)
                 .properties(props);
 
-        assertThat(builder.getPath()).isEqualTo(path);
-        assertThat(builder.getService()).isEqualTo(service);
-        assertThat(builder.publishedEndpointUrl()).isEqualTo(publishedUrl);
-        assertThat(builder.getAuthentication()).isEqualTo(basicAuth);
-        assertThat(builder.getSessionFactory()).isEqualTo(sessionFactory);
-        assertThat(builder.getCxfInInterceptors()).contains(inInterceptor, inInterceptor);
-        assertThat(builder.getCxfInFaultInterceptors()).contains(inFaultInterceptor, inFaultInterceptor);
-        assertThat(builder.getCxfOutInterceptors()).contains(outInterceptor, outInterceptor);
-        assertThat(builder.getCxfOutFaultInterceptors()).contains(outFaultInterceptor, outFaultInterceptor);
-        assertThat(builder.getProperties()).containsEntry("key", "value");
+        assertAll(
+                () -> assertThat(builder.getPath()).isEqualTo(path),
+                () -> assertThat(builder.getService()).isEqualTo(service),
+                () -> assertThat(builder.publishedEndpointUrl()).isEqualTo(publishedUrl),
+                () -> assertThat(builder.getAuthentication()).isEqualTo(basicAuth),
+                () -> assertThat(builder.getSessionFactory()).isEqualTo(sessionFactory),
+                () -> assertThat(builder.getCxfInInterceptors()).contains(inInterceptor, inInterceptor),
+                () -> assertThat(builder.getCxfInFaultInterceptors()).contains(inFaultInterceptor, inFaultInterceptor),
+                () -> assertThat(builder.getCxfOutInterceptors()).contains(outInterceptor, outInterceptor),
+                () -> assertThat(builder.getCxfOutFaultInterceptors()).contains(outFaultInterceptor, outFaultInterceptor),
+                () -> assertThat(builder.getProperties()).containsEntry("key", "value")
+        );
     }
 }
