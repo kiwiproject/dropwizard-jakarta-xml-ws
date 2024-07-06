@@ -4,6 +4,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
 import jakarta.validation.Valid;
+import jakarta.xml.ws.WebFault;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.example.core.Person;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.example.db.PersonDAO;
 
@@ -21,6 +22,13 @@ public class HibernateExampleService {
         this.personDAO = personDAO;
     }
 
+    @WebFault(name = "PersonNotFoundException")
+    public static class PersonNotFoundException extends Exception {
+        public PersonNotFoundException(String message) {
+            super(message);
+        }
+    }
+
     @WebMethod
     @UnitOfWork
     public List<Person> getPersons() {
@@ -29,13 +37,13 @@ public class HibernateExampleService {
 
     @WebMethod
     @UnitOfWork
-    public Person getPerson(long id) throws Exception {
+    public Person getPerson(long id) throws PersonNotFoundException {
         var personOptional = this.personDAO.findById(id);
         if (personOptional.isPresent()) {
             return personOptional.get();
         }
 
-        throw new Exception("Person with id " + id + " not found");
+        throw new PersonNotFoundException("Person with id " + id + " not found");
     }
 
     @WebMethod
