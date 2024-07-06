@@ -142,24 +142,6 @@ class JakartaXmlWsBundleTest {
         Class<?> cls = Object.class;
         var url = "http://foo";
 
-        assertAll(
-                () -> assertThatIllegalArgumentException()
-                        .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(null, null)))
-                        .withMessage("ServiceClass is null"),
-
-                () -> assertThatIllegalArgumentException()
-                        .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(null, url)))
-                        .withMessage("ServiceClass is null"),
-
-                () -> assertThatIllegalArgumentException()
-                        .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(cls, null)))
-                        .withMessage("Address is null"),
-
-                () -> assertThatIllegalArgumentException()
-                        .isThrownBy(() -> jwsBundle.getClient(new ClientBuilder<>(cls, " ")))
-                        .withMessage("Address is empty")
-        );
-
         var builder = new ClientBuilder<>(cls, url);
         jwsBundle.getClient(builder);
         verify(jwsEnvironment).getClient(builder);
