@@ -17,6 +17,7 @@ public class ClientBuilder<T> extends AbstractBuilder {
     final String address;
     private int connectTimeout = 500;
     private int receiveTimeout = 2000;
+    @SuppressWarnings("rawtypes")
     ImmutableList<Handler> handlers;
     String bindingId;
 
@@ -36,6 +37,7 @@ public class ClientBuilder<T> extends AbstractBuilder {
         return receiveTimeout;
     }
 
+    @SuppressWarnings("rawtypes")
     public ImmutableList<Handler> getHandlers() {
         return handlers;
     }
@@ -86,6 +88,7 @@ public class ClientBuilder<T> extends AbstractBuilder {
      * @param handlers Jakarta XML Web Services handlers.
      * @return ClientBuilder instance.
      */
+    @SuppressWarnings("rawtypes")
     public ClientBuilder<T> handlers(Handler... handlers) {
         this.handlers = ImmutableList.<Handler>builder().add(handlers).build();
         return this;
