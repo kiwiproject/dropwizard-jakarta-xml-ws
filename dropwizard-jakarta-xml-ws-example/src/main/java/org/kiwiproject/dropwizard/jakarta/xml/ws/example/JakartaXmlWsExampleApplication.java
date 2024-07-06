@@ -75,7 +75,7 @@ public class JakartaXmlWsExampleApplication extends Application<JakartaXmlWsExam
         // Java-first service protected with basic authentication
         endpoint = jwsBundle.publishEndpoint(
                 new EndpointBuilder("/javafirst", new JavaFirstServiceImpl())
-                        .authentication(new BasicAuthentication(new BasicAuthenticator(), "TOP_SECRET")));
+                        .authentication(new BasicAuthentication<>(new BasicAuthenticator(), "TOP_SECRET")));
 
         // WSDL first service using server side Jakarta XML Web Services handler and CXF logging interceptors.
         // The server handler is defined in the wsdlfirstservice-handlerchain.xml file, via the

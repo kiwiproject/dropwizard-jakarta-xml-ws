@@ -16,6 +16,7 @@ import org.apache.cxf.transport.Destination;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kiwiproject.dropwizard.jakarta.xml.ws.auth.BasicAuthenticator;
+import org.kiwiproject.dropwizard.jakarta.xml.ws.auth.User;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -44,11 +45,11 @@ class BasicAuthenticationInterceptorTest {
     @Mock
     private OutputStream outputStreamMock;
 
-    private BasicAuthentication basicAuthentication;
+    private BasicAuthentication<User> basicAuthentication;
 
     @BeforeEach
     void setup() throws IOException {
-        basicAuthentication = new BasicAuthentication(new BasicAuthenticator(), "TOP_SECRET");
+        basicAuthentication = new BasicAuthentication<>(new BasicAuthenticator(), "TOP_SECRET");
 
         MockitoAnnotations.openMocks(this);
         when(destinationMock.getBackChannel(any())).thenReturn(conduitMock);
@@ -57,7 +58,7 @@ class BasicAuthenticationInterceptorTest {
 
     @Test
     void shouldAuthenticateValidUser() {
-        var interceptor = new BasicAuthenticationInterceptor();
+        var interceptor = new BasicAuthenticationInterceptor<User>();
         interceptor.setAuthenticator(basicAuthentication);
         var message = createMessageWithUsernameAndPassword(USERNAME, CORRECT_PASSWORD);
 
@@ -68,7 +69,7 @@ class BasicAuthenticationInterceptorTest {
 
     @Test
     void shouldReturnUnauthorizedCodeForInvalidCredentials() {
-        var interceptor = new BasicAuthenticationInterceptor();
+        var interceptor = new BasicAuthenticationInterceptor<User>();
         interceptor.setAuthenticator(basicAuthentication);
         var message = createMessageWithUsernameAndPassword(USERNAME, "foo");
 
@@ -79,7 +80,7 @@ class BasicAuthenticationInterceptorTest {
 
     @Test
     void shouldNotCrashOnNullPassword() {
-        var interceptor = new BasicAuthenticationInterceptor();
+        var interceptor = new BasicAuthenticationInterceptor<User>();
         interceptor.setAuthenticator(basicAuthentication);
         var message = createMessageWithUsernameAndPassword(USERNAME, null);
 
@@ -90,7 +91,7 @@ class BasicAuthenticationInterceptorTest {
 
     @Test
     void shouldNotCrashOnNullUser() {
-        var interceptor = new BasicAuthenticationInterceptor();
+        var interceptor = new BasicAuthenticationInterceptor<User>();
         interceptor.setAuthenticator(basicAuthentication);
         var message = createMessageWithUsernameAndPassword(null, CORRECT_PASSWORD);
 

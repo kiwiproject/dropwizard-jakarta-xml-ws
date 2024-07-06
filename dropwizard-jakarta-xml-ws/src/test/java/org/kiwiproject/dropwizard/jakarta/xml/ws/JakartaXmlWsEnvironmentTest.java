@@ -41,6 +41,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Proxy;
+import java.security.Principal;
 import java.util.HashMap;
 
 import javax.wsdl.WSDLException;
@@ -101,8 +102,8 @@ class JakartaXmlWsEnvironmentTest {
             does not get invoked by CXF
             */
             @Override
-            protected BasicAuthenticationInterceptor createBasicAuthenticationInterceptor() {
-                return new BasicAuthenticationInterceptor() {
+            protected <P extends Principal> BasicAuthenticationInterceptor<P> createBasicAuthenticationInterceptor() {
+                return new BasicAuthenticationInterceptor<>() {
                     @Override
                     public void handleMessage(Message message) throws Fault {
                         mockBasicAuthInterceptorInvoked++;
@@ -182,9 +183,11 @@ class JakartaXmlWsEnvironmentTest {
 
     @Test
     void publishEndpointWithAuthentication() throws Exception {
+        BasicAuthentication<? extends Principal> authentication = mock();
+
         jwsEnvironment.publishEndpoint(
                 new EndpointBuilder("local://path", service)
-                        .authentication(mock(BasicAuthentication.class)));
+                        .authentication(authentication));
 
         verify(mockInvokerBuilder).create(any(), any(Invoker.class));
         verifyNoInteractions(mockUnitOfWorkInvokerBuilder);
