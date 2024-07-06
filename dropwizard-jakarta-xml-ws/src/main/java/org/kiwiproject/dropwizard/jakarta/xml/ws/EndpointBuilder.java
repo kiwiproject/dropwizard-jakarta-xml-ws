@@ -7,6 +7,7 @@ import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.message.Message;
 import org.hibernate.SessionFactory;
 
+import java.security.Principal;
 import java.util.Map;
 
 /**
@@ -18,7 +19,7 @@ public class EndpointBuilder extends AbstractBuilder {
     private final Object service;
     private String publishedEndpointUrl;
     SessionFactory sessionFactory;
-    BasicAuthentication authentication;
+    BasicAuthentication<? extends Principal> authentication;
     Map<String, Object> properties;
 
     public String getPath() {
@@ -37,7 +38,7 @@ public class EndpointBuilder extends AbstractBuilder {
         return sessionFactory;
     }
 
-    public BasicAuthentication getAuthentication() {
+    public BasicAuthentication<? extends Principal> getAuthentication() {
         return authentication;
     }
 
@@ -78,7 +79,7 @@ public class EndpointBuilder extends AbstractBuilder {
      *
      * @param authentication BasicAuthentication implementation.
      */
-    public EndpointBuilder authentication(BasicAuthentication authentication) {
+    public EndpointBuilder authentication(BasicAuthentication<? extends Principal> authentication) {
         this.authentication = authentication;
         return this;
     }

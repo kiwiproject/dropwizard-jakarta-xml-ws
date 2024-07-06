@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,13 +42,13 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
 
     public static final String PRINCIPAL_KEY = "dropwizard.jakarta.xml.ws.principal";
 
-    private BasicAuthentication authentication;
+    private BasicAuthentication<? extends Principal> authentication;
 
     public BasicAuthenticationInterceptor() {
         super(Phase.UNMARSHAL);
     }
 
-    public void setAuthenticator(BasicAuthentication authentication) {
+    public void setAuthenticator(BasicAuthentication<? extends Principal> authentication) {
         this.authentication = authentication;
     }
 
@@ -76,7 +77,7 @@ public class BasicAuthenticationInterceptor extends AbstractPhaseInterceptor<Mes
                 return;
             }
 
-            Optional<?> principal = authentication.getAuthenticator().authenticate(
+            Optional<? extends Principal> principal = authentication.getAuthenticator().authenticate(
                     new BasicCredentials(credentials.getUsername(), credentials.getPassword()));
 
             if (principal.isEmpty()) {

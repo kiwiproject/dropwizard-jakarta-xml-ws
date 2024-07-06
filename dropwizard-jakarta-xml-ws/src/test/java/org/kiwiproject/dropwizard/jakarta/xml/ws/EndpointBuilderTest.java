@@ -8,6 +8,7 @@ import org.apache.cxf.interceptor.Interceptor;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,8 +19,8 @@ class EndpointBuilderTest {
         var service = new Object();
         var path = "/foo";
         var publishedUrl = "http://external/url";
-        var basicAuth = mock(BasicAuthentication.class);
         var sessionFactory = mock(SessionFactory.class);
+        BasicAuthentication<? extends Principal> basicAuth = mock();
         Interceptor<?> inInterceptor = mock(Interceptor.class);
         Interceptor<?> inFaultInterceptor = mock(Interceptor.class);
         Interceptor<?> outInterceptor = mock(Interceptor.class);
