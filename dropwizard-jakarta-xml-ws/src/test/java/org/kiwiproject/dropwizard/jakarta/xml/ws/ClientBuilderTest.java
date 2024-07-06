@@ -1,6 +1,7 @@
 package org.kiwiproject.dropwizard.jakarta.xml.ws;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 
@@ -9,6 +10,30 @@ import org.apache.cxf.interceptor.Interceptor;
 import org.junit.jupiter.api.Test;
 
 class ClientBuilderTest {
+
+    @Test
+    void constructorArgumentChecks() {
+        Class<?> cls = Object.class;
+        var url = "https://foo";
+
+        assertAll(
+                () -> assertThatIllegalArgumentException()
+                        .isThrownBy(() -> new ClientBuilder<>(null, null))
+                        .withMessage("ServiceClass is null"),
+
+                () -> assertThatIllegalArgumentException()
+                        .isThrownBy(() -> new ClientBuilder<>(null, url))
+                        .withMessage("ServiceClass is null"),
+
+                () -> assertThatIllegalArgumentException()
+                        .isThrownBy(() -> new ClientBuilder<>(cls, null))
+                        .withMessage("Address is null"),
+
+                () -> assertThatIllegalArgumentException()
+                        .isThrownBy(() -> new ClientBuilder<>(cls, " "))
+                        .withMessage("Address is empty")
+        );
+    }
 
     @Test
     void buildClient() {
