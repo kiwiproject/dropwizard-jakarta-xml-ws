@@ -12,7 +12,7 @@
     <name>Dropwizard Jakarta XML Web Services Bundle</name>
 
     <properties>
-        <jakarta.xml.ws-api.version>3.0.1</jakarta.xml.ws-api.version>
+        <jakarta.xml.ws-api.version>4.0.2</jakarta.xml.ws-api.version>
     </properties>
 
     <dependencies>
