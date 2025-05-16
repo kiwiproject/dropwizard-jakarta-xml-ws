@@ -20,9 +20,6 @@ updates:
     assignees:
       - "sleberknight"
       - "chrisrohr"
-    reviewers:
-      - "sleberknight"
-      - "chrisrohr"
     open-pull-requests-limit: 10
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -35,6 +32,4 @@ updates:
     assignees:
       - "sleberknight"
       - "chrisrohr"
-    reviewers:
-      - "sleberknight"
-      - "chrisrohr"
+
