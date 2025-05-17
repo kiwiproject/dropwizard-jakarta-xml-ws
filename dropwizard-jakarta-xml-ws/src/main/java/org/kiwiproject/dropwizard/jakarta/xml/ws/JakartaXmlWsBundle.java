@@ -7,7 +7,7 @@ import io.dropwizard.core.ConfiguredBundle;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import org.apache.cxf.jaxws.EndpointImpl;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A Dropwizard bundle that enables Dropwizard applications to publish SOAP web services using
