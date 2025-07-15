@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.kiwiproject</groupId>
         <artifactId>kiwi-parent</artifactId>
-        <version>3.0.26</version>
+        <version>3.0.27</version>
     </parent>
 
     <artifactId>dropwizard-jakarta-xml-ws-parent</artifactId>
@@ -44,7 +44,7 @@
         <jakarta.transaction-api.version>2.0.1</jakarta.transaction-api.version>
         <jakarta.xml.soap-api.version>3.0.2</jakarta.xml.soap-api.version>
         <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
-        <kiwi-bom.version>2.0.26</kiwi-bom.version>
+        <kiwi-bom.version>2.0.27</kiwi-bom.version>
 
         <!-- Sonar properties -->
         <sonar.projectKey>kiwiproject_dropwizard-jakarta-xml-ws</sonar.projectKey>
