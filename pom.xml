@@ -25,8 +25,8 @@
     </modules>
 
     <properties>
-        <cxf.version>4.0.6</cxf.version>
-        <cxf.codegen.plugin.version>4.0.6</cxf.codegen.plugin.version>
+        <cxf.version>4.0.9</cxf.version>
+        <cxf.codegen.plugin.version>4.0.9</cxf.codegen.plugin.version>
 
         <!--
         NOTE:
