@@ -26,6 +26,7 @@
 
     <properties>
         <cxf.version>4.0.6</cxf.version>
+        <cxf.codegen.plugin.version>4.0.6</cxf.codegen.plugin.version>
 
         <!--
         NOTE:
@@ -91,6 +92,14 @@
                 <groupId>org.kiwiproject</groupId>
                 <artifactId>kiwi-bom</artifactId>
                 <version>${kiwi-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-bom</artifactId>
+                <version>${cxf.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
