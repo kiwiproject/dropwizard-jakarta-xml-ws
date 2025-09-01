@@ -41,7 +41,6 @@
         <jakarta.persistence-api.version>3.2.0</jakarta.persistence-api.version>
         <jakarta.transaction-api.version>2.0.1</jakarta.transaction-api.version>
         <jakarta.xml.soap-api.version>3.0.2</jakarta.xml.soap-api.version>
-        <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
         <kiwi-bom.version>2.0.30</kiwi-bom.version>
 
         <!-- Sonar properties -->
@@ -112,12 +111,6 @@
                 <groupId>jakarta.xml.soap</groupId>
                 <artifactId>jakarta.xml.soap-api</artifactId>
                 <version>${jakarta.xml.soap-api.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jaxb</groupId>
-                <artifactId>jaxb-runtime</artifactId>
-                <version>${jaxb-runtime.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
