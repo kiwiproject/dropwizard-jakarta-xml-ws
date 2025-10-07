@@ -13,7 +13,6 @@
     <name>Dropwizard Jakarta XML Web Services Example Application</name>
 
     <properties>
-        <h2.version>2.4.240</h2.version>
         <saaj-impl.version>3.0.4</saaj-impl.version>
 
         <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
@@ -45,7 +44,6 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
         </dependency>
 
         <dependency>
