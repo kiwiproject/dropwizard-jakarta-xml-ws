@@ -4,12 +4,12 @@
     <parent>
         <groupId>org.kiwiproject</groupId>
         <artifactId>dropwizard-jakarta-xml-ws-parent</artifactId>
-        <version>1.1.9</version>
+        <version>1.1.10-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dropwizard-jakarta-xml-ws-example</artifactId>
-  <version>1.1.9	</version>
+  <version>1.1.10-SNAPSHOT	</version>
     <name>Dropwizard Jakarta XML Web Services Example Application</name>
 
     <properties>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.kiwiproject</groupId>
             <artifactId>dropwizard-jakarta-xml-ws</artifactId>
-            <version>1.1.9</version>
+            <version>1.1.10-SNAPSHOT</version>
         </dependency>
 
         <dependency>
