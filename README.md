@@ -10,7 +10,7 @@ Dropwizard Jakarta XML Web Services
 
 ---
 
-🥝 _This README will be updated as we transition from the original dropwizard-jaxws to this repository._ 🥝
+🥝 _We have now transitioned from the original dropwizard-jaxws to this repository._ 🥝
 
 ---
 
