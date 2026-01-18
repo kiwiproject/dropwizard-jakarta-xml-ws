@@ -12,8 +12,6 @@
     <name>Dropwizard Jakarta XML Web Services Example Application</name>
 
     <properties>
-        <saaj-impl.version>3.0.4</saaj-impl.version>
-
         <maven-shade-plugin.version>3.6.1</maven-shade-plugin.version>
     </properties>
 
@@ -58,7 +56,6 @@
         <dependency>
             <groupId>com.sun.xml.messaging.saaj</groupId>
             <artifactId>saaj-impl</artifactId>
-            <version>${saaj-impl.version}</version>
         </dependency>
 
     </dependencies>
