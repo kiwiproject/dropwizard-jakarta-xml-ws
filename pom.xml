@@ -27,17 +27,6 @@
     <properties>
         <cxf.version>4.1.4</cxf.version>
 
-        <!--
-        NOTE:
-        We are using Jakarta Persistence and Transaction APIs from Jakarta EE 10 here. I think this will work
-        because Dropwizard 4.x is using Hibernate 6.1.x which says (see https://hibernate.org/orm/releases/6.1/)
-        it is compatible with both Jakarta Persistence 3.1 (Jakarta EE 10) and 3.0 (Jakarta EE 9).
-        The kiwi-bom uses Hibernate 6.3.x which is compatible with Jakarta Persistence 3.1 (Jakarta EE 10)
-        and it seems to work fine with Dropwizard 4.x. Plus, Hibernate 6.1.x is EOL (end-of-life) so we
-        don't really want to be using it. Also, we are also mandating the JAXB runtime version that is
-        Jakarta EE 10 compatible, because even though Dropwizard 4.x is compatible with Jakarta EE 9, it still
-        seems to work just fine.
-        -->
         <jakarta.persistence-api.version>3.2.0</jakarta.persistence-api.version>
         <jakarta.transaction-api.version>2.0.1</jakarta.transaction-api.version>
         <jakarta.xml.soap-api.version>3.0.2</jakarta.xml.soap-api.version>
