@@ -15,8 +15,6 @@ updates:
         update-types:
           - "minor"
           - "patch"
-        exclude-patterns:
-          - "org.apache.cxf:*"
     assignees:
       - "sleberknight"
       - "chrisrohr"
