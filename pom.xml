@@ -25,7 +25,7 @@
     </modules>
 
     <properties>
-        <cxf.version>4.0.9</cxf.version>
+        <cxf.version>4.1.4</cxf.version>
 
         <!--
         NOTE:
