@@ -11,20 +11,6 @@
     <artifactId>dropwizard-jakarta-xml-ws</artifactId>
     <name>Dropwizard Jakarta XML Web Services Bundle</name>
 
-    <properties>
-        <jakarta.xml.ws-api.version>4.0.3</jakarta.xml.ws-api.version>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>jakarta.xml.ws</groupId>
-                <artifactId>jakarta.xml.ws-api</artifactId>
-                <version>${jakarta.xml.ws-api.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
 
         <!-- Required dependencies -->

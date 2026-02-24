@@ -30,6 +30,7 @@
         <jakarta.persistence-api.version>3.2.0</jakarta.persistence-api.version>
         <jakarta.transaction-api.version>2.0.1</jakarta.transaction-api.version>
         <jakarta.xml.soap-api.version>3.0.2</jakarta.xml.soap-api.version>
+        <jakarta.xml.ws-api.version>4.0.3</jakarta.xml.ws-api.version>
         <kiwi-bom.version>3.0.2</kiwi-bom.version>
 
         <!-- Sonar properties -->
@@ -82,6 +83,12 @@
                 <version>${kiwi-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.xml.ws</groupId>
+                <artifactId>jakarta.xml.ws-api</artifactId>
+                <version>${jakarta.xml.ws-api.version}</version>
             </dependency>
 
             <dependency>
