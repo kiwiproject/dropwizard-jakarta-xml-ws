@@ -17,6 +17,13 @@ updates:
           - "patch"
         exclude-patterns:
           - "org.apache.cxf:*"
+    ignore:
+      # Stay on CXF 4.1.x (patch updates only): 4.2.x moves to Jakarta EE 11,
+      # which Dropwizard doesn't support yet.
+      - dependency-name: "org.apache.cxf:*"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
     assignees:
       - "sleberknight"
       - "chrisrohr"
